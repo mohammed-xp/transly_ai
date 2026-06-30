@@ -8,6 +8,10 @@ abstract final class AppColors {
   static const Color gradientMid = Color(0xFFF5421C);
   static const Color gradientEnd = Color(0xFFD5300F);
 
+  // Brand — dark-surface accents
+  static const Color accentDark = Color(0xFFFF6A45);
+  static const Color accentDark2 = Color(0xFFFF8A66);
+
   // Light theme surfaces
   static const Color backgroundLight = Color(0xFFF6F7F9);
   static const Color surfaceLight = Color(0xFFFFFFFF);
@@ -20,6 +24,7 @@ abstract final class AppColors {
   static const Color backgroundDark = Color(0xFF0E0F12);
   static const Color surfaceDark = Color(0xFF1B1D22);
   static const Color borderDark = Color(0xFF2A2D34);
+  static const Color chipBgDark = Color(0xFF26282E);
 
   // Text — light
   static const Color textPrimaryLight = Color(0xFF16181D);
@@ -28,7 +33,9 @@ abstract final class AppColors {
 
   // Text — dark
   static const Color textPrimaryDark = Color(0xFFF3F4F6);
+  static const Color textSecondaryDark = Color(0xFF969CA8);
   static const Color textMutedDark = Color(0xFF7C828E);
+  static const Color iconLineDark = Color(0xFF5A5F69);
 
   // Miscellaneous
   static const Color chipBgLight = Color(0xFFF2F3F6);

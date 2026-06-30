@@ -12,6 +12,7 @@ abstract final class AppDimens {
   // Radii
   static const double radiusS = 8;
   static const double radiusM = 12;
+  static const double radiusInput = 14;
   static const double radiusL = 16;
   static const double radiusXL = 18;
   static const double radius2XL = 20;

@@ -32,6 +32,12 @@ abstract final class AppTypography {
         letterSpacing: letterSpacing,
       );
 
+  static TextStyle sourceText(Color color) =>
+      _ibm(size: 20, weight: FontWeight.w400, color: color, height: 1.45);
+
+  static TextStyle outputText(Color color) =>
+      _ibm(size: 22, weight: FontWeight.w500, color: color, height: 1.55);
+
   static TextStyle labelCaps(Color color) => GoogleFonts.ibmPlexSans(
         fontSize: 12,
         fontWeight: FontWeight.w600,
