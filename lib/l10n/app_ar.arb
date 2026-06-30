@@ -1,0 +1,53 @@
+{
+  "@@locale": "ar",
+  "appName": "ترانسلي AI",
+
+  "getStarted": "ابدأ الآن",
+  "haveAccount": "لديك حساب؟",
+  "signIn": "تسجيل الدخول",
+  "taglineAr": "ترجمة فورية ودقيقة بالذكاء الاصطناعي — أكثر من ٩٠ لغة بين يديك.",
+  "taglineEn": "Speak, type or scan — translate in seconds.",
+
+  "translate": "ترجمة",
+  "translateLabel": "ترجمة",
+  "from": "من",
+  "to": "إلى",
+  "copy": "نسخ",
+  "save": "حفظ",
+  "aiSuggested": "اقتراح الذكاء الاصطناعي",
+  "tone": "النبرة",
+  "toneFormal": "رسمية",
+  "toneCasual": "عامية",
+  "toneShort": "مختصرة",
+
+  "voice": "صوت",
+  "conversation": "محادثة",
+  "listening": "جارٍ الاستماع…",
+
+  "camera": "كاميرا",
+  "scan": "مسح",
+  "translatingLive": "ترجمة فورية",
+
+  "history": "السجل",
+  "searchHistory": "ابحث في الترجمات…",
+  "today": "اليوم",
+  "yesterday": "أمس",
+
+  "settings": "الإعدادات",
+  "translationSection": "الترجمة",
+  "defaultLanguagePair": "زوج اللغات الافتراضي",
+  "aiTone": "نبرة الذكاء الاصطناعي",
+  "offlinePacks": "الحزم غير المتصلة",
+  "preferencesSection": "التفضيلات",
+  "autoPlayAudio": "تشغيل الصوت تلقائياً",
+  "darkAppearance": "المظهر الداكن",
+  "installedPacks": "{count} مثبتة",
+
+  "errorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من شبكتك.",
+  "errorServer": "خطأ في الخادم. يرجى المحاولة مرة أخرى.",
+  "errorUnknown": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "errorOffline": "وضع عدم الاتصال: الترجمة محدودة.",
+
+  "keyboard": "لوحة المفاتيح",
+  "aiPro": "AI Pro"
+}
