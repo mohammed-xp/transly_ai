@@ -1,11 +1,8 @@
 # CLAUDE.md
 
 <!--
-This file loads into context on EVERY message in this project.
-Apply the Golden Test before adding any rule:
-"Would removing this cause Claude to make mistakes?" If not — cut it.
-Do not restate language defaults Claude already knows. Only write rules
-that override defaults or encode decisions specific to this project.
+Golden Test: "Would removing this rule cause Claude to make mistakes?"
+If not — cut it. Don't restate defaults Claude already knows.
 -->
 
 ---
@@ -53,16 +50,24 @@ that override defaults or encode decisions specific to this project.
 - One behavior per test case
 
 ## 8) Workflow (Mandatory)
-- Before marking any task done → run the `/code-review` skill
-- After task approved → run the `/create-pr` skill for branch, commit, and PR output
-- PR descriptions must always be in markdown (`.md`) format
+- Before creating any new feature → invoke the `/flutter-feature` skill first for scaffolding and architecture reference
+- Before marking any task done → run the `/flutter-code-review` skill
+- After task approved → use the `@git-expert` agent for branch, commit, and PR output
+
+## 9) Agents — Proactively Suggest (YOU MUST FOLLOW)
+You MUST proactively suggest the appropriate agent when the situation matches. Do not wait for the user to ask.
+
+- `@debugger` — When a bug, crash, error, or unexpected behavior is encountered
+- `@code-reviewer` — After `/flutter-code-review` passes, ALWAYS suggest running `@code-reviewer` for a deeper independent review before proceeding to PR
+- `@test-writer` — When code is changed or added without corresponding tests, or when test coverage is missing
+- `@git-expert` — When it's time to create a branch, commit, or PR. Also for merge conflicts, rebases, or any complex git situation
 
 ---
 
 # Section B — Flutter / Dart Specific Rules
 
 <!--
-Follow official Dart style guide, Effective Dart, and `flutter_lints` defaults.
+Follow official Dart style guide, Effective Dart, and flutter_lints defaults.
 Rules below only cover things that OVERRIDE defaults or encode project decisions.
 -->
 
@@ -92,7 +97,7 @@ Rules below only cover things that OVERRIDE defaults or encode project decisions
 - Presentation layer: map failures to user-friendly messages and UI states
 
 ## 6) Dependency Injection
-- Use **`get_it`** as the service locator — not `Provider` or constructor-only injection
+- Use **`get_it`** as the service locator
 - Register dependencies in a single `core/di/` setup file
 - Cubits, use cases, and repositories are resolved via `get_it`, not instantiated manually
 

@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Design tokens — typography. Source: `Transly-AI-Design-System.md` §2.
+///
+/// Font: IBM Plex Sans Arabic (Arabic + Latin). Weights 300–700.
 abstract final class AppTypography {
-  static TextTheme textTheme(Color primary) => TextTheme(
-        displayLarge: _ibm(size: 40, weight: FontWeight.w700, color: primary, letterSpacing: -0.4),
-        headlineLarge: _ibm(size: 25, weight: FontWeight.w700, color: primary, letterSpacing: -0.25),
-        headlineMedium: _ibm(size: 20, weight: FontWeight.w600, color: primary),
-        titleLarge: _ibm(size: 17, weight: FontWeight.w600, color: primary),
-        titleMedium: _ibm(size: 16, weight: FontWeight.w600, color: primary),
-        titleSmall: _ibm(size: 13, weight: FontWeight.w600, color: primary),
-        bodyLarge: _ibm(size: 17, weight: FontWeight.w400, color: primary, height: 1.5),
-        bodyMedium: _ibm(size: 16, weight: FontWeight.w400, color: primary, height: 1.45),
-        bodySmall: _ibm(size: 14, weight: FontWeight.w400, color: primary, height: 1.4),
-        labelLarge: _ibm(size: 13, weight: FontWeight.w600, color: primary, letterSpacing: 0.04),
-        labelMedium: _ibm(size: 12, weight: FontWeight.w600, color: primary, letterSpacing: 0.05),
-        labelSmall: _ibm(size: 11, weight: FontWeight.w500, color: primary),
+  /// Material [TextTheme] mapped to the design scale, tinted with [textColor].
+  static TextTheme textTheme(Color textColor) => TextTheme(
+        // Display 40 / 700 — onboarding hero
+        displayLarge: _font(40, FontWeight.w700, textColor, letterSpacing: -0.4),
+        // Heading 25 / 700 — screen titles
+        headlineLarge: _font(25, FontWeight.w700, textColor, letterSpacing: -0.25),
+        headlineMedium: _font(20, FontWeight.w600, textColor),
+        titleLarge: _font(17, FontWeight.w600, textColor),
+        titleMedium: _font(16, FontWeight.w600, textColor),
+        // Caption 13 / 600
+        titleSmall: _font(13, FontWeight.w600, textColor, letterSpacing: 0.04),
+        // Body L 20 / 400 — source/translation text
+        bodyLarge: _font(20, FontWeight.w400, textColor, height: 1.5),
+        // Body 16 / 400 — default
+        bodyMedium: _font(16, FontWeight.w400, textColor, height: 1.45),
+        bodySmall: _font(14, FontWeight.w400, textColor, height: 1.4),
+        // Caption / labels — often UPPERCASE, letter-spacing .04–.05em
+        labelLarge: _font(13, FontWeight.w600, textColor, letterSpacing: 0.04),
+        labelMedium: _font(12, FontWeight.w600, textColor, letterSpacing: 0.05),
+        // Micro 11 / 500 — tags, hints
+        labelSmall: _font(11, FontWeight.w500, textColor),
       );
 
-  static TextStyle _ibm({
-    required double size,
-    required FontWeight weight,
-    required Color color,
+  static TextStyle _font(
+    double size,
+    FontWeight weight,
+    Color color, {
     double? height,
     double? letterSpacing,
   }) =>
@@ -31,25 +42,4 @@ abstract final class AppTypography {
         height: height,
         letterSpacing: letterSpacing,
       );
-
-  static TextStyle sourceText(Color color) =>
-      _ibm(size: 20, weight: FontWeight.w400, color: color, height: 1.45);
-
-  static TextStyle outputText(Color color) =>
-      _ibm(size: 22, weight: FontWeight.w500, color: color, height: 1.55);
-
-  static TextStyle labelCaps(Color color) => GoogleFonts.ibmPlexSans(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: color,
-        letterSpacing: 0.05,
-      );
-}
-
-extension TextStyleX on TextStyle {
-  TextStyle withColor(Color c) => copyWith(color: c);
-  TextStyle light() => copyWith(fontWeight: FontWeight.w300);
-  TextStyle medium() => copyWith(fontWeight: FontWeight.w500);
-  TextStyle semiBold() => copyWith(fontWeight: FontWeight.w600);
-  TextStyle bold() => copyWith(fontWeight: FontWeight.w700);
 }

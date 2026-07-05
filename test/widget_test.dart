@@ -1,30 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:transly_ai/core/result/api_result.dart';
-import 'package:transly_ai/core/error/failures.dart';
+import 'package:transly_ai/app.dart';
+import 'package:transly_ai/core/theme/app_colors.dart';
 
 void main() {
-  group('ApiResult', () {
-    test('Success holds data', () {
-      const result = Success<int>(42);
-      expect(result.dataOrNull, 42);
-      expect(result.isSuccess, isTrue);
-      expect(result.isError, isFalse);
-    });
+  testWidgets('TranslyApp builds and applies the design-system theme',
+      (tester) async {
+    await tester.pumpWidget(const TranslyApp());
+    await tester.pumpAndSettle();
 
-    test('ApiError holds failure', () {
-      const result = ApiError<int>(NetworkFailure());
-      expect(result.failureOrNull, isA<NetworkFailure>());
-      expect(result.isError, isTrue);
-      expect(result.isSuccess, isFalse);
-    });
+    expect(find.byType(MaterialApp), findsOneWidget);
 
-    test('when dispatches correctly', () {
-      const ApiResult<String> result = Success('hello');
-      final out = result.when(
-        success: (d) => 'ok:$d',
-        error: (f) => 'err',
-      );
-      expect(out, 'ok:hello');
-    });
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+    expect(app.theme!.colorScheme.primary, AppColors.primary);
+    expect(app.darkTheme!.colorScheme.primary, AppColors.accentDark);
+    expect(app.themeMode, ThemeMode.system);
   });
 }

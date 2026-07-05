@@ -29,7 +29,16 @@ Run this checklist before marking any task as done. This is a read-only review �
 - [ ] No performance regressions (unnecessary rebuilds, heavy build methods, missing const).
 - [ ] No security risks (hardcoded secrets, unvalidated input, sensitive data in logs).
 - [ ] No unused imports, dead code, or debug artifacts left behind.
-- [ ] Controllers and focus nodes properly disposed.
+
+## Controller & Listener Lifecycle
+
+- [ ] `TextEditingController` / `AnimationController` / `FocusNode` / `ScrollController` are created in `initState` (or a lifecycle hook), never as `StatefulWidget` field initializers and never inside `build()`.
+- [ ] Every controller and focus node has a matching `dispose()` in `State.dispose()`.
+- [ ] Controllers held by a Cubit/Bloc are the exception, not the default — prefer the widget layer. If one must live in a Cubit, it is disposed in `close()` and covered by a unit test proving disposal.
+- [ ] Every `addListener` has a matching `removeListener` before disposal.
+- [ ] A caller-provided `transitionAnimationController` (e.g. `showModalBottomSheet`) is disposed by the caller — it is **not** auto-disposed.
+
+> The first item is enforced automatically by `dart run tool/check_controller_lifecycle.dart lib` (also run in CI). Run it locally if you touched any `StatefulWidget`.
 
 ## Code Quality
 

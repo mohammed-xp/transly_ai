@@ -1,57 +1,7 @@
 {
   "@@locale": "en",
-  "appName": "Transly AI",
-  "@appName": { "description": "Application name" },
-
-  "getStarted": "Get Started",
-  "haveAccount": "Already have an account?",
-  "signIn": "Sign In",
-  "taglineAr": "Instant and accurate AI translation — 90+ languages at your fingertips.",
-  "taglineEn": "Speak, type or scan — translate in seconds.",
-
-  "translate": "Translate",
-  "translateLabel": "TRANSLATE",
-  "from": "FROM",
-  "to": "TO",
-  "copy": "Copy",
-  "save": "Save",
-  "aiSuggested": "AI suggested",
-  "tone": "Tone",
-  "toneFormal": "Formal",
-  "toneCasual": "Casual",
-  "toneShort": "Short",
-
-  "voice": "Voice",
-  "conversation": "Conversation",
-  "listening": "Listening…",
-
-  "camera": "Camera",
-  "scan": "Scan",
-  "translatingLive": "Translating live",
-
-  "history": "History",
-  "searchHistory": "Search translations…",
-  "today": "Today",
-  "yesterday": "Yesterday",
-
-  "settings": "Settings",
-  "translationSection": "TRANSLATION",
-  "defaultLanguagePair": "Default language pair",
-  "aiTone": "AI tone",
-  "offlinePacks": "Offline packs",
-  "preferencesSection": "PREFERENCES",
-  "autoPlayAudio": "Auto-play translation audio",
-  "darkAppearance": "Dark appearance",
-  "installedPacks": "{count} installed",
-  "@installedPacks": {
-    "placeholders": { "count": { "type": "int" } }
-  },
-
-  "errorNetwork": "No internet connection. Please check your network.",
-  "errorServer": "Server error. Please try again.",
-  "errorUnknown": "Something went wrong. Please try again.",
-  "errorOffline": "Offline mode: limited translation available.",
-
-  "keyboard": "Keyboard",
-  "aiPro": "AI Pro"
+  "appTitle": "Transly AI",
+  "@appTitle": {
+    "description": "The application title."
+  }
 }

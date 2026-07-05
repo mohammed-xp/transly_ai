@@ -1,49 +1,62 @@
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
 import 'app_dimens.dart';
 import 'app_typography.dart';
 
+/// App themes built from the design tokens. Source: `Transly-AI-Design-System.md`.
 abstract final class AppTheme {
   static ThemeData get light => _build(
         brightness: Brightness.light,
-        background: AppColors.backgroundLight,
-        surface: AppColors.surfaceLight,
         primary: AppColors.primary,
         secondary: AppColors.gradientStart,
-        textPrimary: AppColors.textPrimaryLight,
+        background: AppColors.backgroundLight,
+        surface: AppColors.surfaceLight,
+        chip: AppColors.chipBgLight,
+        border: AppColors.borderLight,
+        divider: AppColors.dividerLight,
+        textPrimary: AppColors.inkLight,
         textSecondary: AppColors.textSecondaryLight,
         textMuted: AppColors.textMutedLight,
-        border: AppColors.borderLight,
+        toggleTrackOff: AppColors.toggleTrackOffLight,
       );
 
   static ThemeData get dark => _build(
         brightness: Brightness.dark,
-        background: AppColors.backgroundDark,
-        surface: AppColors.surfaceDark,
         primary: AppColors.accentDark,
         secondary: AppColors.accentDark2,
+        background: AppColors.backgroundDark,
+        surface: AppColors.surfaceDark,
+        chip: AppColors.chipBgDark,
+        border: AppColors.borderDark,
+        divider: AppColors.borderDark,
         textPrimary: AppColors.textPrimaryDark,
         textSecondary: AppColors.textSecondaryDark,
         textMuted: AppColors.textMutedDark,
-        border: AppColors.borderDark,
+        toggleTrackOff: AppColors.toggleTrackOffDark,
       );
 
   static ThemeData _build({
     required Brightness brightness,
-    required Color background,
-    required Color surface,
     required Color primary,
     required Color secondary,
+    required Color background,
+    required Color surface,
+    required Color chip,
+    required Color border,
+    required Color divider,
     required Color textPrimary,
     required Color textSecondary,
     required Color textMuted,
-    required Color border,
+    required Color toggleTrackOff,
   }) {
-    final tt = AppTypography.textTheme(textPrimary);
+    final textTheme = AppTypography.textTheme(textPrimary);
 
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      scaffoldBackgroundColor: background,
+      textTheme: textTheme,
       colorScheme: ColorScheme(
         brightness: brightness,
         primary: primary,
@@ -53,18 +66,27 @@ abstract final class AppTheme {
         surface: surface,
         onSurface: textPrimary,
         onSurfaceVariant: textSecondary,
-        error: const Color(0xFFD32F2F),
-        onError: Colors.white,
-        surfaceContainerHighest: background,
+        surfaceContainerHighest: chip,
         outline: border,
+        outlineVariant: divider,
+        error: AppColors.error,
+        onError: Colors.white,
       ),
-      scaffoldBackgroundColor: background,
-      textTheme: tt,
+      dividerTheme: DividerThemeData(color: divider, space: 1, thickness: 1),
+      appBarTheme: AppBarTheme(
+        backgroundColor: background,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: false,
+        titleTextStyle: textTheme.headlineLarge,
+        iconTheme: IconThemeData(color: textPrimary),
+      ),
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimens.radius2XL),
+          borderRadius: BorderRadius.circular(AppDimens.radiusCard),
           side: BorderSide(color: border),
         ),
       ),
@@ -72,21 +94,15 @@ abstract final class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: primary,
           foregroundColor: Colors.white,
+          disabledBackgroundColor: primary.withValues(alpha: 0.4),
+          disabledForegroundColor: Colors.white,
           minimumSize: const Size.fromHeight(AppDimens.buttonHeight),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimens.radiusL),
-          ),
-          textStyle: tt.titleLarge?.copyWith(color: Colors.white),
           elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimens.radiusButton),
+          ),
+          textStyle: textTheme.titleMedium?.copyWith(color: Colors.white),
         ),
-      ),
-      dividerTheme: DividerThemeData(color: border, space: 1, thickness: 1),
-      appBarTheme: AppBarTheme(
-        backgroundColor: background,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        titleTextStyle: tt.headlineLarge,
-        iconTheme: IconThemeData(color: textPrimary),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -95,20 +111,38 @@ abstract final class AppTheme {
           horizontal: AppDimens.spaceL,
           vertical: AppDimens.spaceM,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimens.radiusXL),
-          borderSide: BorderSide(color: border),
+        hintStyle: textTheme.bodyMedium?.copyWith(color: textMuted),
+        border: _inputBorder(border),
+        enabledBorder: _inputBorder(border),
+        focusedBorder: _inputBorder(primary),
+        errorBorder: _inputBorder(AppColors.error),
+        focusedErrorBorder: _inputBorder(AppColors.error),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: surface,
+        selectedColor: primary,
+        side: BorderSide(color: border),
+        labelStyle: textTheme.titleSmall?.copyWith(color: textSecondary),
+        secondaryLabelStyle: textTheme.titleSmall?.copyWith(color: Colors.white),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.spaceL,
+          vertical: 9,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimens.radiusXL),
-          borderSide: BorderSide(color: border),
+        shape: const StadiumBorder(),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: const WidgetStatePropertyAll(Colors.white),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? primary : toggleTrackOff,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimens.radiusXL),
-          borderSide: BorderSide(color: primary),
-        ),
-        hintStyle: tt.bodyMedium?.copyWith(color: textMuted),
+        trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       ),
     );
   }
+
+  static OutlineInputBorder _inputBorder(Color color) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(AppDimens.radiusInput),
+        borderSide: BorderSide(color: color),
+      );
 }
