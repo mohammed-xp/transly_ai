@@ -3,5 +3,13 @@
   "appTitle": "Transly AI",
   "@appTitle": {
     "description": "The application title."
+  },
+  "splashTagline": "AI-powered translation",
+  "@splashTagline": {
+    "description": "Subtitle shown under the wordmark on the splash screen."
+  },
+  "splashPoweredBy": "Powered by AI",
+  "@splashPoweredBy": {
+    "description": "Caption shown near the bottom of the splash screen."
   }
 }

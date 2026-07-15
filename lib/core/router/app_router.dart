@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/splash/presentation/screens/splash_screen.dart';
 import 'app_routes.dart';
 
 /// App navigation. Each route currently renders a themed placeholder so the
 /// app runs; real screens replace these placeholders as features are built.
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.onboarding,
+  initialLocation: AppRoutes.splash,
   routes: [
+    GoRoute(
+      path: AppRoutes.splash,
+      name: AppRoutes.splashName,
+      builder: (context, state) => const SplashScreen(),
+    ),
     GoRoute(
       path: AppRoutes.onboarding,
       name: AppRoutes.onboardingName,

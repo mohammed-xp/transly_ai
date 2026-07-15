@@ -103,6 +103,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transly AI'**
   String get appTitle;
+
+  /// Subtitle shown under the wordmark on the splash screen.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered translation'**
+  String get splashTagline;
+
+  /// Caption shown near the bottom of the splash screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by AI'**
+  String get splashPoweredBy;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 
+import '../../features/splash/presentation/cubit/splash_cubit.dart';
+
 /// Service locator. Register infrastructure, repositories, use cases, and
 /// cubits here. Feature modules add their registrations as they are built.
 final GetIt sl = GetIt.instance;
@@ -14,4 +16,5 @@ Future<void> configureDependencies() async {
   // ── Use cases ──
 
   // ── Cubits (registerFactory — fresh instance per route) ──
+  sl.registerFactory(() => SplashCubit());
 }

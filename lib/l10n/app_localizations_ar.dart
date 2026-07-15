@@ -10,4 +10,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appTitle => 'ترانسلي AI';
+
+  @override
+  String get splashTagline => 'ترجمة بالذكاء الاصطناعي';
+
+  @override
+  String get splashPoweredBy => 'مدعوم بالذكاء الاصطناعي';
 }

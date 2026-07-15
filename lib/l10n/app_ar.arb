@@ -1,4 +1,6 @@
 {
   "@@locale": "ar",
-  "appTitle": "ترانسلي AI"
+  "appTitle": "ترانسلي AI",
+  "splashTagline": "ترجمة بالذكاء الاصطناعي",
+  "splashPoweredBy": "مدعوم بالذكاء الاصطناعي"
 }

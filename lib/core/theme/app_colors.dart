@@ -13,6 +13,7 @@ abstract final class AppColors {
   static const Color outputBgLight = Color(0xFFFFF4F0); // output/icon-chip bg
   static const Color outputBgLight2 = Color(0xFFFFEAE2); // output gradient end
   static const Color tintBorderLight = Color(0xFFFFD8C9);
+  static const Color spinnerTrackLight = Color(0xFFFFE0D5); // splash loader track
   static const Color rtlLabelLight = Color(0xFFC0461F); // Arabic label on light
 
   // ── Light neutrals ──
@@ -20,6 +21,7 @@ abstract final class AppColors {
   static const Color textSecondaryLight = Color(0xFF5A6072);
   static const Color textMutedLight = Color(0xFF9AA0AE);
   static const Color borderLight = Color(0xFFECEDF1);
+  static const Color captionMutedLight = Color(0xFFC2C6D0); // faint captions
   static const Color dividerLight = Color(0xFFF1F2F5);
   static const Color backgroundLight = Color(0xFFF6F7F9); // app bg
   static const Color chipBgLight = Color(0xFFF2F3F6);

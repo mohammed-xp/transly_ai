@@ -10,4 +10,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'Transly AI';
+
+  @override
+  String get splashTagline => 'AI-powered translation';
+
+  @override
+  String get splashPoweredBy => 'Powered by AI';
 }
