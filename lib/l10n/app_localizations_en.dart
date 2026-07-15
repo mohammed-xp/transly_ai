@@ -32,4 +32,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingSignIn => 'Sign in';
+
+  @override
+  String get translateKicker => 'TRANSLATE';
+
+  @override
+  String get translateAiPro => 'AI Pro';
+
+  @override
+  String get translateFrom => 'FROM';
+
+  @override
+  String get translateTo => 'TO';
+
+  @override
+  String get translateAiBadge => 'AI';
+
+  @override
+  String get translateCopy => 'Copy';
+
+  @override
+  String get translateSave => 'Save';
+
+  @override
+  String get translateToneCaption => 'AI suggested · Tone';
+
+  @override
+  String get translateToneFormal => 'Formal';
+
+  @override
+  String get translateToneCasual => 'Casual';
+
+  @override
+  String get translateToneConcise => 'Concise';
+
+  @override
+  String get translateDockKeyboard => 'Keyboard';
+
+  @override
+  String get translateDockVoice => 'Voice';
+
+  @override
+  String get translateDockCamera => 'Camera';
 }

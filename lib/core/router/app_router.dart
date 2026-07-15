@@ -3,10 +3,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/translate/presentation/screens/translate_screen.dart';
 import 'app_routes.dart';
 
-/// App navigation. Each route currently renders a themed placeholder so the
-/// app runs; real screens replace these placeholders as features are built.
+/// App navigation. Splash, onboarding and translate render real screens;
+/// the remaining routes render themed placeholders until their features are
+/// built.
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
   routes: [
@@ -23,7 +25,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.translate,
       name: AppRoutes.translateName,
-      builder: (context, state) => const _PlaceholderPage('Translate'),
+      builder: (context, state) => const TranslateScreen(),
     ),
     GoRoute(
       path: AppRoutes.conversation,

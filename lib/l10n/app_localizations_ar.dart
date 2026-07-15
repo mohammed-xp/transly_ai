@@ -32,4 +32,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onboardingSignIn => 'تسجيل الدخول';
+
+  @override
+  String get translateKicker => 'الترجمة';
+
+  @override
+  String get translateAiPro => 'AI Pro';
+
+  @override
+  String get translateFrom => 'من';
+
+  @override
+  String get translateTo => 'إلى';
+
+  @override
+  String get translateAiBadge => 'AI';
+
+  @override
+  String get translateCopy => 'نسخ';
+
+  @override
+  String get translateSave => 'حفظ';
+
+  @override
+  String get translateToneCaption => 'اقتراح الذكاء الاصطناعي · النبرة';
+
+  @override
+  String get translateToneFormal => 'رسمية';
+
+  @override
+  String get translateToneCasual => 'عامية';
+
+  @override
+  String get translateToneConcise => 'مختصرة';
+
+  @override
+  String get translateDockKeyboard => 'لوحة المفاتيح';
+
+  @override
+  String get translateDockVoice => 'الصوت';
+
+  @override
+  String get translateDockCamera => 'الكاميرا';
 }

@@ -31,5 +31,61 @@
   "onboardingSignIn": "Sign in",
   "@onboardingSignIn": {
     "description": "Sign-in link on the onboarding welcome screen."
+  },
+  "translateKicker": "TRANSLATE",
+  "@translateKicker": {
+    "description": "Uppercase kicker above the title on the translate screen."
+  },
+  "translateAiPro": "AI Pro",
+  "@translateAiPro": {
+    "description": "Label of the plan badge in the translate screen header."
+  },
+  "translateFrom": "FROM",
+  "@translateFrom": {
+    "description": "Source-language column label in the language switch bar."
+  },
+  "translateTo": "TO",
+  "@translateTo": {
+    "description": "Target-language column label in the language switch bar."
+  },
+  "translateAiBadge": "AI",
+  "@translateAiBadge": {
+    "description": "Badge marking the AI-generated translation output."
+  },
+  "translateCopy": "Copy",
+  "@translateCopy": {
+    "description": "Copy action button under the translation output."
+  },
+  "translateSave": "Save",
+  "@translateSave": {
+    "description": "Save action button under the translation output."
+  },
+  "translateToneCaption": "AI suggested · Tone",
+  "@translateToneCaption": {
+    "description": "Caption above the tone selector chips."
+  },
+  "translateToneFormal": "Formal",
+  "@translateToneFormal": {
+    "description": "Formal tone option."
+  },
+  "translateToneCasual": "Casual",
+  "@translateToneCasual": {
+    "description": "Casual tone option."
+  },
+  "translateToneConcise": "Concise",
+  "@translateToneConcise": {
+    "description": "Concise tone option."
+  },
+  "translateDockKeyboard": "Keyboard",
+  "@translateDockKeyboard": {
+    "description": "Keyboard input mode in the bottom input dock."
+  },
+  "translateDockVoice": "Voice",
+  "@translateDockVoice": {
+    "description": "Voice input mode in the bottom input dock."
+  },
+  "translateDockCamera": "Camera",
+  "@translateDockCamera": {
+    "description": "Camera input mode in the bottom input dock."
   }
 }

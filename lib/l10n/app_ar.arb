@@ -7,5 +7,19 @@
   "onboardingCaption": "تحدّث أو اكتب أو صوّر — وترجم في ثوانٍ.",
   "onboardingGetStarted": "ابدأ الآن",
   "onboardingHaveAccount": "لديك حساب؟",
-  "onboardingSignIn": "تسجيل الدخول"
+  "onboardingSignIn": "تسجيل الدخول",
+  "translateKicker": "الترجمة",
+  "translateAiPro": "AI Pro",
+  "translateFrom": "من",
+  "translateTo": "إلى",
+  "translateAiBadge": "AI",
+  "translateCopy": "نسخ",
+  "translateSave": "حفظ",
+  "translateToneCaption": "اقتراح الذكاء الاصطناعي · النبرة",
+  "translateToneFormal": "رسمية",
+  "translateToneCasual": "عامية",
+  "translateToneConcise": "مختصرة",
+  "translateDockKeyboard": "لوحة المفاتيح",
+  "translateDockVoice": "الصوت",
+  "translateDockCamera": "الكاميرا"
 }

@@ -14,6 +14,7 @@ abstract final class AppDimens {
   static const double radiusChipL = 12;
   static const double radiusInput = 14; // input / search
   static const double radiusButton = 16; // primary button
+  static const double radiusDock = 18; // language bar / input dock
   static const double radiusCard = 20; // card
   static const double radiusPill = 999; // pill / toggle
 

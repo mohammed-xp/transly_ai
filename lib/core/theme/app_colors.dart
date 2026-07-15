@@ -39,6 +39,10 @@ abstract final class AppColors {
   static const Color textMutedDark = Color(0xFF7C828E);
   static const Color iconLineDark = Color(0xFF5A5F69);
 
+  // ── Shadows (light surfaces) ──
+  static const Color cardShadowLight = Color(0x0A141928); // subtle card lift
+  static const Color dockShadowLight = Color(0x0F141928); // floating dock lift
+
   // ── Toggle (off track) ──
   static const Color toggleTrackOffLight = Color(0xFFE6E8ED);
   static const Color toggleTrackOffDark = borderDark;

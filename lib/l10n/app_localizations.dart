@@ -145,6 +145,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in'**
   String get onboardingSignIn;
+
+  /// Uppercase kicker above the title on the translate screen.
+  ///
+  /// In en, this message translates to:
+  /// **'TRANSLATE'**
+  String get translateKicker;
+
+  /// Label of the plan badge in the translate screen header.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Pro'**
+  String get translateAiPro;
+
+  /// Source-language column label in the language switch bar.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM'**
+  String get translateFrom;
+
+  /// Target-language column label in the language switch bar.
+  ///
+  /// In en, this message translates to:
+  /// **'TO'**
+  String get translateTo;
+
+  /// Badge marking the AI-generated translation output.
+  ///
+  /// In en, this message translates to:
+  /// **'AI'**
+  String get translateAiBadge;
+
+  /// Copy action button under the translation output.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get translateCopy;
+
+  /// Save action button under the translation output.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get translateSave;
+
+  /// Caption above the tone selector chips.
+  ///
+  /// In en, this message translates to:
+  /// **'AI suggested · Tone'**
+  String get translateToneCaption;
+
+  /// Formal tone option.
+  ///
+  /// In en, this message translates to:
+  /// **'Formal'**
+  String get translateToneFormal;
+
+  /// Casual tone option.
+  ///
+  /// In en, this message translates to:
+  /// **'Casual'**
+  String get translateToneCasual;
+
+  /// Concise tone option.
+  ///
+  /// In en, this message translates to:
+  /// **'Concise'**
+  String get translateToneConcise;
+
+  /// Keyboard input mode in the bottom input dock.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard'**
+  String get translateDockKeyboard;
+
+  /// Voice input mode in the bottom input dock.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get translateDockVoice;
+
+  /// Camera input mode in the bottom input dock.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get translateDockCamera;
 }
 
 class _AppLocalizationsDelegate
