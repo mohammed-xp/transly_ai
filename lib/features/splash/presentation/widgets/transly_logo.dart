@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import 'transly_glyph_painter.dart';
+import '../../../../core/widgets/transly_glyph_painter.dart';
 
 /// The gradient logo tile with the white translate glyph (design `00 · Splash`).
 ///

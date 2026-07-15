@@ -1,28 +1,43 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-/// Paints the white Transly translate glyph (two strokes) from the design SVG.
+/// Paints the Transly translate glyph (two strokes) from the design SVG.
 ///
 /// Source viewBox is 24×24; the canvas is scaled to fit whatever size the
 /// [CustomPaint] provides. Kept in-code (no `flutter_svg`, no asset) so the mark
-/// scales crisply and stays theme-agnostic — it is always white on the gradient.
+/// scales crisply.
+///
+/// [color] paints stroke A (the CJK-style mark). [strokeBColor] paints stroke B
+/// (the "A" letter); when omitted it falls back to [color]. Splash uses a single
+/// white [color]; onboarding's light logo tints the two strokes differently.
 class TranslyGlyphPainter extends CustomPainter {
-  const TranslyGlyphPainter({this.color = Colors.white});
+  const TranslyGlyphPainter({this.color = Colors.white, this.strokeBColor});
 
   final Color color;
+  final Color? strokeBColor;
 
   static const double _viewBox = 24;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final scale = size.width / _viewBox;
+    // Uniform scale on the smaller side so a non-square host can't distort it.
+    final scale = math.min(size.width, size.height) / _viewBox;
     canvas
       ..save()
       ..scale(scale);
 
-    final paint = Paint()
+    final paintA = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       // Stroke width is expressed in viewBox units (matches the SVG's `2`).
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final paintB = Paint()
+      ..color = strokeBColor ?? color
+      ..style = PaintingStyle.stroke
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
@@ -51,12 +66,12 @@ class TranslyGlyphPainter extends CustomPainter {
       ..relativeLineTo(4.4, 0);
 
     canvas
-      ..drawPath(a, paint)
-      ..drawPath(b, paint)
+      ..drawPath(a, paintA)
+      ..drawPath(b, paintB)
       ..restore();
   }
 
   @override
   bool shouldRepaint(TranslyGlyphPainter oldDelegate) =>
-      oldDelegate.color != color;
+      oldDelegate.color != color || oldDelegate.strokeBColor != strokeBColor;
 }

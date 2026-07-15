@@ -8,6 +8,8 @@ abstract final class AppColors {
   static const Color accentDark = Color(0xFFFF6A45); // primary accent (dark)
   static const Color accentDark2 = Color(0xFFFF8A66); // secondary accent (dark)
   static const Color gradientStart = Color(0xFFFF7A4D);
+  static const Color gradientDeepEnd = Color(0xFFD5300F); // onboarding hero end
+  static const Color brandShadow = Color(0xFF781400); // deep coral drop-shadow tint
 
   // ── Coral tints (light) ──
   static const Color outputBgLight = Color(0xFFFFF4F0); // output/icon-chip bg

@@ -115,6 +115,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Powered by AI'**
   String get splashPoweredBy;
+
+  /// Primary subtitle under the wordmark on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast, accurate AI translation — 90+ languages at your fingertips.'**
+  String get onboardingSubtitle;
+
+  /// Secondary caption under the subtitle on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak, type or scan — translate in seconds.'**
+  String get onboardingCaption;
+
+  /// Primary call-to-action button on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingGetStarted;
+
+  /// Prompt preceding the sign-in link on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Have an account?'**
+  String get onboardingHaveAccount;
+
+  /// Sign-in link on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get onboardingSignIn;
 }
 
 class _AppLocalizationsDelegate

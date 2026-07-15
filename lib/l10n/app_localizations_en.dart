@@ -16,4 +16,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get splashPoweredBy => 'Powered by AI';
+
+  @override
+  String get onboardingSubtitle =>
+      'Fast, accurate AI translation — 90+ languages at your fingertips.';
+
+  @override
+  String get onboardingCaption => 'Speak, type or scan — translate in seconds.';
+
+  @override
+  String get onboardingGetStarted => 'Get Started';
+
+  @override
+  String get onboardingHaveAccount => 'Have an account?';
+
+  @override
+  String get onboardingSignIn => 'Sign in';
 }

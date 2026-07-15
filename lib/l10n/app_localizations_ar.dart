@@ -16,4 +16,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get splashPoweredBy => 'مدعوم بالذكاء الاصطناعي';
+
+  @override
+  String get onboardingSubtitle =>
+      'ترجمة فورية ودقيقة بالذكاء الاصطناعي — أكثر من ٩٠ لغة بين يديك.';
+
+  @override
+  String get onboardingCaption => 'تحدّث أو اكتب أو صوّر — وترجم في ثوانٍ.';
+
+  @override
+  String get onboardingGetStarted => 'ابدأ الآن';
+
+  @override
+  String get onboardingHaveAccount => 'لديك حساب؟';
+
+  @override
+  String get onboardingSignIn => 'تسجيل الدخول';
 }

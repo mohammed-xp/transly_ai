@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/splash_cubit.dart';
 import '../cubit/splash_state.dart';
@@ -87,14 +88,14 @@ class _SplashViewState extends State<_SplashView>
         body: Stack(
           children: [
             // Decorative coral glows.
-            _Blob(
+            DecorativeBlob(
               isDark ? AppColors.accentDark : AppColors.primary,
               opacity: isDark ? 0.40 : 0.10,
               diameter: isDark ? 320 : 300,
               top: isDark ? -130 : -120,
               right: isDark ? -100 : -90,
             ),
-            _Blob(
+            DecorativeBlob(
               isDark ? AppColors.deep : AppColors.primary,
               opacity: isDark ? 0.22 : 0.08,
               diameter: isDark ? 300 : 280,
@@ -171,49 +172,6 @@ class _SplashViewState extends State<_SplashView>
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// A soft radial coral glow that fades to transparent at its edge.
-class _Blob extends StatelessWidget {
-  const _Blob(
-    this.color, {
-    required this.opacity,
-    required this.diameter,
-    this.top,
-    this.bottom,
-    this.left,
-    this.right,
-  });
-
-  final Color color;
-  final double opacity;
-  final double diameter;
-  final double? top;
-  final double? bottom;
-  final double? left;
-  final double? right;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: top,
-      bottom: bottom,
-      left: left,
-      right: right,
-      child: IgnorePointer(
-        child: Container(
-          width: diameter,
-          height: diameter,
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [color.withValues(alpha: opacity), color.withValues(alpha: 0)],
-              stops: const [0, 0.7],
-            ),
-          ),
         ),
       ),
     );

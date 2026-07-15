@@ -2,5 +2,10 @@
   "@@locale": "ar",
   "appTitle": "ترانسلي AI",
   "splashTagline": "ترجمة بالذكاء الاصطناعي",
-  "splashPoweredBy": "مدعوم بالذكاء الاصطناعي"
+  "splashPoweredBy": "مدعوم بالذكاء الاصطناعي",
+  "onboardingSubtitle": "ترجمة فورية ودقيقة بالذكاء الاصطناعي — أكثر من ٩٠ لغة بين يديك.",
+  "onboardingCaption": "تحدّث أو اكتب أو صوّر — وترجم في ثوانٍ.",
+  "onboardingGetStarted": "ابدأ الآن",
+  "onboardingHaveAccount": "لديك حساب؟",
+  "onboardingSignIn": "تسجيل الدخول"
 }
