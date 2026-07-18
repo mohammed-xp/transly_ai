@@ -74,4 +74,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translateDockCamera => 'Camera';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageArabic => 'Arabic';
+
+  @override
+  String get translateSourceHint => 'Type text to translate…';
+
+  @override
+  String get translateDownloadingModel => 'Downloading translation model…';
+
+  @override
+  String get translateErrorGeneric => 'Couldn\'t translate. Please try again.';
+
+  @override
+  String get translateErrorModelDownload =>
+      'Couldn\'t download the translation model. Check your connection and try again.';
+
+  @override
+  String get translateErrorNoConnection => 'No internet connection.';
 }

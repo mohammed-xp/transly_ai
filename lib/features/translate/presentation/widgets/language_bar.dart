@@ -12,11 +12,13 @@ class LanguageBar extends StatelessWidget {
     required this.isDark,
     required this.fromLanguage,
     required this.toLanguage,
+    required this.onSwap,
   });
 
   final bool isDark;
   final String fromLanguage;
   final String toLanguage;
+  final VoidCallback onSwap;
 
   static const double _swapButtonSize = 42;
 
@@ -52,7 +54,7 @@ class LanguageBar extends StatelessWidget {
               language: fromLanguage,
             ),
           ),
-          _SwapButton(onTap: () {/* TODO(translate): swap languages via cubit */}),
+          _SwapButton(onTap: onSwap),
           Expanded(
             child: _LanguageColumn(
               isDark: isDark,

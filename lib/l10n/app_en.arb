@@ -87,5 +87,33 @@
   "translateDockCamera": "Camera",
   "@translateDockCamera": {
     "description": "Camera input mode in the bottom input dock."
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "Display name of the English language."
+  },
+  "languageArabic": "Arabic",
+  "@languageArabic": {
+    "description": "Display name of the Arabic language."
+  },
+  "translateSourceHint": "Type text to translate…",
+  "@translateSourceHint": {
+    "description": "Placeholder in the source text field before the user types."
+  },
+  "translateDownloadingModel": "Downloading translation model…",
+  "@translateDownloadingModel": {
+    "description": "Status shown while the on-device language model is downloading."
+  },
+  "translateErrorGeneric": "Couldn't translate. Please try again.",
+  "@translateErrorGeneric": {
+    "description": "Generic translation failure message."
+  },
+  "translateErrorModelDownload": "Couldn't download the translation model. Check your connection and try again.",
+  "@translateErrorModelDownload": {
+    "description": "Shown when the on-device model download fails."
+  },
+  "translateErrorNoConnection": "No internet connection.",
+  "@translateErrorNoConnection": {
+    "description": "Shown when an online-only translation is attempted while offline."
   }
 }

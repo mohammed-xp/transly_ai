@@ -21,5 +21,12 @@
   "translateToneConcise": "مختصرة",
   "translateDockKeyboard": "لوحة المفاتيح",
   "translateDockVoice": "الصوت",
-  "translateDockCamera": "الكاميرا"
+  "translateDockCamera": "الكاميرا",
+  "languageEnglish": "الإنجليزية",
+  "languageArabic": "العربية",
+  "translateSourceHint": "اكتب النص المراد ترجمته…",
+  "translateDownloadingModel": "جارٍ تنزيل نموذج الترجمة…",
+  "translateErrorGeneric": "تعذّرت الترجمة. حاول مرة أخرى.",
+  "translateErrorModelDownload": "تعذّر تنزيل نموذج الترجمة. تحقّق من الاتصال وحاول مجددًا.",
+  "translateErrorNoConnection": "لا يوجد اتصال بالإنترنت."
 }

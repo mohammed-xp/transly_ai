@@ -1,8 +1,22 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(find ~/AppData/Local/Pub/Cache/hosted -maxdepth 1 -type d -iname \"google_mlkit_translation*\" 2>/dev/null; echo \"---LOCK---\"; grep -A2 \"google_mlkit_translation:\" d:/projs/transly_ai/pubspec.lock 2>/dev/null)",
+      "Read(//c/Users/m7md2/AppData/Local/Pub/Cache/hosted/**)",
+      "Bash(cd d:/projs/transly_ai && grep -A5 \"google_mlkit_translation:\" pubspec.lock; echo \"===CACHE SEARCH===\"; ls ~/AppData/Local/Pub/Cache/hosted/pub.dev/ 2>/dev/null | grep -i mlkit_translation)",
+      "Read(//c/Users/m7md2/AppData/Local/Pub/Cache/hosted/pub.dev/**)",
+      "Read(//c/Users/m7md2/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_translation-0.12.0/**)",
+      "Bash(find ~/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_translation-0.12.0 -name \"*.dart\" 2>/dev/null)",
+      "Read(//c/Users/m7md2/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_translation-0.12.0/lib/src/**)",
+      "Bash(find ~/AppData/Local/Pub/Cache/hosted/pub.dev -maxdepth 2 -path \"*google_mlkit_commons*/lib/src*\" -name \"*.dart\" 2>/dev/null | head; echo \"===\"; grep -rn \"isModelDownloaded\\\\|downloadModel\\\\|deleteModel\\\\|abstract class ModelManager\" ~/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_commons*/lib/ 2>/dev/null)",
+      "Bash(grep -rn \"Future<List<ConnectivityResult>> checkConnectivity\\\\|Future<ConnectivityResult> checkConnectivity\\\\|enum ConnectivityResult\" ~/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus_platform_interface*/lib/ ~/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-*/lib/ 2>/dev/null | head)",
+      "Skill(flutter-cubit)",
+      "Skill(flutter-cubit:*)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
-        "description": "Build runner reminder: warns when a code-generated file (datasource, response, request) is modified, reminding to run build_runner",
         "matcher": "Write|Edit",
         "hooks": [
           {
@@ -14,7 +28,6 @@
     ],
     "PreToolUse": [
       {
-        "description": "Test-writer enforcement: routes any *_test.dart Write through a permission prompt so tests are created via the @test-writer agent, not hand-written (CLAUDE.md A.9)",
         "matcher": "Write",
         "hooks": [
           {

@@ -74,4 +74,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get translateDockCamera => 'الكاميرا';
+
+  @override
+  String get languageEnglish => 'الإنجليزية';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get translateSourceHint => 'اكتب النص المراد ترجمته…';
+
+  @override
+  String get translateDownloadingModel => 'جارٍ تنزيل نموذج الترجمة…';
+
+  @override
+  String get translateErrorGeneric => 'تعذّرت الترجمة. حاول مرة أخرى.';
+
+  @override
+  String get translateErrorModelDownload =>
+      'تعذّر تنزيل نموذج الترجمة. تحقّق من الاتصال وحاول مجددًا.';
+
+  @override
+  String get translateErrorNoConnection => 'لا يوجد اتصال بالإنترنت.';
 }

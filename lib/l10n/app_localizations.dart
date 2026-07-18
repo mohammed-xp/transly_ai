@@ -229,6 +229,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera'**
   String get translateDockCamera;
+
+  /// Display name of the English language.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Display name of the Arabic language.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get languageArabic;
+
+  /// Placeholder in the source text field before the user types.
+  ///
+  /// In en, this message translates to:
+  /// **'Type text to translate…'**
+  String get translateSourceHint;
+
+  /// Status shown while the on-device language model is downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading translation model…'**
+  String get translateDownloadingModel;
+
+  /// Generic translation failure message.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t translate. Please try again.'**
+  String get translateErrorGeneric;
+
+  /// Shown when the on-device model download fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t download the translation model. Check your connection and try again.'**
+  String get translateErrorModelDownload;
+
+  /// Shown when an online-only translation is attempted while offline.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get translateErrorNoConnection;
 }
 
 class _AppLocalizationsDelegate
