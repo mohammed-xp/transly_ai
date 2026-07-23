@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import 'speaker_button.dart';
 
 /// Editable source card: language label, a speaker button, and the input field
 /// the user types into (design `02 · Translate`). Owns its [TextEditingController]
@@ -16,6 +17,7 @@ class SourceCard extends StatefulWidget {
     required this.textDirection,
     required this.onChanged,
     required this.onSubmitted,
+    required this.onSpeak,
   });
 
   final bool isDark;
@@ -28,6 +30,9 @@ class SourceCard extends StatefulWidget {
   final TextDirection textDirection;
   final ValueChanged<String> onChanged;
   final VoidCallback onSubmitted;
+
+  /// Invoked when the speaker icon is tapped; null disables it (nothing to speak).
+  final VoidCallback? onSpeak;
 
   @override
   State<SourceCard> createState() => _SourceCardState();
@@ -92,10 +97,10 @@ class _SourceCardState extends State<SourceCard> {
                 widget.language,
                 style: textTheme.titleSmall?.copyWith(color: labelColor),
               ),
-              Icon(
-                Icons.volume_up_outlined,
-                size: AppDimens.iconM,
+              SpeakerButton(
+                icon: Icons.volume_up_outlined,
                 color: iconColor,
+                onTap: widget.onSpeak,
               ),
             ],
           ),

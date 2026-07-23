@@ -11,7 +11,12 @@
       "Bash(find ~/AppData/Local/Pub/Cache/hosted/pub.dev -maxdepth 2 -path \"*google_mlkit_commons*/lib/src*\" -name \"*.dart\" 2>/dev/null | head; echo \"===\"; grep -rn \"isModelDownloaded\\\\|downloadModel\\\\|deleteModel\\\\|abstract class ModelManager\" ~/AppData/Local/Pub/Cache/hosted/pub.dev/google_mlkit_commons*/lib/ 2>/dev/null)",
       "Bash(grep -rn \"Future<List<ConnectivityResult>> checkConnectivity\\\\|Future<ConnectivityResult> checkConnectivity\\\\|enum ConnectivityResult\" ~/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus_platform_interface*/lib/ ~/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-*/lib/ 2>/dev/null | head)",
       "Skill(flutter-cubit)",
-      "Skill(flutter-cubit:*)"
+      "Skill(flutter-cubit:*)",
+      "Bash(find ~/AppData/Local/Pub/Cache/hosted/pub.dev -maxdepth 1 -iname \"flutter_tts-*\" 2>/dev/null)",
+      "Bash(grep -rn \"^class Fake\" ~/AppData/Local/Pub/Cache/hosted/pub.dev/*/lib/*.dart 2>/dev/null | grep -i \"flutter_test\\\\|mockito\\\\|meta\" | head -5 *)",
+      "Bash(flutter --version --machine)",
+      "Bash(grep -n \"Fake\" ~/flutter/packages/flutter_test/lib/flutter_test.dart 2>/dev/null)",
+      "Read(//c/Users/m7md2/flutter/packages/flutter_test/lib/**)"
     ]
   },
   "hooks": {

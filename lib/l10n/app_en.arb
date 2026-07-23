@@ -104,6 +104,10 @@
   "@translateDownloadingModel": {
     "description": "Status shown while the on-device language model is downloading."
   },
+  "translateListen": "Listen",
+  "@translateListen": {
+    "description": "Accessibility label for the speaker button that reads text aloud."
+  },
   "translateErrorGeneric": "Couldn't translate. Please try again.",
   "@translateErrorGeneric": {
     "description": "Generic translation failure message."

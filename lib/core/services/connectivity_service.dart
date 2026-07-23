@@ -1,8 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 /// Thin abstraction over [Connectivity] so repositories can be unit-tested
-/// without hitting platform channels. Shared infra — lives in core/ because the
-/// online translation source (and future features) will reuse it.
+/// without hitting platform channels. Lives in `core/services/` — a device
+/// capability wrapper reused by the online translation source (and future
+/// features), not a networking primitive.
 abstract class ConnectivityService {
   /// `true` when the device reports any active transport (wifi/mobile/ethernet…).
   Future<bool> get isConnected;

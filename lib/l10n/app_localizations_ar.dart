@@ -88,6 +88,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateDownloadingModel => 'جارٍ تنزيل نموذج الترجمة…';
 
   @override
+  String get translateListen => 'استماع';
+
+  @override
   String get translateErrorGeneric => 'تعذّرت الترجمة. حاول مرة أخرى.';
 
   @override

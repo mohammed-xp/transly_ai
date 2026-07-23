@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
@@ -10,7 +11,8 @@ import '../../features/translate/domain/usecases/check_translation_models_usecas
 import '../../features/translate/domain/usecases/download_translation_models_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
-import '../network/connectivity_service.dart';
+import '../services/connectivity_service.dart';
+import '../services/tts_service.dart';
 
 /// Service locator. Register infrastructure, repositories, use cases, and
 /// cubits here. Feature modules add their registrations as they are built.
@@ -23,6 +25,8 @@ Future<void> configureDependencies() async {
     () => ConnectivityServiceImpl(sl()),
   );
   sl.registerLazySingleton(OnDeviceTranslatorModelManager.new);
+  sl.registerLazySingleton(FlutterTts.new);
+  sl.registerLazySingleton<TtsService>(() => FlutterTtsService(sl()));
 
   // ── Data sources ──
   sl.registerLazySingleton<TranslationLocalDataSource>(

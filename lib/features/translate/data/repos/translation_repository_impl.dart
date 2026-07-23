@@ -1,6 +1,6 @@
 import '../../../../core/errors/failure.dart';
-import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/result/api_result.dart';
+import '../../../../core/services/connectivity_service.dart';
 import '../../domain/entities/language.dart';
 import '../../domain/entities/translation_entity.dart';
 import '../../domain/entities/translation_tone.dart';

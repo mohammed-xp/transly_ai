@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
+import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -33,8 +36,20 @@ class TranslateScreen extends StatelessWidget {
   }
 }
 
-class _TranslateView extends StatelessWidget {
+class _TranslateView extends StatefulWidget {
   const _TranslateView();
+
+  @override
+  State<_TranslateView> createState() => _TranslateViewState();
+}
+
+class _TranslateViewState extends State<_TranslateView> {
+  @override
+  void dispose() {
+    // Leaving the screen shouldn't leave speech playing in the background.
+    unawaited(sl<TtsService>().stop());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,15 +128,19 @@ class _SourceSection extends StatelessWidget {
       selector: (state) => (state.sourceText, state.from),
       builder: (context, data) {
         final cubit = context.read<TranslateCubit>();
+        final text = data.$1;
+        final from = data.$2;
         return SourceCard(
           isDark: isDark,
-          language: languageLabel(context, data.$2),
-          text: data.$1,
+          language: languageLabel(context, from),
+          text: text,
           hintText: l10n.translateSourceHint,
-          textDirection:
-              data.$2.isRtl ? TextDirection.rtl : TextDirection.ltr,
+          textDirection: from.isRtl ? TextDirection.rtl : TextDirection.ltr,
           onChanged: cubit.sourceTextChanged,
           onSubmitted: cubit.translateNow,
+          onSpeak: text.trim().isEmpty
+              ? null
+              : () => sl<TtsService>().speak(text: text, languageCode: from.code),
         );
       },
     );
@@ -152,17 +171,21 @@ class _OutputSection extends StatelessWidget {
           TranslationIdle() || TranslationDone() => (null, false),
         };
         final output = data.$1;
+        final to = data.$2;
         return TranslationOutputCard(
           isDark: isDark,
-          language: languageLabel(context, data.$2),
+          language: languageLabel(context, to),
           text: output,
-          textDirection: data.$2.isRtl ? TextDirection.rtl : TextDirection.ltr,
+          textDirection: to.isRtl ? TextDirection.rtl : TextDirection.ltr,
           statusMessage: statusMessage,
           isBusy: isBusy,
           // No in-app confirmation — the OS shows its own copy feedback.
           onCopy: output.isEmpty
               ? null
               : () => Clipboard.setData(ClipboardData(text: output)),
+          onSpeak: output.isEmpty
+              ? null
+              : () => sl<TtsService>().speak(text: output, languageCode: to.code),
         );
       },
     );

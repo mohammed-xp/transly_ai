@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Downloading translation model…'**
   String get translateDownloadingModel;
 
+  /// Accessibility label for the speaker button that reads text aloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get translateListen;
+
   /// Generic translation failure message.
   ///
   /// In en, this message translates to:

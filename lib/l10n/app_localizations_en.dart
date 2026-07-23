@@ -88,6 +88,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateDownloadingModel => 'Downloading translation model…';
 
   @override
+  String get translateListen => 'Listen';
+
+  @override
   String get translateErrorGeneric => 'Couldn\'t translate. Please try again.';
 
   @override

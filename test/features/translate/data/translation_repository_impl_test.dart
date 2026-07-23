@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/errors/failure.dart';
-import 'package:transly_ai/core/network/connectivity_service.dart';
 import 'package:transly_ai/core/result/api_result.dart';
+import 'package:transly_ai/core/services/connectivity_service.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_local_data_source.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_remote_data_source.dart';
 import 'package:transly_ai/features/translate/data/repos/translation_repository_impl.dart';

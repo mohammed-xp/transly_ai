@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../l10n/app_localizations.dart';
+import 'speaker_button.dart';
 
 /// Coral-tinted card holding the AI translation output: language label, "AI"
 /// badge, speaker button, the translated text, a status slot (downloading /
@@ -17,6 +18,7 @@ class TranslationOutputCard extends StatelessWidget {
     required this.statusMessage,
     required this.isBusy,
     required this.onCopy,
+    required this.onSpeak,
   });
 
   final bool isDark;
@@ -35,6 +37,9 @@ class TranslationOutputCard extends StatelessWidget {
 
   /// Invoked when Copy is tapped; null disables the button (nothing to copy).
   final VoidCallback? onCopy;
+
+  /// Invoked when the speaker icon is tapped; null disables it (nothing to speak).
+  final VoidCallback? onSpeak;
 
   static const double _actionHeight = 38;
   static const double _actionRadius = 11;
@@ -89,7 +94,11 @@ class TranslationOutputCard extends StatelessWidget {
                   _AiBadge(coral: coral),
                 ],
               ),
-              Icon(Icons.volume_up_rounded, size: AppDimens.iconM, color: coral),
+              SpeakerButton(
+                icon: Icons.volume_up_rounded,
+                color: coral,
+                onTap: onSpeak,
+              ),
             ],
           ),
           const SizedBox(height: AppDimens.spaceS + 2),
