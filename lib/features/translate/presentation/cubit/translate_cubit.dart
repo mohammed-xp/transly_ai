@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../../domain/usecases/check_translation_models_usecase.dart';
 import '../../domain/usecases/download_translation_models_usecase.dart';
@@ -78,9 +79,11 @@ class TranslateCubit extends Cubit<TranslateState> {
   }
 
   /// Records the selected tone. Inert while the tone is disabled (offline).
+  /// Retranslates so an existing output reflects the new tone.
   void toneChanged(TranslationTone tone) {
     if (!state.isToneEnabled) return;
     emit(state.copyWith(tone: tone));
+    if (state.sourceText.trim().isNotEmpty) _translate();
   }
 
   Future<void> _translate() async {
@@ -127,6 +130,7 @@ class TranslateCubit extends Cubit<TranslateState> {
       success: (translation) => emit(state.copyWith(
         translatedText: translation.translatedText,
         status: const TranslationDone(),
+        isToneEnabled: translation.engine == TranslationEngine.online,
       )),
       failure: (f) => emit(state.copyWith(status: TranslationError(f))),
     );

@@ -46,8 +46,8 @@ class TranslateState {
     required this.isToneEnabled,
   });
 
-  /// Offline default: English → Arabic, formal tone, tone disabled (only the
-  /// ML Kit source exists; the online source will enable tone later).
+  /// Offline default: English → Arabic, formal tone, tone disabled until the
+  /// first online (Gemini) translation completes.
   factory TranslateState.initial() => const TranslateState(
         sourceText: '',
         from: Language.english,

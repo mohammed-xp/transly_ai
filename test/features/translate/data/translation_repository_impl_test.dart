@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transly_ai/core/errors/app_exceptions.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/connectivity_service.dart';
@@ -6,6 +7,7 @@ import 'package:transly_ai/features/translate/data/datasources/translation_local
 import 'package:transly_ai/features/translate/data/datasources/translation_remote_data_source.dart';
 import 'package:transly_ai/features/translate/data/repos/translation_repository_impl.dart';
 import 'package:transly_ai/features/translate/domain/entities/language.dart';
+import 'package:transly_ai/features/translate/domain/entities/translation_engine.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_tone.dart';
 
 class _FakeLocalDataSource implements TranslationLocalDataSource {
@@ -40,6 +42,7 @@ class _FakeLocalDataSource implements TranslationLocalDataSource {
 class _FakeRemoteDataSource implements TranslationRemoteDataSource {
   bool translateCalled = false;
   TranslationTone? receivedTone;
+  Object? throwOnTranslate;
 
   @override
   Future<String> translate({
@@ -50,6 +53,7 @@ class _FakeRemoteDataSource implements TranslationRemoteDataSource {
   }) async {
     translateCalled = true;
     receivedTone = tone;
+    if (throwOnTranslate != null) throw throwOnTranslate!;
     return 'remote:$text';
   }
 }
@@ -124,7 +128,9 @@ void main() {
       expect(remote.translateCalled, isTrue);
       expect(remote.receivedTone, TranslationTone.casual);
       expect(local.translateCalled, isFalse);
-      expect((result as ApiSuccess).data.translatedText, 'remote:hi');
+      final entity = (result as ApiSuccess).data;
+      expect(entity.translatedText, 'remote:hi');
+      expect(entity.engine, TranslationEngine.online);
     });
 
     test('routes to local when a remote exists but the device is offline',
@@ -137,7 +143,7 @@ void main() {
         remote: remote,
       );
 
-      await repo.translate(
+      final result = await repo.translate(
         text: 'hi',
         from: Language.english,
         to: Language.arabic,
@@ -146,6 +152,7 @@ void main() {
 
       expect(local.translateCalled, isTrue);
       expect(remote.translateCalled, isFalse);
+      expect((result as ApiSuccess).data.engine, TranslationEngine.offline);
     });
 
     test('routes to local when no remote is configured', () async {
@@ -163,6 +170,77 @@ void main() {
       );
 
       expect(local.translateCalled, isTrue);
+    });
+
+    test('falls back to local when the remote call fails', () async {
+      final local = _FakeLocalDataSource();
+      final remote = _FakeRemoteDataSource()
+        ..throwOnTranslate = const RemoteApiException('quota exceeded');
+      final repo = TranslationRepositoryImpl(
+        local: local,
+        connectivity: _FakeConnectivity(true),
+        remote: remote,
+      );
+
+      final result = await repo.translate(
+        text: 'hi',
+        from: Language.english,
+        to: Language.arabic,
+        tone: TranslationTone.formal,
+      );
+
+      expect(remote.translateCalled, isTrue);
+      expect(local.translateCalled, isTrue);
+      expect(result, isA<ApiSuccess<dynamic>>());
+      final entity = (result as ApiSuccess).data;
+      expect(entity.translatedText, 'local:hi');
+      expect(entity.engine, TranslationEngine.offline);
+    });
+
+    test(
+        'maps a RemoteConnectionException to NoConnectionFailure when local '
+        'also fails', () async {
+      final local = _FakeLocalDataSource()..throwOnTranslate = Exception('boom');
+      final remote = _FakeRemoteDataSource()
+        ..throwOnTranslate = const RemoteConnectionException('offline');
+      final repo = TranslationRepositoryImpl(
+        local: local,
+        connectivity: _FakeConnectivity(true),
+        remote: remote,
+      );
+
+      final result = await repo.translate(
+        text: 'hi',
+        from: Language.english,
+        to: Language.arabic,
+        tone: TranslationTone.formal,
+      );
+
+      expect(result, isA<ApiFailure<dynamic>>());
+      expect((result as ApiFailure).failure, isA<NoConnectionFailure>());
+    });
+
+    test(
+        'maps a RemoteApiException to TranslationFailure when local also '
+        'fails', () async {
+      final local = _FakeLocalDataSource()..throwOnTranslate = Exception('boom');
+      final remote = _FakeRemoteDataSource()
+        ..throwOnTranslate = const RemoteApiException('server error');
+      final repo = TranslationRepositoryImpl(
+        local: local,
+        connectivity: _FakeConnectivity(true),
+        remote: remote,
+      );
+
+      final result = await repo.translate(
+        text: 'hi',
+        from: Language.english,
+        to: Language.arabic,
+        tone: TranslationTone.formal,
+      );
+
+      expect(result, isA<ApiFailure<dynamic>>());
+      expect((result as ApiFailure).failure, isA<TranslationFailure>());
     });
   });
 

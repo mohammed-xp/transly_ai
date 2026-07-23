@@ -33,6 +33,10 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Local secrets — never commit real API keys. Copy env.json.example to
+# env.json and fill in real values; run with --dart-define-from-file=env.json.
+env.json
+
 # Symbolication related
 app.*.symbols
 

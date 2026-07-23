@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/translate/domain/entities/language.dart';
+import 'package:transly_ai/features/translate/domain/entities/translation_engine.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_entity.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_tone.dart';
 import 'package:transly_ai/features/translate/domain/repos/translation_repository.dart';
@@ -20,6 +21,8 @@ class _FakeTranslationRepository implements TranslationRepository {
   Failure? translateFailure;
   Duration translateDelay = Duration.zero;
   int translateCallCount = 0;
+  TranslationEngine engine = TranslationEngine.offline;
+  TranslationTone? receivedTone;
 
   @override
   Future<ApiResult<bool>> areModelsDownloaded({
@@ -47,6 +50,7 @@ class _FakeTranslationRepository implements TranslationRepository {
     required TranslationTone tone,
   }) async {
     translateCallCount++;
+    receivedTone = tone;
     if (translateDelay > Duration.zero) {
       await Future<void>.delayed(translateDelay);
     }
@@ -57,6 +61,7 @@ class _FakeTranslationRepository implements TranslationRepository {
         translatedText: 'x:$text',
         from: from,
         to: to,
+        engine: engine,
       ),
     );
   }
@@ -331,6 +336,67 @@ void main() {
       cubit.toneChanged(TranslationTone.concise);
 
       expect(cubit.state.tone, TranslationTone.formal);
+    });
+
+    test('an online translation enables the tone selector', () {
+      fakeAsync((async) {
+        final repo = _FakeTranslationRepository()
+          ..engine = TranslationEngine.online;
+        final cubit = _buildCubit(repo);
+
+        cubit.sourceTextChanged('hi');
+        async.elapse(TranslateCubit.debounceDuration);
+        async.flushMicrotasks();
+
+        expect(cubit.state.isToneEnabled, isTrue);
+
+        cubit.close();
+      });
+    });
+
+    test('a subsequent offline fallback disables the tone selector again', () {
+      fakeAsync((async) {
+        final repo = _FakeTranslationRepository()
+          ..engine = TranslationEngine.online;
+        final cubit = _buildCubit(repo);
+
+        cubit.sourceTextChanged('hi');
+        async.elapse(TranslateCubit.debounceDuration);
+        async.flushMicrotasks();
+        expect(cubit.state.isToneEnabled, isTrue);
+
+        repo.engine = TranslationEngine.offline;
+        cubit.sourceTextChanged('bye');
+        async.elapse(TranslateCubit.debounceDuration);
+        async.flushMicrotasks();
+
+        expect(cubit.state.isToneEnabled, isFalse);
+
+        cubit.close();
+      });
+    });
+
+    test('toneChanged retranslates with the new tone while enabled', () {
+      fakeAsync((async) {
+        final repo = _FakeTranslationRepository()
+          ..engine = TranslationEngine.online;
+        final cubit = _buildCubit(repo);
+
+        cubit.sourceTextChanged('hi');
+        async.elapse(TranslateCubit.debounceDuration);
+        async.flushMicrotasks();
+        expect(cubit.state.isToneEnabled, isTrue);
+        final callsBeforeToneChange = repo.translateCallCount;
+
+        cubit.toneChanged(TranslationTone.concise);
+        async.flushMicrotasks();
+
+        expect(cubit.state.tone, TranslationTone.concise);
+        expect(repo.receivedTone, TranslationTone.concise);
+        expect(repo.translateCallCount, callsBeforeToneChange + 1);
+
+        cubit.close();
+      });
     });
 
     test('does not emit after being closed mid-debounce', () {
