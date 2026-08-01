@@ -43,11 +43,13 @@ class TranslateState {
     required this.tone,
     required this.translatedText,
     required this.status,
-    required this.isToneEnabled,
+    required this.isOnlineAvailable,
+    required this.lastEngineWasOnline,
   });
 
-  /// Offline default: English → Arabic, formal tone, tone disabled until the
-  /// first online (Gemini) translation completes.
+  /// Offline default: English → Arabic, formal tone. [isOnlineAvailable] starts
+  /// `false` only because it is the pre-first-emission value of the
+  /// availability stream, which reports the real answer immediately.
   factory TranslateState.initial() => const TranslateState(
         sourceText: '',
         from: Language.english,
@@ -55,7 +57,8 @@ class TranslateState {
         tone: TranslationTone.formal,
         translatedText: '',
         status: TranslationIdle(),
-        isToneEnabled: false,
+        isOnlineAvailable: false,
+        lastEngineWasOnline: true,
       );
 
   final String sourceText;
@@ -64,7 +67,22 @@ class TranslateState {
   final TranslationTone tone;
   final String translatedText;
   final TranslationStatus status;
-  final bool isToneEnabled;
+
+  /// A tone-aware (online) source is configured and the device is connected.
+  /// Driven by the availability stream.
+  final bool isOnlineAvailable;
+
+  /// Whether the most recent successful translation actually came from the
+  /// online engine. A remote call can fail and fall back to the offline engine
+  /// while connectivity still looks fine, so this is tracked separately from
+  /// [isOnlineAvailable] rather than overwriting it.
+  final bool lastEngineWasOnline;
+
+  /// Tone is offered only when online translation is available *and* the last
+  /// result actually honoured it. Derived rather than stored so the two
+  /// independent signals can arrive in any order without one clobbering the
+  /// other.
+  bool get isToneEnabled => isOnlineAvailable && lastEngineWasOnline;
 
   TranslateState copyWith({
     String? sourceText,
@@ -73,7 +91,8 @@ class TranslateState {
     TranslationTone? tone,
     String? translatedText,
     TranslationStatus? status,
-    bool? isToneEnabled,
+    bool? isOnlineAvailable,
+    bool? lastEngineWasOnline,
   }) {
     return TranslateState(
       sourceText: sourceText ?? this.sourceText,
@@ -82,7 +101,8 @@ class TranslateState {
       tone: tone ?? this.tone,
       translatedText: translatedText ?? this.translatedText,
       status: status ?? this.status,
-      isToneEnabled: isToneEnabled ?? this.isToneEnabled,
+      isOnlineAvailable: isOnlineAvailable ?? this.isOnlineAvailable,
+      lastEngineWasOnline: lastEngineWasOnline ?? this.lastEngineWasOnline,
     );
   }
 }

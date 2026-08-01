@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/splash_cubit.dart';
@@ -68,23 +69,13 @@ class _SplashViewState extends State<_SplashView>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
-
-    final background = isDark ? AppColors.backgroundDark : AppColors.surfaceLight;
-    final inkColor = isDark ? AppColors.textPrimaryDark : AppColors.inkLight;
-    final accentColor = isDark ? AppColors.accentDark2 : AppColors.primary;
-    final taglineColor =
-        isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
-    final spinnerTrack =
-        isDark ? AppColors.borderDark : AppColors.spinnerTrackLight;
-    final spinnerActive = isDark ? AppColors.accentDark : AppColors.primary;
-    final poweredColor =
-        isDark ? AppColors.iconLineDark : AppColors.captionMutedLight;
+    final c = context.palette;
 
     return BlocListener<SplashCubit, SplashState>(
       listenWhen: (_, current) => current is SplashReady,
       listener: (context, _) => context.goNamed(AppRoutes.onboardingName),
       child: Scaffold(
-        backgroundColor: background,
+        backgroundColor: c.splashBackground,
         body: Stack(
           children: [
             // Decorative coral glows.
@@ -120,13 +111,13 @@ class _SplashViewState extends State<_SplashView>
                           children: [
                             TextSpan(
                               text: ' AI',
-                              style: TextStyle(color: accentColor),
+                              style: TextStyle(color: c.coralAccent),
                             ),
                           ],
                         ),
                         style: textTheme.displayLarge?.copyWith(
                           fontSize: 34,
-                          color: inkColor,
+                          color: c.ink,
                           letterSpacing: -0.34,
                         ),
                       ),
@@ -135,7 +126,7 @@ class _SplashViewState extends State<_SplashView>
                         l10n.splashTagline,
                         style: textTheme.bodyMedium?.copyWith(
                           fontSize: 15,
-                          color: taglineColor,
+                          color: c.textMuted,
                         ),
                       ),
                     ],
@@ -155,8 +146,8 @@ class _SplashViewState extends State<_SplashView>
                   RotationTransition(
                     turns: _spin,
                     child: SplashSpinner(
-                      trackColor: spinnerTrack,
-                      activeColor: spinnerActive,
+                      trackColor: c.spinnerTrack,
+                      activeColor: c.coral,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -164,7 +155,7 @@ class _SplashViewState extends State<_SplashView>
                     l10n.splashPoweredBy,
                     style: textTheme.bodySmall?.copyWith(
                       fontSize: 12,
-                      color: poweredColor,
+                      color: c.iconLine,
                       letterSpacing: 0.48,
                     ),
                   ),

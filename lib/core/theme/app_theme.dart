@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 import 'app_dimens.dart';
+import 'app_palette.dart';
 import 'app_typography.dart';
 
 /// App themes built from the design tokens. Source: `Transly-AI-Design-System.md`.
@@ -19,6 +20,7 @@ abstract final class AppTheme {
         textSecondary: AppColors.textSecondaryLight,
         textMuted: AppColors.textMutedLight,
         toggleTrackOff: AppColors.toggleTrackOffLight,
+        palette: AppPalette.light,
       );
 
   static ThemeData get dark => _build(
@@ -34,6 +36,7 @@ abstract final class AppTheme {
         textSecondary: AppColors.textSecondaryDark,
         textMuted: AppColors.textMutedDark,
         toggleTrackOff: AppColors.toggleTrackOffDark,
+        palette: AppPalette.dark,
       );
 
   static ThemeData _build({
@@ -49,6 +52,7 @@ abstract final class AppTheme {
     required Color textSecondary,
     required Color textMuted,
     required Color toggleTrackOff,
+    required AppPalette palette,
   }) {
     final textTheme = AppTypography.textTheme(textPrimary);
 
@@ -57,6 +61,7 @@ abstract final class AppTheme {
       brightness: brightness,
       scaffoldBackgroundColor: background,
       textTheme: textTheme,
+      extensions: [palette],
       colorScheme: ColorScheme(
         brightness: brightness,
         primary: primary,

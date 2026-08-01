@@ -26,4 +26,9 @@ abstract class TranslationRepository {
     required Language from,
     required Language to,
   });
+
+  /// Whether the online (tone-aware) translation source is available right
+  /// now — a remote source is configured and the device is connected. Emits
+  /// the current value immediately, then again on every later change.
+  Stream<bool> watchOnlineAvailability();
 }

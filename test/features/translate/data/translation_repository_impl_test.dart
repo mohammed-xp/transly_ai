@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/errors/app_exceptions.dart';
 import 'package:transly_ai/core/errors/failure.dart';
@@ -62,8 +64,24 @@ class _FakeConnectivity implements ConnectivityService {
   _FakeConnectivity(this._connected);
   final bool _connected;
 
+  final _changes = StreamController<bool>.broadcast();
+
+  /// Simulates `checkConnectivity` throwing, which it does on some Android
+  /// configurations and on desktop.
+  Object? throwOnIsConnected;
+
   @override
-  Future<bool> get isConnected async => _connected;
+  Future<bool> get isConnected async {
+    if (throwOnIsConnected != null) throw throwOnIsConnected!;
+    return _connected;
+  }
+
+  @override
+  Stream<bool> get onConnectedChanged => _changes.stream;
+
+  void emit(bool connected) => _changes.add(connected);
+
+  void emitError(Object error) => _changes.addError(error);
 }
 
 void main() {
@@ -306,6 +324,82 @@ void main() {
       );
 
       expect((result as ApiFailure).failure, isA<ModelDownloadFailure>());
+    });
+  });
+
+  group('TranslationRepositoryImpl.watchOnlineAvailability', () {
+    test('emits false once when no remote is configured', () async {
+      final repo = TranslationRepositoryImpl(
+        local: _FakeLocalDataSource(),
+        connectivity: _FakeConnectivity(true),
+      );
+
+      expect(repo.watchOnlineAvailability(), emitsInOrder([false, emitsDone]));
+    });
+
+    test('emits the current connectivity first, then later changes', () async {
+      final connectivity = _FakeConnectivity(true);
+      final repo = TranslationRepositoryImpl(
+        local: _FakeLocalDataSource(),
+        connectivity: connectivity,
+        remote: _FakeRemoteDataSource(),
+      );
+
+      final events = <bool>[];
+      final subscription = repo.watchOnlineAvailability().listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+      connectivity.emit(false);
+      await Future<void>.delayed(Duration.zero);
+      connectivity.emit(true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events, [true, false, true]);
+      await subscription.cancel();
+    });
+
+    test('yields false instead of throwing when the probe fails', () async {
+      final connectivity = _FakeConnectivity(true)
+        ..throwOnIsConnected = Exception('platform channel unavailable');
+      final repo = TranslationRepositoryImpl(
+        local: _FakeLocalDataSource(),
+        connectivity: connectivity,
+        remote: _FakeRemoteDataSource(),
+      );
+
+      final events = <bool>[];
+      final errors = <Object>[];
+      final subscription = repo
+          .watchOnlineAvailability()
+          .listen(events.add, onError: errors.add);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events, [false]);
+      expect(errors, isEmpty, reason: 'the probe error must not escape');
+      await subscription.cancel();
+    });
+
+    test('swallows errors from the connectivity change stream', () async {
+      final connectivity = _FakeConnectivity(true);
+      final repo = TranslationRepositoryImpl(
+        local: _FakeLocalDataSource(),
+        connectivity: connectivity,
+        remote: _FakeRemoteDataSource(),
+      );
+
+      final events = <bool>[];
+      final errors = <Object>[];
+      final subscription = repo
+          .watchOnlineAvailability()
+          .listen(events.add, onError: errors.add);
+      await Future<void>.delayed(Duration.zero);
+      connectivity.emitError(Exception('transport error'));
+      await Future<void>.delayed(Duration.zero);
+      connectivity.emit(false);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(errors, isEmpty);
+      expect(events, [true, false], reason: 'stream survives the error');
+      await subscription.cancel();
     });
   });
 }

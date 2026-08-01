@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Language switch bar: FROM / swap-button / TO. The centered swap button carries
@@ -9,13 +10,11 @@ import '../../../../l10n/app_localizations.dart';
 class LanguageBar extends StatelessWidget {
   const LanguageBar({
     super.key,
-    required this.isDark,
     required this.fromLanguage,
     required this.toLanguage,
     required this.onSwap,
   });
 
-  final bool isDark;
   final String fromLanguage;
   final String toLanguage;
   final VoidCallback onSwap;
@@ -25,23 +24,22 @@ class LanguageBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final surface = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-    final border = isDark ? AppColors.borderDark : AppColors.borderLight;
+    final c = context.palette;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: AppDimens.spaceL),
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(AppDimens.radiusDock),
-        border: Border.all(color: border),
-        boxShadow: isDark
+        border: Border.all(color: c.border),
+        boxShadow: c.cardShadow == null
             ? null
-            : const [
+            : [
                 BoxShadow(
-                  color: AppColors.cardShadowLight,
+                  color: c.cardShadow!,
                   blurRadius: 2,
-                  offset: Offset(0, 1),
+                  offset: const Offset(0, 1),
                 ),
               ],
       ),
@@ -49,7 +47,6 @@ class LanguageBar extends StatelessWidget {
         children: [
           Expanded(
             child: _LanguageColumn(
-              isDark: isDark,
               label: l10n.translateFrom,
               language: fromLanguage,
             ),
@@ -57,7 +54,6 @@ class LanguageBar extends StatelessWidget {
           _SwapButton(onTap: onSwap),
           Expanded(
             child: _LanguageColumn(
-              isDark: isDark,
               label: l10n.translateTo,
               language: toLanguage,
             ),
@@ -70,20 +66,17 @@ class LanguageBar extends StatelessWidget {
 
 class _LanguageColumn extends StatelessWidget {
   const _LanguageColumn({
-    required this.isDark,
     required this.label,
     required this.language,
   });
 
-  final bool isDark;
   final String label;
   final String language;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final mutedColor = isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
-    final inkColor = isDark ? AppColors.textPrimaryDark : AppColors.inkLight;
+    final c = context.palette;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
@@ -91,11 +84,11 @@ class _LanguageColumn extends StatelessWidget {
         children: [
           Text(
             label,
-            style: textTheme.labelSmall?.copyWith(color: mutedColor),
+            style: textTheme.labelSmall?.copyWith(color: c.textMuted),
           ),
           Text(
             language,
-            style: textTheme.titleMedium?.copyWith(color: inkColor),
+            style: textTheme.titleMedium?.copyWith(color: c.ink),
           ),
         ],
       ),

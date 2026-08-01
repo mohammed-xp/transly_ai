@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:transly_ai/core/services/tts_service.dart';
+import 'package:transly_ai/core/services/flutter_tts_service.dart';
 
 /// Overrides every method [FlutterTtsService] calls — none of them invoke
 /// `super`, so the base class's private platform channel is never touched.

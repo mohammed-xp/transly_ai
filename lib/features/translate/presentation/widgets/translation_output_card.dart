@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'speaker_button.dart';
 
@@ -11,7 +11,6 @@ import 'speaker_button.dart';
 class TranslationOutputCard extends StatelessWidget {
   const TranslationOutputCard({
     super.key,
-    required this.isDark,
     required this.language,
     required this.text,
     required this.textDirection,
@@ -21,7 +20,6 @@ class TranslationOutputCard extends StatelessWidget {
     required this.onSpeak,
   });
 
-  final bool isDark;
   final String language;
   final String text;
 
@@ -47,36 +45,14 @@ class TranslationOutputCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final labelColor = isDark ? AppColors.accentDark2 : AppColors.rtlLabelLight;
-    final coral = isDark ? AppColors.accentDark : AppColors.primary;
-    final inkColor = isDark ? AppColors.textPrimaryDark : AppColors.inkLight;
-    final mutedColor =
-        isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
-
-    final gradient = isDark
-        ? LinearGradient(
-            begin: const Alignment(-0.3, -1),
-            end: const Alignment(0.3, 1),
-            colors: [
-              AppColors.accentDark.withValues(alpha: 0.16),
-              AppColors.deep.withValues(alpha: 0.08),
-            ],
-          )
-        : const LinearGradient(
-            begin: Alignment(-0.3, -1),
-            end: Alignment(0.3, 1),
-            colors: [AppColors.outputBgLight, AppColors.outputBgLight2],
-          );
-    final borderColor = isDark
-        ? AppColors.accentDark.withValues(alpha: 0.32)
-        : AppColors.tintBorderLight;
+    final c = context.palette;
 
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: gradient,
+        gradient: c.outputGradient,
         borderRadius: BorderRadius.circular(AppDimens.radiusCard),
-        border: Border.all(color: borderColor),
+        border: Border.all(color: c.outputBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,15 +64,15 @@ class TranslationOutputCard extends StatelessWidget {
                 children: [
                   Text(
                     language,
-                    style: textTheme.titleSmall?.copyWith(color: labelColor),
+                    style: textTheme.titleSmall?.copyWith(color: c.coralLabel),
                   ),
                   const SizedBox(width: 7),
-                  _AiBadge(coral: coral),
+                  const _AiBadge(),
                 ],
               ),
               SpeakerButton(
                 icon: Icons.volume_up_rounded,
-                color: coral,
+                color: c.coral,
                 onTap: onSpeak,
               ),
             ],
@@ -113,7 +89,7 @@ class TranslationOutputCard extends StatelessWidget {
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
                 height: 1.55,
-                color: inkColor,
+                color: c.ink,
               ),
             ),
           if (statusMessage != null) ...[
@@ -126,7 +102,7 @@ class TranslationOutputCard extends StatelessWidget {
                     height: 14,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(coral),
+                      valueColor: AlwaysStoppedAnimation<Color>(c.coral),
                     ),
                   ),
                   const SizedBox(width: AppDimens.spaceS),
@@ -134,7 +110,7 @@ class TranslationOutputCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     statusMessage!,
-                    style: textTheme.titleSmall?.copyWith(color: mutedColor),
+                    style: textTheme.titleSmall?.copyWith(color: c.textMuted),
                   ),
                 ),
               ],
@@ -145,8 +121,6 @@ class TranslationOutputCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _ActionButton(
-                  isDark: isDark,
-                  coral: coral,
                   icon: Icons.copy_rounded,
                   label: AppLocalizations.of(context)!.translateCopy,
                   onTap: onCopy,
@@ -155,8 +129,6 @@ class TranslationOutputCard extends StatelessWidget {
               const SizedBox(width: AppDimens.spaceS),
               Expanded(
                 child: _ActionButton(
-                  isDark: isDark,
-                  coral: coral,
                   icon: Icons.check_circle_outline_rounded,
                   label: AppLocalizations.of(context)!.translateSave,
                   onTap: null, // save/history is future scope
@@ -171,17 +143,16 @@ class TranslationOutputCard extends StatelessWidget {
 }
 
 class _AiBadge extends StatelessWidget {
-  const _AiBadge({required this.coral});
-
-  final Color coral;
+  const _AiBadge();
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final c = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: coral,
+        color: c.coral,
         borderRadius: BorderRadius.circular(AppDimens.radiusPill),
       ),
       child: Row(
@@ -206,15 +177,11 @@ class _AiBadge extends StatelessWidget {
 
 class _ActionButton extends StatelessWidget {
   const _ActionButton({
-    required this.isDark,
-    required this.coral,
     required this.icon,
     required this.label,
     required this.onTap,
   });
 
-  final bool isDark;
-  final Color coral;
   final IconData icon;
   final String label;
 
@@ -224,20 +191,21 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final c = context.palette;
     final radius = BorderRadius.circular(TranslationOutputCard._actionRadius);
-    final bg = isDark
-        ? Colors.white.withValues(alpha: 0.06)
-        : AppColors.surfaceLight;
-    final border =
-        isDark ? Border.all(color: Colors.white.withValues(alpha: 0.08)) : null;
-    final labelColor = isDark ? AppColors.textPrimaryDark : AppColors.inkLight;
+    final border = c.actionBorder == null
+        ? null
+        : Border.all(color: c.actionBorder!);
     final enabled = onTap != null;
 
     return Opacity(
       opacity: enabled ? 1 : 0.45,
       child: DecoratedBox(
-        decoration:
-            BoxDecoration(color: bg, borderRadius: radius, border: border),
+        decoration: BoxDecoration(
+          color: c.actionSurface,
+          borderRadius: radius,
+          border: border,
+        ),
         child: Material(
           color: Colors.transparent,
           borderRadius: radius,
@@ -249,11 +217,11 @@ class _ActionButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, size: 15, color: coral),
+                  Icon(icon, size: 15, color: c.coral),
                   const SizedBox(width: 6),
                   Text(
                     label,
-                    style: textTheme.titleSmall?.copyWith(color: labelColor),
+                    style: textTheme.titleSmall?.copyWith(color: c.ink),
                   ),
                 ],
               ),

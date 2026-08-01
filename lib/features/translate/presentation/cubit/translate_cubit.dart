@@ -6,7 +6,9 @@ import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../../domain/usecases/check_translation_models_usecase.dart';
 import '../../domain/usecases/download_translation_models_usecase.dart';
+import '../../domain/usecases/speak_text_usecase.dart';
 import '../../domain/usecases/translate_text_usecase.dart';
+import '../../domain/usecases/watch_online_availability_usecase.dart';
 import 'translate_state.dart';
 
 /// Orchestrates the translate screen: holds source text + language pair + tone,
@@ -17,14 +19,35 @@ class TranslateCubit extends Cubit<TranslateState> {
     required TranslateTextUseCase translateText,
     required CheckTranslationModelsUseCase checkModels,
     required DownloadTranslationModelsUseCase downloadModels,
+    required SpeakTextUseCase speakText,
+    required WatchOnlineAvailabilityUseCase watchOnlineAvailability,
   })  : _translateText = translateText,
         _checkModels = checkModels,
         _downloadModels = downloadModels,
-        super(TranslateState.initial());
+        _speakText = speakText,
+        super(TranslateState.initial()) {
+    _onlineAvailabilitySubscription = watchOnlineAvailability().listen((available) {
+      if (isClosed) return;
+      emit(state.copyWith(
+        isOnlineAvailable: available,
+        // Coming back online clears a stale offline-fallback latch; without
+        // this, one transient remote failure would keep the tone disabled
+        // until another translation happened to succeed online.
+        lastEngineWasOnline: available ? true : null,
+      ));
+    }, onError: (_) {
+      // Defence in depth — the repository already contains connectivity
+      // errors. Without this the subscription would rethrow into the zone.
+      if (!isClosed) emit(state.copyWith(isOnlineAvailable: false));
+    });
+  }
 
   final TranslateTextUseCase _translateText;
   final CheckTranslationModelsUseCase _checkModels;
   final DownloadTranslationModelsUseCase _downloadModels;
+  final SpeakTextUseCase _speakText;
+
+  late final StreamSubscription<bool> _onlineAvailabilitySubscription;
 
   /// Delay after the last keystroke before translating. Public so tests advance
   /// the clock against the same source of truth.
@@ -86,6 +109,21 @@ class TranslateCubit extends Cubit<TranslateState> {
     if (state.sourceText.trim().isNotEmpty) _translate();
   }
 
+  /// Speaks the current source text. No-op while it is blank. Fire-and-forget:
+  /// a speech failure is swallowed by the TTS service and must not block or
+  /// surface in the UI.
+  void speakSource() {
+    if (state.sourceText.trim().isEmpty) return;
+    unawaited(_speakText(text: state.sourceText, language: state.from));
+  }
+
+  /// Speaks the current translation output. No-op while it is blank. See
+  /// [speakSource] for why the future is not awaited.
+  void speakOutput() {
+    if (state.translatedText.trim().isEmpty) return;
+    unawaited(_speakText(text: state.translatedText, language: state.to));
+  }
+
   Future<void> _translate() async {
     final id = ++_requestId;
     // One consistent snapshot — later awaits must not see newer field values.
@@ -130,7 +168,7 @@ class TranslateCubit extends Cubit<TranslateState> {
       success: (translation) => emit(state.copyWith(
         translatedText: translation.translatedText,
         status: const TranslationDone(),
-        isToneEnabled: translation.engine == TranslationEngine.online,
+        lastEngineWasOnline: translation.engine == TranslationEngine.online,
       )),
       failure: (f) => emit(state.copyWith(status: TranslationError(f))),
     );
@@ -141,6 +179,8 @@ class TranslateCubit extends Cubit<TranslateState> {
   @override
   Future<void> close() {
     _debounce?.cancel();
+    unawaited(_onlineAvailabilitySubscription.cancel());
+    unawaited(_speakText.stop());
     return super.close();
   }
 }

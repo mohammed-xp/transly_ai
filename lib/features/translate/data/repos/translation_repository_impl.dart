@@ -120,4 +120,23 @@ class TranslationRepositoryImpl implements TranslationRepository {
       return ApiResult.failure(ModelDownloadFailure(e.toString()));
     }
   }
+
+  @override
+  Stream<bool> watchOnlineAvailability() async* {
+    if (_remote == null) {
+      yield false;
+      return;
+    }
+    // Connectivity is a platform channel: `checkConnectivity` throws on some
+    // Android configurations and the change stream can emit errors. Both are
+    // contained here at the data boundary (CLAUDE.md §A-3) and reported as
+    // "not available" — an unavailable probe must degrade the tone selector,
+    // never surface as an uncaught async error.
+    try {
+      yield await _connectivity.isConnected;
+    } catch (_) {
+      yield false;
+    }
+    yield* _connectivity.onConnectedChanged.handleError((_) {});
+  }
 }

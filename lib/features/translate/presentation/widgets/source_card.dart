@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
 import 'speaker_button.dart';
 
 /// Editable source card: language label, a speaker button, and the input field
@@ -10,7 +10,6 @@ import 'speaker_button.dart';
 class SourceCard extends StatefulWidget {
   const SourceCard({
     super.key,
-    required this.isDark,
     required this.language,
     required this.text,
     required this.hintText,
@@ -20,7 +19,6 @@ class SourceCard extends StatefulWidget {
     required this.onSpeak,
   });
 
-  final bool isDark;
   final String language;
 
   /// Source text from cubit state. When it diverges from the controller (swap),
@@ -68,24 +66,14 @@ class _SourceCardState extends State<SourceCard> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final surface =
-        widget.isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-    final border = widget.isDark ? AppColors.borderDark : AppColors.borderLight;
-    final labelColor =
-        widget.isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
-    final iconColor =
-        widget.isDark ? AppColors.iconLineDark : AppColors.captionMutedLight;
-    final inkColor =
-        widget.isDark ? AppColors.textPrimaryDark : AppColors.inkLight;
-    final hintColor =
-        widget.isDark ? AppColors.textMutedDark : AppColors.captionMutedLight;
+    final c = context.palette;
 
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(AppDimens.radiusCard),
-        border: Border.all(color: border),
+        border: Border.all(color: c.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,11 +83,11 @@ class _SourceCardState extends State<SourceCard> {
             children: [
               Text(
                 widget.language,
-                style: textTheme.titleSmall?.copyWith(color: labelColor),
+                style: textTheme.titleSmall?.copyWith(color: c.textMuted),
               ),
               SpeakerButton(
                 icon: Icons.volume_up_outlined,
-                color: iconColor,
+                color: c.iconLine,
                 onTap: widget.onSpeak,
               ),
             ],
@@ -113,8 +101,8 @@ class _SourceCardState extends State<SourceCard> {
             textDirection: widget.textDirection,
             maxLines: null,
             minLines: 1,
-            cursorColor: widget.isDark ? AppColors.accentDark : AppColors.primary,
-            style: textTheme.bodyLarge?.copyWith(color: inkColor, height: 1.45),
+            cursorColor: c.coral,
+            style: textTheme.bodyLarge?.copyWith(color: c.ink, height: 1.45),
             decoration: InputDecoration(
               isDense: true,
               // The card is the field's chrome — suppress the app-level
@@ -127,8 +115,7 @@ class _SourceCardState extends State<SourceCard> {
               focusedErrorBorder: InputBorder.none,
               contentPadding: EdgeInsets.zero,
               hintText: widget.hintText,
-              hintStyle:
-                  textTheme.bodyLarge?.copyWith(color: hintColor, height: 1.45),
+              hintStyle: textTheme.bodyLarge?.copyWith(color: c.hint, height: 1.45),
             ),
           ),
         ],

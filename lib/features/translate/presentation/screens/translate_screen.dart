@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
-import '../../../../core/services/tts_service.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/language.dart';
@@ -36,38 +32,22 @@ class TranslateScreen extends StatelessWidget {
   }
 }
 
-class _TranslateView extends StatefulWidget {
+class _TranslateView extends StatelessWidget {
   const _TranslateView();
 
   @override
-  State<_TranslateView> createState() => _TranslateViewState();
-}
-
-class _TranslateViewState extends State<_TranslateView> {
-  @override
-  void dispose() {
-    // Leaving the screen shouldn't leave speech playing in the background.
-    unawaited(sl<TtsService>().stop());
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final background =
-        isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
     // While the keyboard is open it takes the dock's place at the bottom; the
     // dock reappears when the keyboard closes.
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
 
     return Scaffold(
-      backgroundColor: background,
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
-            TranslateHeader(isDark: isDark),
-            _LanguageBarSection(isDark: isDark),
+            const TranslateHeader(),
+            const _LanguageBarSection(),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.fromLTRB(
@@ -77,15 +57,15 @@ class _TranslateViewState extends State<_TranslateView> {
                   keyboardOpen ? AppDimens.spaceL : 0,
                 ),
                 children: [
-                  _SourceSection(isDark: isDark),
+                  const _SourceSection(),
                   const SizedBox(height: AppDimens.spaceM),
-                  _OutputSection(isDark: isDark),
+                  const _OutputSection(),
                   const SizedBox(height: AppDimens.spaceM),
-                  _ToneSection(isDark: isDark),
+                  const _ToneSection(),
                 ],
               ),
             ),
-            if (!keyboardOpen) InputDock(isDark: isDark),
+            if (!keyboardOpen) const InputDock(),
           ],
         ),
       ),
@@ -95,9 +75,7 @@ class _TranslateViewState extends State<_TranslateView> {
 
 /// Selects only the language pair — rebuilds on swap, not on every keystroke.
 class _LanguageBarSection extends StatelessWidget {
-  const _LanguageBarSection({required this.isDark});
-
-  final bool isDark;
+  const _LanguageBarSection();
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +83,6 @@ class _LanguageBarSection extends StatelessWidget {
       selector: (state) => (state.from, state.to),
       builder: (context, pair) {
         return LanguageBar(
-          isDark: isDark,
           fromLanguage: languageLabel(context, pair.$1),
           toLanguage: languageLabel(context, pair.$2),
           onSwap: context.read<TranslateCubit>().swapLanguages,
@@ -117,9 +94,7 @@ class _LanguageBarSection extends StatelessWidget {
 
 /// Selects the source-side fields (text + from language) for the editable card.
 class _SourceSection extends StatelessWidget {
-  const _SourceSection({required this.isDark});
-
-  final bool isDark;
+  const _SourceSection();
 
   @override
   Widget build(BuildContext context) {
@@ -131,16 +106,13 @@ class _SourceSection extends StatelessWidget {
         final text = data.$1;
         final from = data.$2;
         return SourceCard(
-          isDark: isDark,
           language: languageLabel(context, from),
           text: text,
           hintText: l10n.translateSourceHint,
           textDirection: from.isRtl ? TextDirection.rtl : TextDirection.ltr,
           onChanged: cubit.sourceTextChanged,
           onSubmitted: cubit.translateNow,
-          onSpeak: text.trim().isEmpty
-              ? null
-              : () => sl<TtsService>().speak(text: text, languageCode: from.code),
+          onSpeak: text.trim().isEmpty ? null : cubit.speakSource,
         );
       },
     );
@@ -149,9 +121,7 @@ class _SourceSection extends StatelessWidget {
 
 /// Selects the output text, target language, and async status.
 class _OutputSection extends StatelessWidget {
-  const _OutputSection({required this.isDark});
-
-  final bool isDark;
+  const _OutputSection();
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +130,7 @@ class _OutputSection extends StatelessWidget {
         (String, Language, TranslationStatus)>(
       selector: (state) => (state.translatedText, state.to, state.status),
       builder: (context, data) {
+        final cubit = context.read<TranslateCubit>();
         final status = data.$3;
         final (statusMessage, isBusy) = switch (status) {
           TranslationDownloadingModel() => (l10n.translateDownloadingModel, true),
@@ -173,7 +144,6 @@ class _OutputSection extends StatelessWidget {
         final output = data.$1;
         final to = data.$2;
         return TranslationOutputCard(
-          isDark: isDark,
           language: languageLabel(context, to),
           text: output,
           textDirection: to.isRtl ? TextDirection.rtl : TextDirection.ltr,
@@ -183,9 +153,9 @@ class _OutputSection extends StatelessWidget {
           onCopy: output.isEmpty
               ? null
               : () => Clipboard.setData(ClipboardData(text: output)),
-          onSpeak: output.isEmpty
-              ? null
-              : () => sl<TtsService>().speak(text: output, languageCode: to.code),
+          // Matches TranslateCubit.speakOutput's own guard — a whitespace-only
+          // output must not render an enabled button that does nothing.
+          onSpeak: output.trim().isEmpty ? null : cubit.speakOutput,
         );
       },
     );
@@ -194,9 +164,7 @@ class _OutputSection extends StatelessWidget {
 
 /// Selects the tone + enabled flag.
 class _ToneSection extends StatelessWidget {
-  const _ToneSection({required this.isDark});
-
-  final bool isDark;
+  const _ToneSection();
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +172,6 @@ class _ToneSection extends StatelessWidget {
       selector: (state) => (state.tone, state.isToneEnabled),
       builder: (context, data) {
         return ToneSelector(
-          isDark: isDark,
           selected: data.$1,
           enabled: data.$2,
           onSelected: context.read<TranslateCubit>().toneChanged,

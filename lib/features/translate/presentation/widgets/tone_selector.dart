@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/translation_tone.dart';
 
@@ -12,13 +12,11 @@ import '../../domain/entities/translation_tone.dart';
 class ToneSelector extends StatelessWidget {
   const ToneSelector({
     super.key,
-    required this.isDark,
     required this.selected,
     required this.enabled,
     required this.onSelected,
   });
 
-  final bool isDark;
   final TranslationTone selected;
   final bool enabled;
   final ValueChanged<TranslationTone> onSelected;
@@ -27,8 +25,7 @@ class ToneSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
-    final captionColor =
-        isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
+    final c = context.palette;
     const tones = TranslationTone.values;
 
     return Opacity(
@@ -40,7 +37,7 @@ class ToneSelector extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(4, 2, 4, AppDimens.spaceS),
             child: Text(
               l10n.translateToneCaption,
-              style: textTheme.titleSmall?.copyWith(color: captionColor),
+              style: textTheme.titleSmall?.copyWith(color: c.textMuted),
             ),
           ),
           Row(
@@ -48,7 +45,6 @@ class ToneSelector extends StatelessWidget {
               for (var i = 0; i < tones.length; i++) ...[
                 if (i > 0) const SizedBox(width: AppDimens.spaceS),
                 _ToneChip(
-                  isDark: isDark,
                   label: _toneLabel(l10n, tones[i]),
                   selected: tones[i] == selected,
                   onTap: enabled ? () => onSelected(tones[i]) : null,
@@ -72,13 +68,11 @@ class ToneSelector extends StatelessWidget {
 
 class _ToneChip extends StatelessWidget {
   const _ToneChip({
-    required this.isDark,
     required this.label,
     required this.selected,
     required this.onTap,
   });
 
-  final bool isDark;
   final String label;
   final bool selected;
 
@@ -88,20 +82,19 @@ class _ToneChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final c = context.palette;
     final radius = BorderRadius.circular(AppDimens.radiusPill);
 
     final Color bg;
     final Color fg;
     Border? border;
     if (selected) {
-      bg = isDark ? AppColors.accentDark : AppColors.primary;
+      bg = c.coral;
       fg = Colors.white;
     } else {
-      bg = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-      fg = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight;
-      border = Border.all(
-        color: isDark ? AppColors.borderDark : AppColors.borderLight,
-      );
+      bg = c.surface;
+      fg = c.textSecondary;
+      border = Border.all(color: c.border);
     }
 
     return Material(

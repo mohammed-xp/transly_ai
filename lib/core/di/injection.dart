@@ -14,12 +14,15 @@ import '../../features/translate/data/repos/translation_repository_impl.dart';
 import '../../features/translate/domain/repos/translation_repository.dart';
 import '../../features/translate/domain/usecases/check_translation_models_usecase.dart';
 import '../../features/translate/domain/usecases/download_translation_models_usecase.dart';
+import '../../features/translate/domain/usecases/speak_text_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
+import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
 import '../config/app_config.dart';
 import '../network/dio_rest_client.dart';
 import '../network/rest_client.dart';
 import '../services/connectivity_service.dart';
+import '../services/flutter_tts_service.dart';
 import '../services/tts_service.dart';
 
 /// Service locator. Register infrastructure, repositories, use cases, and
@@ -85,6 +88,8 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton(() => TranslateTextUseCase(sl()));
   sl.registerLazySingleton(() => CheckTranslationModelsUseCase(sl()));
   sl.registerLazySingleton(() => DownloadTranslationModelsUseCase(sl()));
+  sl.registerLazySingleton(() => SpeakTextUseCase(sl()));
+  sl.registerLazySingleton(() => WatchOnlineAvailabilityUseCase(sl()));
 
   // ── Cubits (registerFactory — fresh instance per route) ──
   sl.registerFactory(() => SplashCubit());
@@ -93,6 +98,8 @@ Future<void> configureDependencies() async {
       translateText: sl(),
       checkModels: sl(),
       downloadModels: sl(),
+      speakText: sl(),
+      watchOnlineAvailability: sl(),
     ),
   );
 }

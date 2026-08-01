@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Bottom input dock with three input modes. Keyboard is the active mode; Voice
 /// and Camera navigate to their screens (design `02 · Translate`).
 class InputDock extends StatelessWidget {
-  const InputDock({super.key, required this.isDark});
-
-  final bool isDark;
+  const InputDock({super.key});
 
   /// Design bottom margin (28) — grown when the device's bottom inset
   /// (gesture bar / home indicator) would otherwise overlap the dock.
@@ -25,8 +23,7 @@ class InputDock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final surface = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-    final border = isDark ? AppColors.borderDark : AppColors.borderLight;
+    final c = context.palette;
 
     return Container(
       margin: EdgeInsets.fromLTRB(
@@ -37,16 +34,16 @@ class InputDock extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(AppDimens.radiusDock),
-        border: Border.all(color: border),
-        boxShadow: isDark
+        border: Border.all(color: c.border),
+        boxShadow: c.dockShadow == null
             ? null
-            : const [
+            : [
                 BoxShadow(
-                  color: AppColors.dockShadowLight,
+                  color: c.dockShadow!,
                   blurRadius: 16,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
               ],
       ),
@@ -54,7 +51,6 @@ class InputDock extends StatelessWidget {
         children: [
           Expanded(
             child: _DockTab(
-              isDark: isDark,
               icon: Icons.keyboard_alt_outlined,
               label: l10n.translateDockKeyboard,
               active: true,
@@ -63,7 +59,6 @@ class InputDock extends StatelessWidget {
           ),
           Expanded(
             child: _DockTab(
-              isDark: isDark,
               icon: Icons.mic_none_rounded,
               label: l10n.translateDockVoice,
               active: false,
@@ -72,7 +67,6 @@ class InputDock extends StatelessWidget {
           ),
           Expanded(
             child: _DockTab(
-              isDark: isDark,
               icon: Icons.photo_camera_outlined,
               label: l10n.translateDockCamera,
               active: false,
@@ -87,14 +81,12 @@ class InputDock extends StatelessWidget {
 
 class _DockTab extends StatelessWidget {
   const _DockTab({
-    required this.isDark,
     required this.icon,
     required this.label,
     required this.active,
     required this.onTap,
   });
 
-  final bool isDark;
   final IconData icon;
   final String label;
   final bool active;
@@ -103,9 +95,8 @@ class _DockTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final coral = isDark ? AppColors.accentDark : AppColors.primary;
-    final muted = isDark ? AppColors.textMutedDark : AppColors.textMutedLight;
-    final color = active ? coral : muted;
+    final c = context.palette;
+    final color = active ? c.coral : c.textMuted;
     final radius = BorderRadius.circular(AppDimens.radiusChipL);
 
     return Material(
