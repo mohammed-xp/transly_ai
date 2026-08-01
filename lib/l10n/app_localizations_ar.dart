@@ -12,6 +12,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'ترانسلي AI';
 
   @override
+  String get splashTagline => 'ترجمة بالذكاء الاصطناعي';
+
+  @override
+  String get poweredByAi => 'بدعم من الذكاء الاصطناعي';
+
+  @override
   String get getStarted => 'ابدأ الآن';
 
   @override

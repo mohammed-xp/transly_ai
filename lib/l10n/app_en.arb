@@ -3,6 +3,9 @@
   "appName": "Transly AI",
   "@appName": { "description": "Application name" },
 
+  "splashTagline": "AI-powered translation",
+  "poweredByAi": "Powered by AI",
+
   "getStarted": "Get Started",
   "haveAccount": "Already have an account?",
   "signIn": "Sign In",

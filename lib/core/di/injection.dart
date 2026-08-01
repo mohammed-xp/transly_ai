@@ -11,6 +11,7 @@ import '../../features/history/domain/repositories/history_repository.dart';
 import '../../features/history/presentation/cubit/history_cubit.dart';
 import '../../features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import '../../features/settings/presentation/cubit/settings_cubit.dart';
+import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translation/data/datasources/ai_translation_stub_datasource.dart';
 import '../../features/translation/data/datasources/mlkit_translation_datasource.dart';
 import '../../features/translation/data/repositories/translation_repository_impl.dart';
@@ -51,6 +52,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton(() => GetSupportedLanguagesUseCase(sl()));
 
   // Cubits — registered as factories so each route gets a fresh instance
+  sl.registerFactory(() => SplashCubit());
   sl.registerFactory(() => OnboardingCubit());
   sl.registerFactory(() => TranslationCubit(sl()));
   sl.registerFactory(() => ConversationCubit());

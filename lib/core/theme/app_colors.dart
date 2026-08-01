@@ -21,6 +21,11 @@ abstract final class AppColors {
   static const Color surfaceDark = Color(0xFF1B1D22);
   static const Color borderDark = Color(0xFF2A2D34);
 
+  // Accent on dark surfaces
+  static const Color accentDark = Color(0xFFFF6A45);
+  static const Color accentDark2 = Color(0xFFFF8A66);
+  static const Color iconLineDark = Color(0xFF5A5F69);
+
   // Text — light
   static const Color textPrimaryLight = Color(0xFF16181D);
   static const Color textSecondaryLight = Color(0xFF5A6072);
@@ -33,6 +38,8 @@ abstract final class AppColors {
   // Miscellaneous
   static const Color chipBgLight = Color(0xFFF2F3F6);
   static const Color divider = Color(0xFFF1F2F5);
+  static const Color disabledLight = Color(0xFFC2C6D0);
+  static const Color spinnerTrackLight = Color(0xFFFFE0D5);
 
   static const LinearGradient brandGradient = LinearGradient(
     begin: Alignment.topLeft,

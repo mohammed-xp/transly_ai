@@ -2,6 +2,9 @@
   "@@locale": "ar",
   "appName": "ترانسلي AI",
 
+  "splashTagline": "ترجمة بالذكاء الاصطناعي",
+  "poweredByAi": "بدعم من الذكاء الاصطناعي",
+
   "getStarted": "ابدأ الآن",
   "haveAccount": "لديك حساب؟",
   "signIn": "تسجيل الدخول",

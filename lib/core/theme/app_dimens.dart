@@ -16,6 +16,7 @@ abstract final class AppDimens {
   static const double radiusXL = 18;
   static const double radius2XL = 20;
   static const double radius3XL = 22;
+  static const double radius4XL = 30;
   static const double radiusPill = 999;
 
   // Card / surface heights
@@ -31,6 +32,8 @@ abstract final class AppDimens {
 
   // Avatar / logo
   static const double logoSize = 76;
+  static const double splashLogoSize = 104;
   static const double avatarSize = 54;
   static const double micButtonSize = 84;
+  static const double spinnerSize = 34;
 }

@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Transly AI'**
   String get appName;
 
+  /// No description provided for @splashTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered translation'**
+  String get splashTagline;
+
+  /// No description provided for @poweredByAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by AI'**
+  String get poweredByAi;
+
   /// No description provided for @getStarted.
   ///
   /// In en, this message translates to:

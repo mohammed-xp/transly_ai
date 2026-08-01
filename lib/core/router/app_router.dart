@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
 
 // Placeholder pages — replaced with real screens later
@@ -20,8 +21,13 @@ class _PlaceholderPage extends StatelessWidget {
 }
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.onboarding,
+  initialLocation: AppRoutes.splash,
   routes: [
+    GoRoute(
+      path: AppRoutes.splash,
+      name: 'splash',
+      builder: (context, state) => const SplashPage(),
+    ),
     GoRoute(
       path: AppRoutes.onboarding,
       name: 'onboarding',
