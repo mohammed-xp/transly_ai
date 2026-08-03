@@ -4,20 +4,25 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
+import 'translate_progress_bar.dart';
 
 /// Language switch bar: FROM / swap-button / TO. The centered swap button carries
 /// the brand gradient (design `02 · Translate`). Swap is inert until state exists.
+/// While [isBusy], a thin progress line sweeps along the bottom edge (design
+/// `02b · Translating`).
 class LanguageBar extends StatelessWidget {
   const LanguageBar({
     super.key,
     required this.fromLanguage,
     required this.toLanguage,
     required this.onSwap,
+    required this.isBusy,
   });
 
   final String fromLanguage;
   final String toLanguage;
   final VoidCallback onSwap;
+  final bool isBusy;
 
   static const double _swapButtonSize = 42;
 
@@ -25,13 +30,13 @@ class LanguageBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.palette;
+    final radius = BorderRadius.circular(AppDimens.radiusDock);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: AppDimens.spaceL),
-      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: c.surface,
-        borderRadius: BorderRadius.circular(AppDimens.radiusDock),
+        borderRadius: radius,
         border: Border.all(color: c.border),
         boxShadow: c.cardShadow == null
             ? null
@@ -43,22 +48,39 @@ class LanguageBar extends StatelessWidget {
                 ),
               ],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _LanguageColumn(
-              label: l10n.translateFrom,
-              language: fromLanguage,
+      child: ClipRRect(
+        borderRadius: radius,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _LanguageColumn(
+                      label: l10n.translateFrom,
+                      language: fromLanguage,
+                    ),
+                  ),
+                  _SwapButton(onTap: onSwap),
+                  Expanded(
+                    child: _LanguageColumn(
+                      label: l10n.translateTo,
+                      language: toLanguage,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          _SwapButton(onTap: onSwap),
-          Expanded(
-            child: _LanguageColumn(
-              label: l10n.translateTo,
-              language: toLanguage,
-            ),
-          ),
-        ],
+            if (isBusy)
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: TranslateProgressBar(),
+              ),
+          ],
+        ),
       ),
     );
   }

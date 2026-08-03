@@ -14,6 +14,7 @@ import '../widgets/input_dock.dart';
 import '../widgets/language_bar.dart';
 import '../widgets/source_card.dart';
 import '../widgets/tone_selector.dart';
+import '../widgets/translate_busy_note.dart';
 import '../widgets/translate_header.dart';
 import '../widgets/translation_output_card.dart';
 
@@ -60,6 +61,7 @@ class _TranslateView extends StatelessWidget {
                   const _SourceSection(),
                   const SizedBox(height: AppDimens.spaceM),
                   const _OutputSection(),
+                  const _BusyNoteSection(),
                   const SizedBox(height: AppDimens.spaceM),
                   const _ToneSection(),
                 ],
@@ -79,13 +81,15 @@ class _LanguageBarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<TranslateCubit, TranslateState, (Language, Language)>(
-      selector: (state) => (state.from, state.to),
-      builder: (context, pair) {
+    return BlocSelector<TranslateCubit, TranslateState,
+        (Language, Language, bool)>(
+      selector: (state) => (state.from, state.to, state.isBusy),
+      builder: (context, data) {
         return LanguageBar(
-          fromLanguage: languageLabel(context, pair.$1),
-          toLanguage: languageLabel(context, pair.$2),
+          fromLanguage: languageLabel(context, data.$1),
+          toLanguage: languageLabel(context, data.$2),
           onSwap: context.read<TranslateCubit>().swapLanguages,
+          isBusy: data.$3,
         );
       },
     );
@@ -132,30 +136,58 @@ class _OutputSection extends StatelessWidget {
       builder: (context, data) {
         final cubit = context.read<TranslateCubit>();
         final status = data.$3;
-        final (statusMessage, isBusy) = switch (status) {
-          TranslationDownloadingModel() => (l10n.translateDownloadingModel, true),
-          TranslationInProgress() => (null, true),
+        final (busyLabel, errorMessage) = switch (status) {
+          TranslationDownloadingModel() ||
+          TranslationInProgress() =>
+            (l10n.translateInProgress, null),
           TranslationError(:final failure) => (
+              null,
               failureMessage(context, failure),
-              false,
             ),
-          TranslationIdle() || TranslationDone() => (null, false),
+          TranslationIdle() || TranslationDone() => (null, null),
         };
         final output = data.$1;
         final to = data.$2;
+        final isBusy = busyLabel != null;
         return TranslationOutputCard(
           language: languageLabel(context, to),
           text: output,
           textDirection: to.isRtl ? TextDirection.rtl : TextDirection.ltr,
-          statusMessage: statusMessage,
-          isBusy: isBusy,
+          busyLabel: busyLabel,
+          errorMessage: errorMessage,
           // No in-app confirmation — the OS shows its own copy feedback.
-          onCopy: output.isEmpty
+          onCopy: (output.isEmpty || isBusy)
               ? null
               : () => Clipboard.setData(ClipboardData(text: output)),
           // Matches TranslateCubit.speakOutput's own guard — a whitespace-only
           // output must not render an enabled button that does nothing.
-          onSpeak: output.trim().isEmpty ? null : cubit.speakOutput,
+          onSpeak: (output.trim().isEmpty || isBusy) ? null : cubit.speakOutput,
+        );
+      },
+    );
+  }
+}
+
+/// Shows the AI-analyzing / model-download caption under the output card
+/// while [TranslateState.isBusy] — hidden the rest of the time.
+class _BusyNoteSection extends StatelessWidget {
+  const _BusyNoteSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return BlocSelector<TranslateCubit, TranslateState, TranslationStatus>(
+      selector: (state) => state.status,
+      builder: (context, status) {
+        final message = switch (status) {
+          TranslationDownloadingModel() => l10n.translateDownloadingModel,
+          TranslationInProgress() => l10n.translateAiAnalyzing,
+          TranslationIdle() || TranslationDone() || TranslationError() => null,
+        };
+        if (message == null) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: AppDimens.spaceM),
+          child: TranslateBusyNote(message: message),
         );
       },
     );
@@ -169,7 +201,7 @@ class _ToneSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<TranslateCubit, TranslateState, (TranslationTone, bool)>(
-      selector: (state) => (state.tone, state.isToneEnabled),
+      selector: (state) => (state.tone, state.isToneEnabled && !state.isBusy),
       builder: (context, data) {
         return ToneSelector(
           selected: data.$1,

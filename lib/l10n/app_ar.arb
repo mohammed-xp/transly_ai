@@ -26,6 +26,8 @@
   "languageArabic": "العربية",
   "translateSourceHint": "اكتب النص المراد ترجمته…",
   "translateDownloadingModel": "جارٍ تنزيل نموذج الترجمة…",
+  "translateInProgress": "جاري الترجمة",
+  "translateAiAnalyzing": "الذكاء الاصطناعي يحلّل السياق والنبرة…",
   "translateListen": "استماع",
   "translateErrorGeneric": "تعذّرت الترجمة. حاول مرة أخرى.",
   "translateErrorModelDownload": "تعذّر تنزيل نموذج الترجمة. تحقّق من الاتصال وحاول مجددًا.",

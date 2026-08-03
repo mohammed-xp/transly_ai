@@ -34,6 +34,9 @@ void main() {
       expect(c.coralLabel, AppColors.rtlLabelLight);
       expect(c.splashBackground, AppColors.surfaceLight);
       expect(c.spinnerTrack, AppColors.spinnerTrackLight);
+      expect(c.progressTrack, AppColors.progressTrackLight);
+      expect(c.skeletonBase, const Color(0x8CFFD8C9));
+      expect(c.skeletonHighlight, const Color(0xE6FFFFFF));
       expect(c.cardShadow, AppColors.cardShadowLight);
       expect(c.dockShadow, AppColors.dockShadowLight);
       expect(c.outputBorder, AppColors.tintBorderLight);
@@ -59,6 +62,9 @@ void main() {
       expect(c.coralLabel, AppColors.accentDark2);
       expect(c.splashBackground, AppColors.backgroundDark);
       expect(c.spinnerTrack, AppColors.borderDark);
+      expect(c.progressTrack, AppColors.borderDark);
+      expect(c.skeletonBase, Colors.white.withValues(alpha: 0.05));
+      expect(c.skeletonHighlight, AppColors.accentDark2.withValues(alpha: 0.22));
       expect(c.cardShadow, isNull, reason: 'dark surfaces carry no shadow');
       expect(c.dockShadow, isNull, reason: 'dark surfaces carry no shadow');
       expect(c.outputBorder, AppColors.accentDark.withValues(alpha: 0.32));

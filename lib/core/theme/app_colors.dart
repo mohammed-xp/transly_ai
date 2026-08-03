@@ -17,6 +17,7 @@ abstract final class AppColors {
   static const Color tintBorderLight = Color(0xFFFFD8C9);
   static const Color spinnerTrackLight = Color(0xFFFFE0D5); // splash loader track
   static const Color rtlLabelLight = Color(0xFFC0461F); // Arabic label on light
+  static const Color progressTrackLight = Color(0xFFFFE8E0); // language-bar progress track
 
   // ── Light neutrals ──
   static const Color inkLight = Color(0xFF16181D); // primary text

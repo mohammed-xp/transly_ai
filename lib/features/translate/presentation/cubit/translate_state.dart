@@ -84,6 +84,11 @@ class TranslateState {
   /// other.
   bool get isToneEnabled => isOnlineAvailable && lastEngineWasOnline;
 
+  /// A model download or a translation is in flight — drives the loading UI
+  /// (design `02b · Translating`).
+  bool get isBusy =>
+      status is TranslationDownloadingModel || status is TranslationInProgress;
+
   TranslateState copyWith({
     String? sourceText,
     Language? from,

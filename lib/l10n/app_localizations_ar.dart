@@ -88,6 +88,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateDownloadingModel => 'جارٍ تنزيل نموذج الترجمة…';
 
   @override
+  String get translateInProgress => 'جاري الترجمة';
+
+  @override
+  String get translateAiAnalyzing => 'الذكاء الاصطناعي يحلّل السياق والنبرة…';
+
+  @override
   String get translateListen => 'استماع';
 
   @override

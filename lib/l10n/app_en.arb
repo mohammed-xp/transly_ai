@@ -104,6 +104,14 @@
   "@translateDownloadingModel": {
     "description": "Status shown while the on-device language model is downloading."
   },
+  "translateInProgress": "Translating",
+  "@translateInProgress": {
+    "description": "Short header label shown in the output card while a translation (or model download) is in flight."
+  },
+  "translateAiAnalyzing": "AI is analyzing context and tone…",
+  "@translateAiAnalyzing": {
+    "description": "Caption shown under the output card while a translation is running."
+  },
   "translateListen": "Listen",
   "@translateListen": {
     "description": "Accessibility label for the speaker button that reads text aloud."

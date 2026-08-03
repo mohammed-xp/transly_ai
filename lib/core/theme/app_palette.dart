@@ -22,6 +22,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.coralLabel,
     required this.splashBackground,
     required this.spinnerTrack,
+    required this.progressTrack,
+    required this.skeletonBase,
+    required this.skeletonHighlight,
     required this.cardShadow,
     required this.dockShadow,
     required this.outputGradient,
@@ -42,6 +45,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color coralLabel;
   final Color splashBackground;
   final Color spinnerTrack;
+  final Color progressTrack;
+  final Color skeletonBase;
+  final Color skeletonHighlight;
 
   /// Null in dark mode — surfaces there carry no drop shadow.
   final Color? cardShadow;
@@ -67,6 +73,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coralLabel: AppColors.rtlLabelLight,
     splashBackground: AppColors.surfaceLight,
     spinnerTrack: AppColors.spinnerTrackLight,
+    progressTrack: AppColors.progressTrackLight,
+    skeletonBase: Color(0x8CFFD8C9),
+    skeletonHighlight: Color(0xE6FFFFFF),
     cardShadow: AppColors.cardShadowLight,
     dockShadow: AppColors.dockShadowLight,
     outputGradient: LinearGradient(
@@ -92,6 +101,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coralLabel: AppColors.accentDark2,
     splashBackground: AppColors.backgroundDark,
     spinnerTrack: AppColors.borderDark,
+    progressTrack: AppColors.borderDark,
+    skeletonBase: Colors.white.withValues(alpha: 0.05),
+    skeletonHighlight: AppColors.accentDark2.withValues(alpha: 0.22),
     cardShadow: null,
     dockShadow: null,
     outputGradient: LinearGradient(
@@ -121,6 +133,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? coralLabel,
     Color? splashBackground,
     Color? spinnerTrack,
+    Color? progressTrack,
+    Color? skeletonBase,
+    Color? skeletonHighlight,
     Color? cardShadow,
     Color? dockShadow,
     Gradient? outputGradient,
@@ -141,6 +156,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coralLabel: coralLabel ?? this.coralLabel,
       splashBackground: splashBackground ?? this.splashBackground,
       spinnerTrack: spinnerTrack ?? this.spinnerTrack,
+      progressTrack: progressTrack ?? this.progressTrack,
+      skeletonBase: skeletonBase ?? this.skeletonBase,
+      skeletonHighlight: skeletonHighlight ?? this.skeletonHighlight,
       cardShadow: cardShadow ?? this.cardShadow,
       dockShadow: dockShadow ?? this.dockShadow,
       outputGradient: outputGradient ?? this.outputGradient,
@@ -166,6 +184,9 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coralLabel: Color.lerp(coralLabel, other.coralLabel, t)!,
       splashBackground: Color.lerp(splashBackground, other.splashBackground, t)!,
       spinnerTrack: Color.lerp(spinnerTrack, other.spinnerTrack, t)!,
+      progressTrack: Color.lerp(progressTrack, other.progressTrack, t)!,
+      skeletonBase: Color.lerp(skeletonBase, other.skeletonBase, t)!,
+      skeletonHighlight: Color.lerp(skeletonHighlight, other.skeletonHighlight, t)!,
       cardShadow: Color.lerp(cardShadow, other.cardShadow, t),
       dockShadow: Color.lerp(dockShadow, other.dockShadow, t),
       outputGradient: Gradient.lerp(outputGradient, other.outputGradient, t)!,

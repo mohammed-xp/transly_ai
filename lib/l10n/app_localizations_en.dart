@@ -88,6 +88,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateDownloadingModel => 'Downloading translation model…';
 
   @override
+  String get translateInProgress => 'Translating';
+
+  @override
+  String get translateAiAnalyzing => 'AI is analyzing context and tone…';
+
+  @override
   String get translateListen => 'Listen';
 
   @override

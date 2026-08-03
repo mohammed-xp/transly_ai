@@ -254,6 +254,18 @@ abstract class AppLocalizations {
   /// **'Downloading translation model…'**
   String get translateDownloadingModel;
 
+  /// Short header label shown in the output card while a translation (or model download) is in flight.
+  ///
+  /// In en, this message translates to:
+  /// **'Translating'**
+  String get translateInProgress;
+
+  /// Caption shown under the output card while a translation is running.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is analyzing context and tone…'**
+  String get translateAiAnalyzing;
+
   /// Accessibility label for the speaker button that reads text aloud.
   ///
   /// In en, this message translates to:

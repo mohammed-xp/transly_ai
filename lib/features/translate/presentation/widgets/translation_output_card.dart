@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/spinning_ring.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'speaker_button.dart';
+import 'translating_dots.dart';
+import 'translation_skeleton.dart';
 
 /// Coral-tinted card holding the AI translation output: language label, "AI"
-/// badge, speaker button, the translated text, a status slot (downloading /
-/// translating / error), and copy/save actions (design `02 · Translate`).
+/// badge, speaker button, the translated text, a status slot (translating /
+/// error), and copy/save actions (design `02 · Translate` / `02b · Translating`).
 class TranslationOutputCard extends StatelessWidget {
   const TranslationOutputCard({
     super.key,
     required this.language,
     required this.text,
     required this.textDirection,
-    required this.statusMessage,
-    required this.isBusy,
+    required this.busyLabel,
+    required this.errorMessage,
     required this.onCopy,
     required this.onSpeak,
   });
@@ -26,18 +29,20 @@ class TranslationOutputCard extends StatelessWidget {
   /// Derived by the caller from the target language's direction.
   final TextDirection textDirection;
 
-  /// Non-null while downloading a model, translating, or on error — shown in
-  /// place of / alongside the output text.
-  final String? statusMessage;
+  /// Non-null while downloading a model or translating — replaces the speaker
+  /// button with a bouncing-dots label and the body with a shimmer skeleton.
+  final String? busyLabel;
 
-  /// Whether to show an inline spinner (download or translation in progress).
-  final bool isBusy;
+  /// Non-null on translation failure — shown in place of the output text.
+  final String? errorMessage;
 
   /// Invoked when Copy is tapped; null disables the button (nothing to copy).
   final VoidCallback? onCopy;
 
   /// Invoked when the speaker icon is tapped; null disables it (nothing to speak).
   final VoidCallback? onSpeak;
+
+  bool get _isBusy => busyLabel != null;
 
   static const double _actionHeight = 38;
   static const double _actionRadius = 11;
@@ -67,18 +72,40 @@ class TranslationOutputCard extends StatelessWidget {
                     style: textTheme.titleSmall?.copyWith(color: c.coralLabel),
                   ),
                   const SizedBox(width: 7),
-                  const _AiBadge(),
+                  _AiBadge(isBusy: _isBusy),
                 ],
               ),
-              SpeakerButton(
-                icon: Icons.volume_up_rounded,
-                color: c.coral,
-                onTap: onSpeak,
-              ),
+              if (_isBusy)
+                Flexible(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          busyLabel!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.titleSmall
+                              ?.copyWith(fontSize: 12, color: c.coralLabel),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      TranslatingDots(color: c.coral),
+                    ],
+                  ),
+                )
+              else
+                SpeakerButton(
+                  icon: Icons.volume_up_rounded,
+                  color: c.coral,
+                  onTap: onSpeak,
+                ),
             ],
           ),
-          const SizedBox(height: AppDimens.spaceS + 2),
-          if (text.isNotEmpty)
+          SizedBox(height: _isBusy ? 14 : AppDimens.spaceS + 2),
+          if (_isBusy)
+            TranslationSkeleton(textDirection: textDirection)
+          else if (text.isNotEmpty)
             Text(
               text,
               textAlign: textDirection == TextDirection.rtl
@@ -92,28 +119,11 @@ class TranslationOutputCard extends StatelessWidget {
                 color: c.ink,
               ),
             ),
-          if (statusMessage != null) ...[
+          if (errorMessage != null) ...[
             if (text.isNotEmpty) const SizedBox(height: AppDimens.spaceS),
-            Row(
-              children: [
-                if (isBusy) ...[
-                  SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(c.coral),
-                    ),
-                  ),
-                  const SizedBox(width: AppDimens.spaceS),
-                ],
-                Flexible(
-                  child: Text(
-                    statusMessage!,
-                    style: textTheme.titleSmall?.copyWith(color: c.textMuted),
-                  ),
-                ),
-              ],
+            Text(
+              errorMessage!,
+              style: textTheme.titleSmall?.copyWith(color: c.textMuted),
             ),
           ],
           const SizedBox(height: AppDimens.spaceL - 2),
@@ -143,7 +153,9 @@ class TranslationOutputCard extends StatelessWidget {
 }
 
 class _AiBadge extends StatelessWidget {
-  const _AiBadge();
+  const _AiBadge({required this.isBusy});
+
+  final bool isBusy;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +170,16 @@ class _AiBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.auto_awesome, size: 10, color: Colors.white),
+          if (isBusy)
+            SpinningRing(
+              size: 9,
+              stroke: 1.6,
+              trackColor: Colors.white.withValues(alpha: 0.45),
+              activeColor: Colors.white,
+              duration: const Duration(milliseconds: 700),
+            )
+          else
+            const Icon(Icons.auto_awesome, size: 10, color: Colors.white),
           const SizedBox(width: 4),
           Text(
             l10n.translateAiBadge,
