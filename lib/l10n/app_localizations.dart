@@ -289,6 +289,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No internet connection.'**
   String get translateErrorNoConnection;
+
+  /// Headline on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get signInTitle;
+
+  /// Subtitle under the headline on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to sync your translations across devices.'**
+  String get signInSubtitle;
+
+  /// Label above the email field on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get signInEmailLabel;
+
+  /// Placeholder in the email field on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'you@example.com'**
+  String get signInEmailHint;
+
+  /// Label above the password field on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get signInPasswordLabel;
+
+  /// Placeholder in the password field on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get signInPasswordHint;
+
+  /// Label for the remember-me checkbox on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember me'**
+  String get signInRememberMe;
+
+  /// Forgot-password link on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get signInForgotPassword;
+
+  /// Primary submit button on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signInSubmit;
+
+  /// Divider label above the social sign-in buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Or continue with'**
+  String get signInOrContinueWith;
+
+  /// Prompt preceding the create-account link on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get signInNoAccount;
+
+  /// Create-account link on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get signInCreateAccount;
+
+  /// Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account).
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get signInComingSoon;
+
+  /// Accessibility label for the button that reveals the password field's text.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get signInShowPassword;
+
+  /// Accessibility label for the button that hides the password field's text.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get signInHidePassword;
+
+  /// Accessibility label for the back button on the sign-in screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get signInBack;
+
+  /// Shown under the email field when it is left empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address.'**
+  String get authErrorEmailRequired;
+
+  /// Shown under the email field when the format is invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get authErrorEmailInvalid;
+
+  /// Shown under the password field when it is left empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password.'**
+  String get authErrorPasswordRequired;
+
+  /// Shown under the password field when it is too short.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get authErrorPasswordTooShort;
+
+  /// Shown when sign-in fails because the credentials are wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get authErrorInvalidCredentials;
+
+  /// Shown when sign-in fails because the account is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get authErrorUserDisabled;
+
+  /// Shown when sign-in fails because of rate limiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please try again later.'**
+  String get authErrorTooManyRequests;
+
+  /// Shown when sign-in fails because the device is offline.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get authErrorNoConnection;
+
+  /// Shown when no auth provider is configured.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in isn\'t available right now.'**
+  String get authErrorUnavailable;
+
+  /// Generic sign-in failure message.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sign in. Please try again.'**
+  String get authErrorGeneric;
+
+  /// Shown when the backend rejects the session token and the user is routed back to sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please sign in again.'**
+  String get authErrorSessionExpired;
+
+  /// Tooltip/label for the sign-out action on the translate screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get authSignOut;
 }
 
 class _AppLocalizationsDelegate

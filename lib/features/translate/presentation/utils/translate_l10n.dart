@@ -22,5 +22,6 @@ String failureMessage(BuildContext context, Failure failure) {
     NoConnectionFailure() => l10n.translateErrorNoConnection,
     TranslationFailure() => l10n.translateErrorGeneric,
     UnknownFailure() => l10n.translateErrorGeneric,
+    AuthFailure() => l10n.translateErrorGeneric,
   };
 }

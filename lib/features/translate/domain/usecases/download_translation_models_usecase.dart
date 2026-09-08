@@ -8,10 +8,7 @@ class DownloadTranslationModelsUseCase {
 
   final TranslationRepository _repository;
 
-  Future<ApiResult<void>> call({
-    required Language from,
-    required Language to,
-  }) {
+  Future<ApiResult<void>> call({required Language from, required Language to}) {
     return _repository.downloadModels(from: from, to: to);
   }
 }

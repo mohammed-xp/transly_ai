@@ -53,8 +53,10 @@ class _SplashViewState extends State<_SplashView>
       duration: const Duration(milliseconds: 600),
     )..forward();
     _fade = CurvedAnimation(parent: _entrance, curve: Curves.easeOut);
-    _scale = Tween<double>(begin: 0.96, end: 1)
-        .animate(CurvedAnimation(parent: _entrance, curve: Curves.easeOutBack));
+    _scale = Tween<double>(
+      begin: 0.96,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _entrance, curve: Curves.easeOutBack));
   }
 
   @override
@@ -73,9 +75,17 @@ class _SplashViewState extends State<_SplashView>
 
     return BlocListener<SplashCubit, SplashState>(
       listenWhen: (_, current) => current is SplashReady,
-      listener: (context, _) => context.goNamed(AppRoutes.onboardingName),
+      listener: (context, state) {
+        if (state case SplashReady(:final isAuthenticated)) {
+          context.goNamed(
+            isAuthenticated
+                ? AppRoutes.translateName
+                : AppRoutes.onboardingName,
+          );
+        }
+      },
       child: Scaffold(
-        backgroundColor: c.splashBackground,
+        backgroundColor: c.screenBackground,
         body: Stack(
           children: [
             // Decorative coral glows.

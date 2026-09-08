@@ -7,6 +7,7 @@ import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/connectivity_service.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_local_data_source.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_remote_data_source.dart';
+import 'package:transly_ai/features/translate/data/models/translation_response_model.dart';
 import 'package:transly_ai/features/translate/data/repos/translation_repository_impl.dart';
 import 'package:transly_ai/features/translate/domain/entities/language.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_engine.dart';
@@ -47,7 +48,7 @@ class _FakeRemoteDataSource implements TranslationRemoteDataSource {
   Object? throwOnTranslate;
 
   @override
-  Future<String> translate({
+  Future<TranslationResponseModel> translate({
     required String text,
     required Language from,
     required Language to,
@@ -56,7 +57,7 @@ class _FakeRemoteDataSource implements TranslationRemoteDataSource {
     translateCalled = true;
     receivedTone = tone;
     if (throwOnTranslate != null) throw throwOnTranslate!;
-    return 'remote:$text';
+    return TranslationResponseModel(translatedText: 'remote:$text');
   }
 }
 
@@ -86,11 +87,13 @@ class _FakeConnectivity implements ConnectivityService {
 
 void main() {
   group('TranslationRepositoryImpl.translate', () {
-    test('returns success with a TranslationEntity from the local source', () async {
+    test('returns success with a TranslationEntity from the local source '
+        'when offline', () async {
       final local = _FakeLocalDataSource();
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.translate(
@@ -109,10 +112,12 @@ void main() {
     });
 
     test('maps a thrown exception to TranslationFailure', () async {
-      final local = _FakeLocalDataSource()..throwOnTranslate = Exception('boom');
+      final local = _FakeLocalDataSource()
+        ..throwOnTranslate = Exception('boom');
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.translate(
@@ -126,8 +131,7 @@ void main() {
       expect((result as ApiFailure).failure, isA<TranslationFailure>());
     });
 
-    test('routes to remote (tone-aware) when a remote exists and is connected',
-        () async {
+    test('routes to remote (tone-aware) when connected', () async {
       final local = _FakeLocalDataSource();
       final remote = _FakeRemoteDataSource();
       final repo = TranslationRepositoryImpl(
@@ -151,8 +155,7 @@ void main() {
       expect(entity.engine, TranslationEngine.online);
     });
 
-    test('routes to local when a remote exists but the device is offline',
-        () async {
+    test('routes to local when the device is offline', () async {
       final local = _FakeLocalDataSource();
       final remote = _FakeRemoteDataSource();
       final repo = TranslationRepositoryImpl(
@@ -171,23 +174,6 @@ void main() {
       expect(local.translateCalled, isTrue);
       expect(remote.translateCalled, isFalse);
       expect((result as ApiSuccess).data.engine, TranslationEngine.offline);
-    });
-
-    test('routes to local when no remote is configured', () async {
-      final local = _FakeLocalDataSource();
-      final repo = TranslationRepositoryImpl(
-        local: local,
-        connectivity: _FakeConnectivity(true),
-      );
-
-      await repo.translate(
-        text: 'hi',
-        from: Language.english,
-        to: Language.arabic,
-        tone: TranslationTone.formal,
-      );
-
-      expect(local.translateCalled, isTrue);
     });
 
     test('falls back to local when the remote call fails', () async {
@@ -216,9 +202,33 @@ void main() {
     });
 
     test(
-        'maps a RemoteConnectionException to NoConnectionFailure when local '
+      'falls back to local when the remote session has expired (401)',
+      () async {
+        final local = _FakeLocalDataSource();
+        final remote = _FakeRemoteDataSource()
+          ..throwOnTranslate = const UnauthorizedException('HTTP 401');
+        final repo = TranslationRepositoryImpl(
+          local: local,
+          connectivity: _FakeConnectivity(true),
+          remote: remote,
+        );
+
+        final result = await repo.translate(
+          text: 'hi',
+          from: Language.english,
+          to: Language.arabic,
+          tone: TranslationTone.formal,
+        );
+
+        expect(local.translateCalled, isTrue);
+        expect((result as ApiSuccess).data.engine, TranslationEngine.offline);
+      },
+    );
+
+    test('maps a RemoteConnectionException to NoConnectionFailure when local '
         'also fails', () async {
-      final local = _FakeLocalDataSource()..throwOnTranslate = Exception('boom');
+      final local = _FakeLocalDataSource()
+        ..throwOnTranslate = Exception('boom');
       final remote = _FakeRemoteDataSource()
         ..throwOnTranslate = const RemoteConnectionException('offline');
       final repo = TranslationRepositoryImpl(
@@ -238,10 +248,10 @@ void main() {
       expect((result as ApiFailure).failure, isA<NoConnectionFailure>());
     });
 
-    test(
-        'maps a RemoteApiException to TranslationFailure when local also '
+    test('maps a RemoteApiException to TranslationFailure when local also '
         'fails', () async {
-      final local = _FakeLocalDataSource()..throwOnTranslate = Exception('boom');
+      final local = _FakeLocalDataSource()
+        ..throwOnTranslate = Exception('boom');
       final remote = _FakeRemoteDataSource()
         ..throwOnTranslate = const RemoteApiException('server error');
       final repo = TranslationRepositoryImpl(
@@ -268,6 +278,7 @@ void main() {
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.areModelsDownloaded(
@@ -283,6 +294,7 @@ void main() {
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.areModelsDownloaded(
@@ -300,6 +312,7 @@ void main() {
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.downloadModels(
@@ -316,6 +329,7 @@ void main() {
       final repo = TranslationRepositoryImpl(
         local: local,
         connectivity: _FakeConnectivity(false),
+        remote: _FakeRemoteDataSource(),
       );
 
       final result = await repo.downloadModels(
@@ -328,15 +342,6 @@ void main() {
   });
 
   group('TranslationRepositoryImpl.watchOnlineAvailability', () {
-    test('emits false once when no remote is configured', () async {
-      final repo = TranslationRepositoryImpl(
-        local: _FakeLocalDataSource(),
-        connectivity: _FakeConnectivity(true),
-      );
-
-      expect(repo.watchOnlineAvailability(), emitsInOrder([false, emitsDone]));
-    });
-
     test('emits the current connectivity first, then later changes', () async {
       final connectivity = _FakeConnectivity(true);
       final repo = TranslationRepositoryImpl(
@@ -368,9 +373,10 @@ void main() {
 
       final events = <bool>[];
       final errors = <Object>[];
-      final subscription = repo
-          .watchOnlineAvailability()
-          .listen(events.add, onError: errors.add);
+      final subscription = repo.watchOnlineAvailability().listen(
+        events.add,
+        onError: errors.add,
+      );
       await Future<void>.delayed(Duration.zero);
 
       expect(events, [false]);
@@ -388,9 +394,10 @@ void main() {
 
       final events = <bool>[];
       final errors = <Object>[];
-      final subscription = repo
-          .watchOnlineAvailability()
-          .listen(events.add, onError: errors.add);
+      final subscription = repo.watchOnlineAvailability().listen(
+        events.add,
+        onError: errors.add,
+      );
       await Future<void>.delayed(Duration.zero);
       connectivity.emitError(Exception('transport error'));
       await Future<void>.delayed(Duration.zero);

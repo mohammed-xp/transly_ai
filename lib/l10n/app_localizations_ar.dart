@@ -105,4 +105,90 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get translateErrorNoConnection => 'لا يوجد اتصال بالإنترنت.';
+
+  @override
+  String get signInTitle => 'أهلاً بعودتك';
+
+  @override
+  String get signInSubtitle => 'سجّل دخولك لمزامنة ترجماتك عبر أجهزتك.';
+
+  @override
+  String get signInEmailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get signInEmailHint => 'ahmed@example.com';
+
+  @override
+  String get signInPasswordLabel => 'كلمة المرور';
+
+  @override
+  String get signInPasswordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get signInRememberMe => 'تذكّرني';
+
+  @override
+  String get signInForgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get signInSubmit => 'تسجيل الدخول';
+
+  @override
+  String get signInOrContinueWith => 'أو تابع باستخدام';
+
+  @override
+  String get signInNoAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signInCreateAccount => 'إنشاء حساب';
+
+  @override
+  String get signInComingSoon => 'قريبًا';
+
+  @override
+  String get signInShowPassword => 'إظهار كلمة المرور';
+
+  @override
+  String get signInHidePassword => 'إخفاء كلمة المرور';
+
+  @override
+  String get signInBack => 'رجوع';
+
+  @override
+  String get authErrorEmailRequired => 'أدخل بريدك الإلكتروني.';
+
+  @override
+  String get authErrorEmailInvalid => 'أدخل بريدًا إلكترونيًا صحيحًا.';
+
+  @override
+  String get authErrorPasswordRequired => 'أدخل كلمة المرور.';
+
+  @override
+  String get authErrorPasswordTooShort => 'يجب ألا تقل كلمة المرور عن 6 أحرف.';
+
+  @override
+  String get authErrorInvalidCredentials =>
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+
+  @override
+  String get authErrorUserDisabled => 'تم تعطيل هذا الحساب.';
+
+  @override
+  String get authErrorTooManyRequests => 'محاولات كثيرة. حاول مرة أخرى لاحقًا.';
+
+  @override
+  String get authErrorNoConnection => 'لا يوجد اتصال بالإنترنت.';
+
+  @override
+  String get authErrorUnavailable => 'تسجيل الدخول غير متاح حاليًا.';
+
+  @override
+  String get authErrorGeneric => 'تعذّر تسجيل الدخول. حاول مرة أخرى.';
+
+  @override
+  String get authErrorSessionExpired =>
+      'انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.';
+
+  @override
+  String get authSignOut => 'تسجيل الخروج';
 }

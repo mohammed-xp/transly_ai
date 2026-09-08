@@ -8,36 +8,36 @@ import 'app_typography.dart';
 /// App themes built from the design tokens. Source: `Transly-AI-Design-System.md`.
 abstract final class AppTheme {
   static ThemeData get light => _build(
-        brightness: Brightness.light,
-        primary: AppColors.primary,
-        secondary: AppColors.gradientStart,
-        background: AppColors.backgroundLight,
-        surface: AppColors.surfaceLight,
-        chip: AppColors.chipBgLight,
-        border: AppColors.borderLight,
-        divider: AppColors.dividerLight,
-        textPrimary: AppColors.inkLight,
-        textSecondary: AppColors.textSecondaryLight,
-        textMuted: AppColors.textMutedLight,
-        toggleTrackOff: AppColors.toggleTrackOffLight,
-        palette: AppPalette.light,
-      );
+    brightness: Brightness.light,
+    primary: AppColors.primary,
+    secondary: AppColors.gradientStart,
+    background: AppColors.backgroundLight,
+    surface: AppColors.surfaceLight,
+    chip: AppColors.chipBgLight,
+    border: AppColors.borderLight,
+    divider: AppColors.dividerLight,
+    textPrimary: AppColors.inkLight,
+    textSecondary: AppColors.textSecondaryLight,
+    textMuted: AppColors.textMutedLight,
+    toggleTrackOff: AppColors.toggleTrackOffLight,
+    palette: AppPalette.light,
+  );
 
   static ThemeData get dark => _build(
-        brightness: Brightness.dark,
-        primary: AppColors.accentDark,
-        secondary: AppColors.accentDark2,
-        background: AppColors.backgroundDark,
-        surface: AppColors.surfaceDark,
-        chip: AppColors.chipBgDark,
-        border: AppColors.borderDark,
-        divider: AppColors.borderDark,
-        textPrimary: AppColors.textPrimaryDark,
-        textSecondary: AppColors.textSecondaryDark,
-        textMuted: AppColors.textMutedDark,
-        toggleTrackOff: AppColors.toggleTrackOffDark,
-        palette: AppPalette.dark,
-      );
+    brightness: Brightness.dark,
+    primary: AppColors.accentDark,
+    secondary: AppColors.accentDark2,
+    background: AppColors.backgroundDark,
+    surface: AppColors.surfaceDark,
+    chip: AppColors.chipBgDark,
+    border: AppColors.borderDark,
+    divider: AppColors.borderDark,
+    textPrimary: AppColors.textPrimaryDark,
+    textSecondary: AppColors.textSecondaryDark,
+    textMuted: AppColors.textMutedDark,
+    toggleTrackOff: AppColors.toggleTrackOffDark,
+    palette: AppPalette.dark,
+  );
 
   static ThemeData _build({
     required Brightness brightness,
@@ -128,7 +128,9 @@ abstract final class AppTheme {
         selectedColor: primary,
         side: BorderSide(color: border),
         labelStyle: textTheme.titleSmall?.copyWith(color: textSecondary),
-        secondaryLabelStyle: textTheme.titleSmall?.copyWith(color: Colors.white),
+        secondaryLabelStyle: textTheme.titleSmall?.copyWith(
+          color: Colors.white,
+        ),
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimens.spaceL,
           vertical: 9,
@@ -147,7 +149,7 @@ abstract final class AppTheme {
   }
 
   static OutlineInputBorder _inputBorder(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppDimens.radiusInput),
-        borderSide: BorderSide(color: color),
-      );
+    borderRadius: BorderRadius.circular(AppDimens.radiusInput),
+    borderSide: BorderSide(color: color),
+  );
 }

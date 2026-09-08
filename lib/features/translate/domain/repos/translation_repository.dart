@@ -4,9 +4,8 @@ import '../entities/translation_entity.dart';
 import '../entities/translation_tone.dart';
 
 /// Contract for translating text and managing on-device models. Implementations
-/// choose between an offline source (ML Kit) and an online source (Gemini) —
-/// [tone] is in the contract now so the online source plugs in later without any
-/// change here; the offline source ignores it.
+/// choose between an offline source (ML Kit) and an online source (the backend
+/// API) — [tone] is honoured by the online source; the offline source ignores it.
 abstract class TranslationRepository {
   Future<ApiResult<TranslationEntity>> translate({
     required String text,
@@ -28,7 +27,7 @@ abstract class TranslationRepository {
   });
 
   /// Whether the online (tone-aware) translation source is available right
-  /// now — a remote source is configured and the device is connected. Emits
-  /// the current value immediately, then again on every later change.
+  /// now — i.e. the device is connected. Emits the current value immediately,
+  /// then again on every later change.
   Stream<bool> watchOnlineAvailability();
 }

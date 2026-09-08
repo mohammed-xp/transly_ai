@@ -1,12 +1,10 @@
 import '../../domain/entities/language.dart';
 import '../../domain/entities/translation_tone.dart';
+import '../models/translation_response_model.dart';
 
-/// Online, tone-aware translation source (e.g. Gemini). Interface only for now —
-/// the repository is already wired to route to it when connected, so the
-/// implementation can be added later as a data source + one DI line, with no
-/// change to the domain or repository contracts.
+/// Online, tone-aware translation source backed by the backend API.
 abstract class TranslationRemoteDataSource {
-  Future<String> translate({
+  Future<TranslationResponseModel> translate({
     required String text,
     required Language from,
     required Language to,

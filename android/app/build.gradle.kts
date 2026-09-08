@@ -5,9 +5,16 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Applied imperatively (not in the plugins {} block) so a missing
+// google-services.json doesn't hard-fail the build before the auth feature's
+// own Firebase.initializeApp() try/catch gets a chance to degrade gracefully.
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.example.transly_ai"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -24,7 +31,8 @@ android {
         applicationId = "com.example.transly_ai"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // flutter_secure_storage's EncryptedSharedPreferences backend requires minSdk 23.
+        minSdk = maxOf(flutter.minSdkVersion, 23)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

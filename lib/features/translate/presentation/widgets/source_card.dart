@@ -115,7 +115,10 @@ class _SourceCardState extends State<SourceCard> {
               focusedErrorBorder: InputBorder.none,
               contentPadding: EdgeInsets.zero,
               hintText: widget.hintText,
-              hintStyle: textTheme.bodyLarge?.copyWith(color: c.hint, height: 1.45),
+              hintStyle: textTheme.bodyLarge?.copyWith(
+                color: c.hint,
+                height: 1.45,
+              ),
             ),
           ),
         ],

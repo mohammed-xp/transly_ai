@@ -69,14 +69,18 @@ void main() {
     });
 
     test('returns the decoded JSON response body', () async {
-      adapter.responseJson = {'candidates': ['a', 'b']};
+      adapter.responseJson = {
+        'candidates': ['a', 'b'],
+      };
 
       final result = await client.postJson(
         'https://example.test/endpoint',
         body: {},
       );
 
-      expect(result, {'candidates': ['a', 'b']});
+      expect(result, {
+        'candidates': ['a', 'b'],
+      });
     });
 
     test('throws RemoteApiException on a non-2xx response', () async {
@@ -91,7 +95,29 @@ void main() {
 
       expect(
         () => client.postJson('https://example.test/endpoint', body: {}),
-        throwsA(isA<RemoteApiException>()),
+        throwsA(
+          isA<RemoteApiException>().having(
+            (e) => e.statusCode,
+            'statusCode',
+            429,
+          ),
+        ),
+      );
+    });
+
+    test('throws UnauthorizedException on a 401 response', () async {
+      adapter.throwError = DioException(
+        requestOptions: RequestOptions(path: 'x'),
+        type: DioExceptionType.badResponse,
+        response: Response(
+          requestOptions: RequestOptions(path: 'x'),
+          statusCode: 401,
+        ),
+      );
+
+      expect(
+        () => client.postJson('https://example.test/endpoint', body: {}),
+        throwsA(isA<UnauthorizedException>()),
       );
     });
 

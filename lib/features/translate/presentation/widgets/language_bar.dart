@@ -87,10 +87,7 @@ class LanguageBar extends StatelessWidget {
 }
 
 class _LanguageColumn extends StatelessWidget {
-  const _LanguageColumn({
-    required this.label,
-    required this.language,
-  });
+  const _LanguageColumn({required this.label, required this.language});
 
   final String label;
   final String language;
@@ -108,10 +105,7 @@ class _LanguageColumn extends StatelessWidget {
             label,
             style: textTheme.labelSmall?.copyWith(color: c.textMuted),
           ),
-          Text(
-            language,
-            style: textTheme.titleMedium?.copyWith(color: c.ink),
-          ),
+          Text(language, style: textTheme.titleMedium?.copyWith(color: c.ink)),
         ],
       ),
     );

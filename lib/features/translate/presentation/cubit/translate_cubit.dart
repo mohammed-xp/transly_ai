@@ -21,25 +21,30 @@ class TranslateCubit extends Cubit<TranslateState> {
     required DownloadTranslationModelsUseCase downloadModels,
     required SpeakTextUseCase speakText,
     required WatchOnlineAvailabilityUseCase watchOnlineAvailability,
-  })  : _translateText = translateText,
-        _checkModels = checkModels,
-        _downloadModels = downloadModels,
-        _speakText = speakText,
-        super(TranslateState.initial()) {
-    _onlineAvailabilitySubscription = watchOnlineAvailability().listen((available) {
-      if (isClosed) return;
-      emit(state.copyWith(
-        isOnlineAvailable: available,
-        // Coming back online clears a stale offline-fallback latch; without
-        // this, one transient remote failure would keep the tone disabled
-        // until another translation happened to succeed online.
-        lastEngineWasOnline: available ? true : null,
-      ));
-    }, onError: (_) {
-      // Defence in depth — the repository already contains connectivity
-      // errors. Without this the subscription would rethrow into the zone.
-      if (!isClosed) emit(state.copyWith(isOnlineAvailable: false));
-    });
+  }) : _translateText = translateText,
+       _checkModels = checkModels,
+       _downloadModels = downloadModels,
+       _speakText = speakText,
+       super(TranslateState.initial()) {
+    _onlineAvailabilitySubscription = watchOnlineAvailability().listen(
+      (available) {
+        if (isClosed) return;
+        emit(
+          state.copyWith(
+            isOnlineAvailable: available,
+            // Coming back online clears a stale offline-fallback latch; without
+            // this, one transient remote failure would keep the tone disabled
+            // until another translation happened to succeed online.
+            lastEngineWasOnline: available ? true : null,
+          ),
+        );
+      },
+      onError: (_) {
+        // Defence in depth — the repository already contains connectivity
+        // errors. Without this the subscription would rethrow into the zone.
+        if (!isClosed) emit(state.copyWith(isOnlineAvailable: false));
+      },
+    );
   }
 
   final TranslateTextUseCase _translateText;
@@ -91,13 +96,15 @@ class TranslateCubit extends Cubit<TranslateState> {
     _debounce?.cancel();
     _requestId++; // supersede any in-flight run
     final hasOutput = state.translatedText.isNotEmpty;
-    emit(state.copyWith(
-      from: state.to,
-      to: state.from,
-      sourceText: hasOutput ? state.translatedText : state.sourceText,
-      translatedText: '',
-      status: const TranslationIdle(),
-    ));
+    emit(
+      state.copyWith(
+        from: state.to,
+        to: state.from,
+        sourceText: hasOutput ? state.translatedText : state.sourceText,
+        translatedText: '',
+        status: const TranslationIdle(),
+      ),
+    );
     if (hasOutput) _translate();
   }
 
@@ -138,7 +145,8 @@ class TranslateCubit extends Cubit<TranslateState> {
 
     final needsDownload = modelsResult.when(
       success: (downloaded) => !downloaded,
-      failure: (_) => false, // treat as ready; the translate call will surface it
+      failure: (_) =>
+          false, // treat as ready; the translate call will surface it
     );
 
     if (needsDownload) {
@@ -165,11 +173,13 @@ class TranslateCubit extends Cubit<TranslateState> {
     if (_isStale(id)) return;
 
     result.when(
-      success: (translation) => emit(state.copyWith(
-        translatedText: translation.translatedText,
-        status: const TranslationDone(),
-        lastEngineWasOnline: translation.engine == TranslationEngine.online,
-      )),
+      success: (translation) => emit(
+        state.copyWith(
+          translatedText: translation.translatedText,
+          status: const TranslationDone(),
+          lastEngineWasOnline: translation.engine == TranslationEngine.online,
+        ),
+      ),
       failure: (f) => emit(state.copyWith(status: TranslationError(f))),
     );
   }

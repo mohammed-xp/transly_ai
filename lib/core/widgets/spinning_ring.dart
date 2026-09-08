@@ -87,13 +87,7 @@ class RingPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     // Full faint track.
-    canvas.drawArc(
-      arcRect,
-      0,
-      2 * math.pi,
-      false,
-      base..color = trackColor,
-    );
+    canvas.drawArc(arcRect, 0, 2 * math.pi, false, base..color = trackColor);
 
     // Leading quarter-turn arc, starting at the top (−90°).
     canvas.drawArc(

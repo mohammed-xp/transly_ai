@@ -127,5 +127,117 @@
   "translateErrorNoConnection": "No internet connection.",
   "@translateErrorNoConnection": {
     "description": "Shown when an online-only translation is attempted while offline."
+  },
+  "signInTitle": "Welcome back",
+  "@signInTitle": {
+    "description": "Headline on the sign-in screen."
+  },
+  "signInSubtitle": "Sign in to sync your translations across devices.",
+  "@signInSubtitle": {
+    "description": "Subtitle under the headline on the sign-in screen."
+  },
+  "signInEmailLabel": "Email",
+  "@signInEmailLabel": {
+    "description": "Label above the email field on the sign-in screen."
+  },
+  "signInEmailHint": "you@example.com",
+  "@signInEmailHint": {
+    "description": "Placeholder in the email field on the sign-in screen."
+  },
+  "signInPasswordLabel": "Password",
+  "@signInPasswordLabel": {
+    "description": "Label above the password field on the sign-in screen."
+  },
+  "signInPasswordHint": "Enter your password",
+  "@signInPasswordHint": {
+    "description": "Placeholder in the password field on the sign-in screen."
+  },
+  "signInRememberMe": "Remember me",
+  "@signInRememberMe": {
+    "description": "Label for the remember-me checkbox on the sign-in screen."
+  },
+  "signInForgotPassword": "Forgot password?",
+  "@signInForgotPassword": {
+    "description": "Forgot-password link on the sign-in screen."
+  },
+  "signInSubmit": "Sign in",
+  "@signInSubmit": {
+    "description": "Primary submit button on the sign-in screen."
+  },
+  "signInOrContinueWith": "Or continue with",
+  "@signInOrContinueWith": {
+    "description": "Divider label above the social sign-in buttons."
+  },
+  "signInNoAccount": "Don't have an account?",
+  "@signInNoAccount": {
+    "description": "Prompt preceding the create-account link on the sign-in screen."
+  },
+  "signInCreateAccount": "Create account",
+  "@signInCreateAccount": {
+    "description": "Create-account link on the sign-in screen."
+  },
+  "signInComingSoon": "Coming soon",
+  "@signInComingSoon": {
+    "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account)."
+  },
+  "signInShowPassword": "Show password",
+  "@signInShowPassword": {
+    "description": "Accessibility label for the button that reveals the password field's text."
+  },
+  "signInHidePassword": "Hide password",
+  "@signInHidePassword": {
+    "description": "Accessibility label for the button that hides the password field's text."
+  },
+  "signInBack": "Back",
+  "@signInBack": {
+    "description": "Accessibility label for the back button on the sign-in screen."
+  },
+  "authErrorEmailRequired": "Enter your email address.",
+  "@authErrorEmailRequired": {
+    "description": "Shown under the email field when it is left empty."
+  },
+  "authErrorEmailInvalid": "Enter a valid email address.",
+  "@authErrorEmailInvalid": {
+    "description": "Shown under the email field when the format is invalid."
+  },
+  "authErrorPasswordRequired": "Enter your password.",
+  "@authErrorPasswordRequired": {
+    "description": "Shown under the password field when it is left empty."
+  },
+  "authErrorPasswordTooShort": "Password must be at least 6 characters.",
+  "@authErrorPasswordTooShort": {
+    "description": "Shown under the password field when it is too short."
+  },
+  "authErrorInvalidCredentials": "Incorrect email or password.",
+  "@authErrorInvalidCredentials": {
+    "description": "Shown when sign-in fails because the credentials are wrong."
+  },
+  "authErrorUserDisabled": "This account has been disabled.",
+  "@authErrorUserDisabled": {
+    "description": "Shown when sign-in fails because the account is disabled."
+  },
+  "authErrorTooManyRequests": "Too many attempts. Please try again later.",
+  "@authErrorTooManyRequests": {
+    "description": "Shown when sign-in fails because of rate limiting."
+  },
+  "authErrorNoConnection": "No internet connection.",
+  "@authErrorNoConnection": {
+    "description": "Shown when sign-in fails because the device is offline."
+  },
+  "authErrorUnavailable": "Sign-in isn't available right now.",
+  "@authErrorUnavailable": {
+    "description": "Shown when no auth provider is configured."
+  },
+  "authErrorGeneric": "Couldn't sign in. Please try again.",
+  "@authErrorGeneric": {
+    "description": "Generic sign-in failure message."
+  },
+  "authErrorSessionExpired": "Your session has expired. Please sign in again.",
+  "@authErrorSessionExpired": {
+    "description": "Shown when the backend rejects the session token and the user is routed back to sign-in."
+  },
+  "authSignOut": "Sign out",
+  "@authSignOut": {
+    "description": "Tooltip/label for the sign-out action on the translate screen."
   }
 }

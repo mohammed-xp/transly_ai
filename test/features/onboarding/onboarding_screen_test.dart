@@ -7,9 +7,9 @@ import 'package:transly_ai/core/theme/app_theme.dart';
 import 'package:transly_ai/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
-/// Minimal harness: the onboarding route plus a Translate stub, driven by the
-/// given [locale]/[themeMode] so we can assert per-locale copy, RTL behavior,
-/// and both theme variants.
+/// Minimal harness: the onboarding route plus Sign-In and Translate stubs,
+/// driven by the given [locale]/[themeMode] so we can assert per-locale
+/// copy, RTL behavior, and both theme variants.
 Widget _harness(Locale locale, {ThemeMode themeMode = ThemeMode.light}) {
   final router = GoRouter(
     initialLocation: AppRoutes.onboarding,
@@ -18,6 +18,12 @@ Widget _harness(Locale locale, {ThemeMode themeMode = ThemeMode.light}) {
         path: AppRoutes.onboarding,
         name: AppRoutes.onboardingName,
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.signIn,
+        name: AppRoutes.signInName,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text('sign-in-stub'))),
       ),
       GoRoute(
         path: AppRoutes.translate,
@@ -83,7 +89,7 @@ void main() {
       );
     });
 
-    testWidgets('Get Started navigates to Translate', (tester) async {
+    testWidgets('Get Started navigates to Sign In', (tester) async {
       await tester.pumpWidget(_harness(const Locale('en')));
       await tester.pumpAndSettle();
 
@@ -91,7 +97,18 @@ void main() {
       await tester.tap(find.text(en.onboardingGetStarted));
       await tester.pumpAndSettle();
 
-      expect(find.text('translate-stub'), findsOneWidget);
+      expect(find.text('sign-in-stub'), findsOneWidget);
+    });
+
+    testWidgets('Sign in link navigates to Sign In', (tester) async {
+      await tester.pumpWidget(_harness(const Locale('en')));
+      await tester.pumpAndSettle();
+
+      final en = lookupAppLocalizations(const Locale('en'));
+      await tester.tap(find.text(en.onboardingSignIn));
+      await tester.pumpAndSettle();
+
+      expect(find.text('sign-in-stub'), findsOneWidget);
     });
 
     testWidgets('renders in dark theme without errors', (tester) async {
@@ -110,8 +127,9 @@ void main() {
     // end of the range) in both themes.
     for (final size in const [Size(402, 874), Size(360, 640)]) {
       for (final mode in const [ThemeMode.light, ThemeMode.dark]) {
-        testWidgets('lays out without overflow at $size ($mode)',
-            (tester) async {
+        testWidgets('lays out without overflow at $size ($mode)', (
+          tester,
+        ) async {
           await _withSurface(tester, size, () async {
             await tester.pumpWidget(
               _harness(const Locale('ar'), themeMode: mode),

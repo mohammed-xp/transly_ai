@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/presentation/screens/sign_in_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/translate/presentation/screens/translate_screen.dart';
@@ -21,6 +22,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.onboarding,
       name: AppRoutes.onboardingName,
       builder: (context, state) => const OnboardingScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.signIn,
+      name: AppRoutes.signInName,
+      builder: (context, state) => const SignInScreen(),
     ),
     GoRoute(
       path: AppRoutes.translate,

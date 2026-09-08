@@ -23,7 +23,10 @@ class TranslateBusyNote extends StatelessWidget {
           child: Text(
             message,
             textAlign: TextAlign.center,
-            style: textTheme.bodySmall?.copyWith(fontSize: 12, color: c.textMuted),
+            style: textTheme.bodySmall?.copyWith(
+              fontSize: 12,
+              color: c.textMuted,
+            ),
           ),
         ),
       ],

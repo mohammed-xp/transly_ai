@@ -8,7 +8,11 @@ class SplashInitializing extends SplashState {
   const SplashInitializing();
 }
 
-/// Startup finished; the screen should navigate onward.
+/// Startup finished; the screen should navigate onward. [isAuthenticated]
+/// says whether a persisted session token exists, so the app can skip
+/// straight to the translate screen instead of onboarding/sign-in.
 class SplashReady extends SplashState {
-  const SplashReady();
+  const SplashReady({required this.isAuthenticated});
+
+  final bool isAuthenticated;
 }

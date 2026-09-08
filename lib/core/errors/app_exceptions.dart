@@ -14,7 +14,27 @@ class RemoteConnectionException extends AppException {
 }
 
 /// The remote API responded but the call failed: non-2xx status, a safety
-/// block, or a malformed/empty response.
+/// block, or a malformed/empty response. [statusCode] is null for failures
+/// with no HTTP status (e.g. a malformed response body).
 class RemoteApiException extends AppException {
-  const RemoteApiException([super.message]);
+  const RemoteApiException([super.message, this.statusCode]);
+
+  final int? statusCode;
+}
+
+/// The backend rejected the request with HTTP 401 — the session token is
+/// missing, invalid, or expired. Distinct from [RemoteApiException] so
+/// callers can react to it specifically (e.g. sign the user out).
+class UnauthorizedException extends AppException {
+  const UnauthorizedException([super.message]);
+}
+
+/// An auth provider rejected the request. Carries a provider-agnostic error
+/// [code] (e.g. `invalid-credential`) so the repository can map it to a
+/// specific [Failure] without HTTP/provider details leaking past the data
+/// layer.
+class AuthProviderException extends AppException {
+  const AuthProviderException(this.code, [super.message]);
+
+  final String code;
 }

@@ -10,6 +10,6 @@ abstract class RestClient {
   Future<dynamic> postJson(
     String url, {
     Map<String, String>? headers,
-    required Object body,
+    required Map<String, dynamic> body,
   });
 }

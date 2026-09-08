@@ -13,12 +13,14 @@ void main() {
       expect(toMlKitLanguage(Language.arabic), TranslateLanguage.arabic);
     });
 
-    test('every Language maps to a TranslateLanguage with matching bcp code',
-        () {
-      // Guards against a new Language enum value missing its mapper arm.
-      for (final language in Language.values) {
-        expect(toMlKitLanguage(language).bcpCode, language.code);
-      }
-    });
+    test(
+      'every Language maps to a TranslateLanguage with matching bcp code',
+      () {
+        // Guards against a new Language enum value missing its mapper arm.
+        for (final language in Language.values) {
+          expect(toMlKitLanguage(language).bcpCode, language.code);
+        }
+      },
+    );
   });
 }

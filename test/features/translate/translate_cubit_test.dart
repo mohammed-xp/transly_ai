@@ -38,7 +38,8 @@ class _FakeTranslationRepository implements TranslationRepository {
 
   void setOnlineAvailable(bool available) => _onlineAvailability.add(available);
 
-  void failOnlineAvailability(Object error) => _onlineAvailability.addError(error);
+  void failOnlineAvailability(Object error) =>
+      _onlineAvailability.addError(error);
 
   bool get onlineAvailabilityHasListener => _onlineAvailability.hasListener;
 
@@ -94,7 +95,10 @@ class _FakeTtsService implements TtsService {
   int stopCallCount = 0;
 
   @override
-  Future<void> speak({required String text, required String languageCode}) async {
+  Future<void> speak({
+    required String text,
+    required String languageCode,
+  }) async {
     speakCalls.add('$languageCode:$text');
   }
 
@@ -176,7 +180,10 @@ void main() {
         cubit.sourceTextChanged('he'); // restarts the timer
         async.elapse(const Duration(milliseconds: 300));
         async.flushMicrotasks();
-        expect(repo.translateCallCount, 0); // 600ms not yet since last keystroke
+        expect(
+          repo.translateCallCount,
+          0,
+        ); // 600ms not yet since last keystroke
 
         async.elapse(const Duration(milliseconds: 300));
         async.flushMicrotasks();
@@ -192,7 +199,9 @@ void main() {
         final cubit = _buildCubit(repo);
 
         cubit.sourceTextChanged('   ');
-        async.elapse(TranslateCubit.debounceDuration + const Duration(seconds: 1));
+        async.elapse(
+          TranslateCubit.debounceDuration + const Duration(seconds: 1),
+        );
         async.flushMicrotasks();
 
         expect(repo.translateCallCount, 0);
@@ -215,10 +224,12 @@ void main() {
         async.flushMicrotasks();
 
         final statuses = _statuses(emitted);
-        final downloadIndex =
-            statuses.indexWhere((s) => s is TranslationDownloadingModel);
-        final inProgressIndex =
-            statuses.indexWhere((s) => s is TranslationInProgress);
+        final downloadIndex = statuses.indexWhere(
+          (s) => s is TranslationDownloadingModel,
+        );
+        final inProgressIndex = statuses.indexWhere(
+          (s) => s is TranslationInProgress,
+        );
         expect(downloadIndex, greaterThanOrEqualTo(0));
         expect(inProgressIndex, greaterThan(downloadIndex));
         expect(cubit.state.status, isA<TranslationDone>());
@@ -242,7 +253,10 @@ void main() {
         expect(repo.translateCallCount, 0);
         final status = cubit.state.status;
         expect(status, isA<TranslationError>());
-        expect((status as TranslationError).failure, isA<ModelDownloadFailure>());
+        expect(
+          (status as TranslationError).failure,
+          isA<ModelDownloadFailure>(),
+        );
 
         cubit.close();
       });
@@ -290,8 +304,9 @@ void main() {
         async.flushMicrotasks(); // both delays complete
 
         // Only the latest run emits Done — the stale one bails.
-        final doneCount =
-            _statuses(emitted).whereType<TranslationDone>().length;
+        final doneCount = _statuses(
+          emitted,
+        ).whereType<TranslationDone>().length;
         expect(doneCount, 1);
         expect(repo.translateCallCount, 2);
 
@@ -342,14 +357,19 @@ void main() {
 
         cubit.sourceTextChanged('hello'); // debounce still pending
         cubit.swapLanguages();
-        async.elapse(TranslateCubit.debounceDuration + const Duration(seconds: 1));
+        async.elapse(
+          TranslateCubit.debounceDuration + const Duration(seconds: 1),
+        );
         async.flushMicrotasks();
 
         expect(cubit.state.from, Language.arabic);
         expect(cubit.state.to, Language.english);
         expect(cubit.state.sourceText, 'hello'); // source text kept as-is
-        expect(repo.translateCallCount, 0,
-            reason: 'old-language text must not be retranslated reversed');
+        expect(
+          repo.translateCallCount,
+          0,
+          reason: 'old-language text must not be retranslated reversed',
+        );
         expect(cubit.state.status, isA<TranslationIdle>());
 
         cubit.close();
@@ -463,14 +483,13 @@ void main() {
         cubit.sourceTextChanged('hi');
         cubit.close();
 
-        async.elapse(TranslateCubit.debounceDuration + const Duration(seconds: 1));
+        async.elapse(
+          TranslateCubit.debounceDuration + const Duration(seconds: 1),
+        );
         async.flushMicrotasks();
 
         expect(repo.translateCallCount, 0);
-        expect(
-          _statuses(emitted).whereType<TranslationInProgress>(),
-          isEmpty,
-        );
+        expect(_statuses(emitted).whereType<TranslationInProgress>(), isEmpty);
 
         sub.cancel();
       });
@@ -574,8 +593,7 @@ void main() {
       });
     });
 
-    test(
-        'an offline translation result disables the tone selector even while '
+    test('an offline translation result disables the tone selector even while '
         'the online signal still says available', () {
       fakeAsync((async) {
         final repo = _FakeTranslationRepository()
@@ -595,8 +613,7 @@ void main() {
       });
     });
 
-    test(
-        'a transient offline fallback does not latch the tone off — coming '
+    test('a transient offline fallback does not latch the tone off — coming '
         'back online re-enables it without another translation', () {
       fakeAsync((async) {
         final repo = _FakeTranslationRepository()
@@ -620,13 +637,15 @@ void main() {
         repo.setOnlineAvailable(true);
         async.flushMicrotasks();
 
-        expect(cubit.state.isToneEnabled, isTrue,
-            reason: 'availability returning must clear the offline latch');
+        expect(
+          cubit.state.isToneEnabled,
+          isTrue,
+          reason: 'availability returning must clear the offline latch',
+        );
       });
     });
 
-    test(
-        'an online result landing after the signal dropped does not re-enable '
+    test('an online result landing after the signal dropped does not re-enable '
         'the tone', () {
       fakeAsync((async) {
         final repo = _FakeTranslationRepository()
@@ -653,8 +672,11 @@ void main() {
         async.flushMicrotasks();
 
         expect(cubit.state.translatedText, 'x:hi');
-        expect(cubit.state.isToneEnabled, isFalse,
-            reason: 'a stale online result must not override live availability');
+        expect(
+          cubit.state.isToneEnabled,
+          isFalse,
+          reason: 'a stale online result must not override live availability',
+        );
       });
     });
 

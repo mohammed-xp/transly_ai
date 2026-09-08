@@ -51,15 +51,15 @@ class TranslateState {
   /// `false` only because it is the pre-first-emission value of the
   /// availability stream, which reports the real answer immediately.
   factory TranslateState.initial() => const TranslateState(
-        sourceText: '',
-        from: Language.english,
-        to: Language.arabic,
-        tone: TranslationTone.formal,
-        translatedText: '',
-        status: TranslationIdle(),
-        isOnlineAvailable: false,
-        lastEngineWasOnline: true,
-      );
+    sourceText: '',
+    from: Language.english,
+    to: Language.arabic,
+    tone: TranslationTone.formal,
+    translatedText: '',
+    status: TranslationIdle(),
+    isOnlineAvailable: false,
+    lastEngineWasOnline: true,
+  );
 
   final String sourceText;
   final Language from;

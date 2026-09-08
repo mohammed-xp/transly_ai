@@ -70,19 +70,21 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('FlutterTtsService.speak — tag resolution', () {
-    test('prefers the region-qualified tag when its voice is installed',
-        () async {
-      final tts = _FakeFlutterTts()..installedLanguages = {'ar-SA'};
-      final service = FlutterTtsService(tts);
+    test(
+      'prefers the region-qualified tag when its voice is installed',
+      () async {
+        final tts = _FakeFlutterTts()..installedLanguages = {'ar-SA'};
+        final service = FlutterTtsService(tts);
 
-      await service.speak(text: 'مرحبا', languageCode: 'ar');
+        await service.speak(text: 'مرحبا', languageCode: 'ar');
 
-      expect(tts.calls, [
-        'isLanguageInstalled:ar-SA',
-        'setLanguage:ar-SA',
-        'speak:مرحبا',
-      ]);
-    });
+        expect(tts.calls, [
+          'isLanguageInstalled:ar-SA',
+          'setLanguage:ar-SA',
+          'speak:مرحبا',
+        ]);
+      },
+    );
 
     test('falls back to the bare code when only it is installed', () async {
       final tts = _FakeFlutterTts()..installedLanguages = {'ar'};
@@ -108,20 +110,23 @@ void main() {
     });
 
     test(
-        'does not speak a language the engine knows but has not installed',
-        () async {
-      // The exact Android trap: isLanguageAvailable says yes, but the voice
-      // data was never downloaded, so speaking would produce silence.
-      final tts = _FakeFlutterTts()..availableLanguages = {'ar-SA', 'ar'};
-      final service = FlutterTtsService(tts);
+      'does not speak a language the engine knows but has not installed',
+      () async {
+        // The exact Android trap: isLanguageAvailable says yes, but the voice
+        // data was never downloaded, so speaking would produce silence.
+        final tts = _FakeFlutterTts()..availableLanguages = {'ar-SA', 'ar'};
+        final service = FlutterTtsService(tts);
 
-      await service.speak(text: 'مرحبا', languageCode: 'ar');
+        await service.speak(text: 'مرحبا', languageCode: 'ar');
 
-      expect(
-        tts.calls.where((c) => c.startsWith('speak') || c.startsWith('setLanguage')),
-        isEmpty,
-      );
-    });
+        expect(
+          tts.calls.where(
+            (c) => c.startsWith('speak') || c.startsWith('setLanguage'),
+          ),
+          isEmpty,
+        );
+      },
+    );
 
     test('falls back to isLanguageAvailable where isLanguageInstalled is '
         'unimplemented (iOS)', () async {
@@ -147,7 +152,9 @@ void main() {
       await service.speak(text: 'hello', languageCode: 'en');
 
       expect(
-        tts.calls.where((c) => c.startsWith('setLanguage') || c.startsWith('speak')),
+        tts.calls.where(
+          (c) => c.startsWith('setLanguage') || c.startsWith('speak'),
+        ),
         isEmpty,
       );
     });
@@ -184,20 +191,22 @@ void main() {
       expect(tts.calls.where((c) => c.startsWith('isLanguage')).length, 2);
     });
 
-    test('does NOT cache a failed resolution — a later install is picked up',
-        () async {
-      final tts = _FakeFlutterTts(); // Arabic voice not installed yet
-      final service = FlutterTtsService(tts);
+    test(
+      'does NOT cache a failed resolution — a later install is picked up',
+      () async {
+        final tts = _FakeFlutterTts(); // Arabic voice not installed yet
+        final service = FlutterTtsService(tts);
 
-      await service.speak(text: 'مرحبا', languageCode: 'ar');
-      expect(tts.calls.where((c) => c.startsWith('speak')), isEmpty);
+        await service.speak(text: 'مرحبا', languageCode: 'ar');
+        expect(tts.calls.where((c) => c.startsWith('speak')), isEmpty);
 
-      // User installs the Arabic voice from system settings, then taps again.
-      tts.installedLanguages = {'ar-SA'};
-      await service.speak(text: 'مرحبا', languageCode: 'ar');
+        // User installs the Arabic voice from system settings, then taps again.
+        tts.installedLanguages = {'ar-SA'};
+        await service.speak(text: 'مرحبا', languageCode: 'ar');
 
-      expect(tts.calls, contains('speak:مرحبا'));
-    });
+        expect(tts.calls, contains('speak:مرحبا'));
+      },
+    );
 
     test('does NOT cache a transient probe failure', () async {
       final tts = _FakeFlutterTts()

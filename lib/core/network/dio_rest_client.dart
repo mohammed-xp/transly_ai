@@ -14,15 +14,18 @@ class DioRestClient implements RestClient {
   Future<dynamic> postJson(
     String url, {
     Map<String, String>? headers,
-    required Object body,
+    required Map<String, dynamic> body,
   }) async {
     try {
-      final response = await _dio.post<dynamic>(
+      final response = await _dio.post(
         url,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          ...?headers,
-        }),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": 'application/json',
+            ...?headers
+          },
+        ),
         data: body,
       );
       return response.data;
@@ -39,7 +42,11 @@ class DioRestClient implements RestClient {
       case DioExceptionType.connectionError:
         return RemoteConnectionException(e.message);
       case DioExceptionType.badResponse:
-        return RemoteApiException('HTTP ${e.response?.statusCode}');
+        final statusCode = e.response?.statusCode;
+        if (statusCode == 401) {
+          return UnauthorizedException('HTTP $statusCode');
+        }
+        return RemoteApiException('HTTP $statusCode', statusCode);
       case DioExceptionType.cancel:
       case DioExceptionType.badCertificate:
       case DioExceptionType.unknown:

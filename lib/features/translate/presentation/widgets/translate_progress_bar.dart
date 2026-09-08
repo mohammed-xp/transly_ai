@@ -57,7 +57,9 @@ class _TranslateProgressBarState extends State<TranslateProgressBar>
                         gradient: AppColors.brandGradient,
                         borderRadius: BorderRadius.circular(3),
                       ),
-                      child: const SizedBox(height: TranslateProgressBar.height),
+                      child: const SizedBox(
+                        height: TranslateProgressBar.height,
+                      ),
                     ),
                   ),
                 );

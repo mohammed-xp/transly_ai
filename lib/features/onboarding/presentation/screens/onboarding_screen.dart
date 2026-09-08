@@ -56,8 +56,10 @@ class _OnboardingViewState extends State<_OnboardingView>
       duration: const Duration(milliseconds: 600),
     )..forward();
     _fade = CurvedAnimation(parent: _entrance, curve: Curves.easeOut);
-    _slide = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _entrance, curve: Curves.easeOutCubic));
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.08),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _entrance, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -72,8 +74,7 @@ class _OnboardingViewState extends State<_OnboardingView>
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
 
-    final subtitleColor =
-        Colors.white.withValues(alpha: isDark ? 0.86 : 0.92);
+    final subtitleColor = Colors.white.withValues(alpha: isDark ? 0.86 : 0.92);
     final captionColor = Colors.white.withValues(alpha: isDark ? 0.5 : 0.66);
 
     return Scaffold(
@@ -105,8 +106,18 @@ class _OnboardingViewState extends State<_OnboardingView>
               left: -130,
             ),
           ] else ...[
-            const _SoftCircle(diameter: 320, opacity: 0.10, top: -120, right: -80),
-            const _SoftCircle(diameter: 260, opacity: 0.07, top: 90, left: -110),
+            const _SoftCircle(
+              diameter: 320,
+              opacity: 0.10,
+              top: -120,
+              right: -80,
+            ),
+            const _SoftCircle(
+              diameter: 260,
+              opacity: 0.07,
+              top: 90,
+              left: -110,
+            ),
           ],
 
           // Content. Bottom-anchored via the Spacer on tall screens; scrolls
@@ -116,7 +127,9 @@ class _OnboardingViewState extends State<_OnboardingView>
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
                     child: IntrinsicHeight(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(
@@ -142,11 +155,15 @@ class _OnboardingViewState extends State<_OnboardingView>
                                   children: [
                                     const OnboardingLogo(),
                                     const SizedBox(height: 26),
-                                    _Wordmark(isDark: isDark, textTheme: textTheme),
+                                    _Wordmark(
+                                      isDark: isDark,
+                                      textTheme: textTheme,
+                                    ),
                                     const SizedBox(height: 14),
                                     ConstrainedBox(
-                                      constraints:
-                                          const BoxConstraints(maxWidth: 280),
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 280,
+                                      ),
                                       child: Text(
                                         l10n.onboardingSubtitle,
                                         style: textTheme.bodyMedium?.copyWith(
@@ -170,8 +187,9 @@ class _OnboardingViewState extends State<_OnboardingView>
                                         isDark: isDark,
                                         label: l10n.onboardingGetStarted,
                                         textTheme: textTheme,
-                                        onPressed: () => context
-                                            .goNamed(AppRoutes.translateName),
+                                        onPressed: () => context.goNamed(
+                                          AppRoutes.signInName,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 18),
@@ -383,7 +401,9 @@ class _GetStartedButton extends StatelessWidget {
                 ),
                 const SizedBox(width: AppDimens.spaceS),
                 Icon(
-                  isRtl ? Icons.arrow_back_rounded : Icons.arrow_forward_rounded,
+                  isRtl
+                      ? Icons.arrow_back_rounded
+                      : Icons.arrow_forward_rounded,
                   size: AppDimens.iconS + 2,
                   color: foreground,
                 ),
@@ -396,8 +416,7 @@ class _GetStartedButton extends StatelessWidget {
   }
 }
 
-/// "Have an account? Sign in" — the link is wired but inert until an auth
-/// feature exists.
+/// "Have an account? Sign in" — routes to the sign-in screen.
 class _SignInRow extends StatelessWidget {
   const _SignInRow({required this.isDark, required this.textTheme});
 
@@ -422,9 +441,7 @@ class _SignInRow extends StatelessWidget {
             style: textTheme.bodySmall?.copyWith(color: promptColor),
           ),
           GestureDetector(
-            onTap: () {
-              // TODO(auth): route to sign-in once the auth feature exists.
-            },
+            onTap: () => context.pushNamed(AppRoutes.signInName),
             child: Text(
               l10n.onboardingSignIn,
               style: textTheme.bodySmall?.copyWith(

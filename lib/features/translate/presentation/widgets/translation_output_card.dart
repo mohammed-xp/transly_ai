@@ -85,8 +85,10 @@ class TranslationOutputCard extends StatelessWidget {
                           busyLabel!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.titleSmall
-                              ?.copyWith(fontSize: 12, color: c.coralLabel),
+                          style: textTheme.titleSmall?.copyWith(
+                            fontSize: 12,
+                            color: c.coralLabel,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 6),

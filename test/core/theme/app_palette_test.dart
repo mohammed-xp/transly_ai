@@ -9,8 +9,9 @@ void main() {
   // network font fetch; testWidgets + pump (same pattern as widget_test.dart)
   // lets that settle inside the test's zone instead of leaking into whichever
   // test runs next.
-  testWidgets('AppTheme.light and AppTheme.dark register the extension',
-      (tester) async {
+  testWidgets('AppTheme.light and AppTheme.dark register the extension', (
+    tester,
+  ) async {
     expect(AppTheme.light.extension<AppPalette>(), same(AppPalette.light));
     expect(AppTheme.dark.extension<AppPalette>(), same(AppPalette.dark));
     await tester.pump();
@@ -32,7 +33,8 @@ void main() {
       expect(c.coral, AppColors.primary);
       expect(c.coralAccent, AppColors.primary);
       expect(c.coralLabel, AppColors.rtlLabelLight);
-      expect(c.splashBackground, AppColors.surfaceLight);
+      expect(c.screenBackground, AppColors.surfaceLight);
+      expect(c.inputFill, AppColors.backgroundLight);
       expect(c.spinnerTrack, AppColors.spinnerTrackLight);
       expect(c.progressTrack, AppColors.progressTrackLight);
       expect(c.skeletonBase, const Color(0x8CFFD8C9));
@@ -41,11 +43,15 @@ void main() {
       expect(c.dockShadow, AppColors.dockShadowLight);
       expect(c.outputBorder, AppColors.tintBorderLight);
       expect(c.actionSurface, AppColors.surfaceLight);
-      expect(c.actionBorder, isNull, reason: 'light action button has no border');
       expect(
-        (c.outputGradient as LinearGradient).colors,
-        [AppColors.outputBgLight, AppColors.outputBgLight2],
+        c.actionBorder,
+        isNull,
+        reason: 'light action button has no border',
       );
+      expect((c.outputGradient as LinearGradient).colors, [
+        AppColors.outputBgLight,
+        AppColors.outputBgLight2,
+      ]);
     });
 
     test('dark matches the pre-refactor dark-mode ternary arms', () {
@@ -60,23 +66,24 @@ void main() {
       expect(c.coral, AppColors.accentDark);
       expect(c.coralAccent, AppColors.accentDark2);
       expect(c.coralLabel, AppColors.accentDark2);
-      expect(c.splashBackground, AppColors.backgroundDark);
+      expect(c.screenBackground, AppColors.backgroundDark);
+      expect(c.inputFill, AppColors.surfaceDark);
       expect(c.spinnerTrack, AppColors.borderDark);
       expect(c.progressTrack, AppColors.borderDark);
       expect(c.skeletonBase, Colors.white.withValues(alpha: 0.05));
-      expect(c.skeletonHighlight, AppColors.accentDark2.withValues(alpha: 0.22));
+      expect(
+        c.skeletonHighlight,
+        AppColors.accentDark2.withValues(alpha: 0.22),
+      );
       expect(c.cardShadow, isNull, reason: 'dark surfaces carry no shadow');
       expect(c.dockShadow, isNull, reason: 'dark surfaces carry no shadow');
       expect(c.outputBorder, AppColors.accentDark.withValues(alpha: 0.32));
       expect(c.actionSurface, Colors.white.withValues(alpha: 0.06));
       expect(c.actionBorder, Colors.white.withValues(alpha: 0.08));
-      expect(
-        (c.outputGradient as LinearGradient).colors,
-        [
-          AppColors.accentDark.withValues(alpha: 0.16),
-          AppColors.deep.withValues(alpha: 0.08),
-        ],
-      );
+      expect((c.outputGradient as LinearGradient).colors, [
+        AppColors.accentDark.withValues(alpha: 0.16),
+        AppColors.deep.withValues(alpha: 0.08),
+      ]);
     });
 
     test('the three coral tokens are genuinely distinct in light mode', () {
@@ -100,10 +107,14 @@ void main() {
     });
 
     test('lerp at t=0 and t=1 returns the endpoints', () {
-      expect(AppPalette.light.lerp(AppPalette.dark, 0).surface,
-          AppPalette.light.surface);
-      expect(AppPalette.light.lerp(AppPalette.dark, 1).surface,
-          AppPalette.dark.surface);
+      expect(
+        AppPalette.light.lerp(AppPalette.dark, 0).surface,
+        AppPalette.light.surface,
+      );
+      expect(
+        AppPalette.light.lerp(AppPalette.dark, 1).surface,
+        AppPalette.dark.surface,
+      );
     });
   });
 }

@@ -24,10 +24,12 @@ class MlKitTranslationLocalDataSource implements TranslationLocalDataSource {
 
   @override
   Future<bool> areModelsDownloaded(Language from, Language to) async {
-    final fromDownloaded =
-        await _modelManager.isModelDownloaded(toMlKitLanguage(from).bcpCode);
-    final toDownloaded =
-        await _modelManager.isModelDownloaded(toMlKitLanguage(to).bcpCode);
+    final fromDownloaded = await _modelManager.isModelDownloaded(
+      toMlKitLanguage(from).bcpCode,
+    );
+    final toDownloaded = await _modelManager.isModelDownloaded(
+      toMlKitLanguage(to).bcpCode,
+    );
     return fromDownloaded && toDownloaded;
   }
 

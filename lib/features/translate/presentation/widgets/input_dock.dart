@@ -16,9 +16,9 @@ class InputDock extends StatelessWidget {
   /// Design bottom margin (28) — grown when the device's bottom inset
   /// (gesture bar / home indicator) would otherwise overlap the dock.
   static double _bottomMargin(BuildContext context) => math.max(
-        AppDimens.space3XL - 4,
-        MediaQuery.viewPaddingOf(context).bottom + AppDimens.spaceM - 2,
-      );
+    AppDimens.space3XL - 4,
+    MediaQuery.viewPaddingOf(context).bottom + AppDimens.spaceM - 2,
+  );
 
   @override
   Widget build(BuildContext context) {

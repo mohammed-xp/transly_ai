@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../auth/presentation/cubit/session_cubit.dart';
 import '../../domain/entities/language.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../cubit/translate_cubit.dart';
@@ -47,7 +48,9 @@ class _TranslateView extends StatelessWidget {
         bottom: false,
         child: Column(
           children: [
-            const TranslateHeader(),
+            TranslateHeader(
+              onSignOut: () => context.read<SessionCubit>().signOut(),
+            ),
             const _LanguageBarSection(),
             Expanded(
               child: ListView(
@@ -81,8 +84,11 @@ class _LanguageBarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<TranslateCubit, TranslateState,
-        (Language, Language, bool)>(
+    return BlocSelector<
+      TranslateCubit,
+      TranslateState,
+      (Language, Language, bool)
+    >(
       selector: (state) => (state.from, state.to, state.isBusy),
       builder: (context, data) {
         return LanguageBar(
@@ -130,20 +136,22 @@ class _OutputSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<TranslateCubit, TranslateState,
-        (String, Language, TranslationStatus)>(
+    return BlocSelector<
+      TranslateCubit,
+      TranslateState,
+      (String, Language, TranslationStatus)
+    >(
       selector: (state) => (state.translatedText, state.to, state.status),
       builder: (context, data) {
         final cubit = context.read<TranslateCubit>();
         final status = data.$3;
         final (busyLabel, errorMessage) = switch (status) {
           TranslationDownloadingModel() ||
-          TranslationInProgress() =>
-            (l10n.translateInProgress, null),
+          TranslationInProgress() => (l10n.translateInProgress, null),
           TranslationError(:final failure) => (
-              null,
-              failureMessage(context, failure),
-            ),
+            null,
+            failureMessage(context, failure),
+          ),
           TranslationIdle() || TranslationDone() => (null, null),
         };
         final output = data.$1;
@@ -200,7 +208,11 @@ class _ToneSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<TranslateCubit, TranslateState, (TranslationTone, bool)>(
+    return BlocSelector<
+      TranslateCubit,
+      TranslateState,
+      (TranslationTone, bool)
+    >(
       selector: (state) => (state.tone, state.isToneEnabled && !state.isBusy),
       builder: (context, data) {
         return ToneSelector(

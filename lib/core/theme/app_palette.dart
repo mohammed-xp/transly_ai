@@ -20,7 +20,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.coral,
     required this.coralAccent,
     required this.coralLabel,
-    required this.splashBackground,
+    required this.screenBackground,
+    required this.inputFill,
     required this.spinnerTrack,
     required this.progressTrack,
     required this.skeletonBase,
@@ -43,7 +44,15 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color coral;
   final Color coralAccent;
   final Color coralLabel;
-  final Color splashBackground;
+
+  /// Full-screen background for screens that aren't tinted by [surface]
+  /// (splash, sign-in): white/`backgroundLight` in light, near-black in dark.
+  final Color screenBackground;
+
+  /// Fill for input-like surfaces (text fields, back button chip): a step
+  /// off [surface] so they read as recessed rather than blending into it.
+  final Color inputFill;
+
   final Color spinnerTrack;
   final Color progressTrack;
   final Color skeletonBase;
@@ -71,7 +80,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coral: AppColors.primary,
     coralAccent: AppColors.primary,
     coralLabel: AppColors.rtlLabelLight,
-    splashBackground: AppColors.surfaceLight,
+    screenBackground: AppColors.surfaceLight,
+    inputFill: AppColors.backgroundLight,
     spinnerTrack: AppColors.spinnerTrackLight,
     progressTrack: AppColors.progressTrackLight,
     skeletonBase: Color(0x8CFFD8C9),
@@ -99,7 +109,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coral: AppColors.accentDark,
     coralAccent: AppColors.accentDark2,
     coralLabel: AppColors.accentDark2,
-    splashBackground: AppColors.backgroundDark,
+    screenBackground: AppColors.backgroundDark,
+    inputFill: AppColors.surfaceDark,
     spinnerTrack: AppColors.borderDark,
     progressTrack: AppColors.borderDark,
     skeletonBase: Colors.white.withValues(alpha: 0.05),
@@ -131,7 +142,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? coral,
     Color? coralAccent,
     Color? coralLabel,
-    Color? splashBackground,
+    Color? screenBackground,
+    Color? inputFill,
     Color? spinnerTrack,
     Color? progressTrack,
     Color? skeletonBase,
@@ -154,7 +166,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coral: coral ?? this.coral,
       coralAccent: coralAccent ?? this.coralAccent,
       coralLabel: coralLabel ?? this.coralLabel,
-      splashBackground: splashBackground ?? this.splashBackground,
+      screenBackground: screenBackground ?? this.screenBackground,
+      inputFill: inputFill ?? this.inputFill,
       spinnerTrack: spinnerTrack ?? this.spinnerTrack,
       progressTrack: progressTrack ?? this.progressTrack,
       skeletonBase: skeletonBase ?? this.skeletonBase,
@@ -182,11 +195,20 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coral: Color.lerp(coral, other.coral, t)!,
       coralAccent: Color.lerp(coralAccent, other.coralAccent, t)!,
       coralLabel: Color.lerp(coralLabel, other.coralLabel, t)!,
-      splashBackground: Color.lerp(splashBackground, other.splashBackground, t)!,
+      screenBackground: Color.lerp(
+        screenBackground,
+        other.screenBackground,
+        t,
+      )!,
+      inputFill: Color.lerp(inputFill, other.inputFill, t)!,
       spinnerTrack: Color.lerp(spinnerTrack, other.spinnerTrack, t)!,
       progressTrack: Color.lerp(progressTrack, other.progressTrack, t)!,
       skeletonBase: Color.lerp(skeletonBase, other.skeletonBase, t)!,
-      skeletonHighlight: Color.lerp(skeletonHighlight, other.skeletonHighlight, t)!,
+      skeletonHighlight: Color.lerp(
+        skeletonHighlight,
+        other.skeletonHighlight,
+        t,
+      )!,
       cardShadow: Color.lerp(cardShadow, other.cardShadow, t),
       dockShadow: Color.lerp(dockShadow, other.dockShadow, t),
       outputGradient: Gradient.lerp(outputGradient, other.outputGradient, t)!,

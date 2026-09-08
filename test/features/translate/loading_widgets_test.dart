@@ -18,21 +18,29 @@ Widget _wrap(Widget child) {
 void main() {
   group('LanguageBar', () {
     testWidgets('shows the progress bar only while busy', (tester) async {
-      await tester.pumpWidget(_wrap(LanguageBar(
-        fromLanguage: 'English',
-        toLanguage: 'العربية',
-        onSwap: () {},
-        isBusy: false,
-      )));
+      await tester.pumpWidget(
+        _wrap(
+          LanguageBar(
+            fromLanguage: 'English',
+            toLanguage: 'العربية',
+            onSwap: () {},
+            isBusy: false,
+          ),
+        ),
+      );
       await tester.pump();
       expect(find.byType(TranslateProgressBar), findsNothing);
 
-      await tester.pumpWidget(_wrap(LanguageBar(
-        fromLanguage: 'English',
-        toLanguage: 'العربية',
-        onSwap: () {},
-        isBusy: true,
-      )));
+      await tester.pumpWidget(
+        _wrap(
+          LanguageBar(
+            fromLanguage: 'English',
+            toLanguage: 'العربية',
+            onSwap: () {},
+            isBusy: true,
+          ),
+        ),
+      );
       // TranslateProgressBar animates forever — one frame is enough to assert
       // it mounted; pumpAndSettle would never converge.
       await tester.pump();
@@ -43,18 +51,20 @@ void main() {
   });
 
   group('TranslationSkeleton', () {
-    testWidgets('renders three shimmering lines and survives mid-animation pumps',
-        (tester) async {
-      await tester.pumpWidget(
-        _wrap(const TranslationSkeleton(textDirection: TextDirection.rtl)),
-      );
-      await tester.pump();
+    testWidgets(
+      'renders three shimmering lines and survives mid-animation pumps',
+      (tester) async {
+        await tester.pumpWidget(
+          _wrap(const TranslationSkeleton(textDirection: TextDirection.rtl)),
+        );
+        await tester.pump();
 
-      // One FractionallySizedBox per shimmer line (widths 100% / 88% / 56%).
-      expect(find.byType(FractionallySizedBox), findsNWidgets(3));
+        // One FractionallySizedBox per shimmer line (widths 100% / 88% / 56%).
+        expect(find.byType(FractionallySizedBox), findsNWidgets(3));
 
-      await tester.pump(const Duration(milliseconds: 700));
-      await tester.pump(const Duration(milliseconds: 700));
-    });
+        await tester.pump(const Duration(milliseconds: 700));
+        await tester.pump(const Duration(milliseconds: 700));
+      },
+    );
   });
 }

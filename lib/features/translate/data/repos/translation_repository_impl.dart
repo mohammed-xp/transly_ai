@@ -10,11 +10,10 @@ import '../../domain/repos/translation_repository.dart';
 import '../datasources/translation_local_data_source.dart';
 import '../datasources/translation_remote_data_source.dart';
 
-/// Routes translation between the online source (tone-aware, when a [remote] is
-/// configured and the device is connected) and the offline ML Kit source. When
-/// the remote call fails, falls back to the local source so translation stays
-/// available; the entity's `engine` field records which one actually produced
-/// the result.
+/// Routes translation between the online source (tone-aware, reached when the
+/// device is connected) and the offline ML Kit source. When the remote call
+/// fails, falls back to the local source so translation stays available; the
+/// entity's `engine` field records which one actually produced the result.
 ///
 /// Exceptions are caught at this boundary and mapped to typed [Failure]s
 /// (CLAUDE.md §B-5).
@@ -22,14 +21,14 @@ class TranslationRepositoryImpl implements TranslationRepository {
   TranslationRepositoryImpl({
     required TranslationLocalDataSource local,
     required ConnectivityService connectivity,
-    TranslationRemoteDataSource? remote,
-  })  : _local = local,
-        _connectivity = connectivity,
-        _remote = remote;
+    required TranslationRemoteDataSource remote,
+  }) : _local = local,
+       _connectivity = connectivity,
+       _remote = remote;
 
   final TranslationLocalDataSource _local;
   final ConnectivityService _connectivity;
-  final TranslationRemoteDataSource? _remote;
+  final TranslationRemoteDataSource _remote;
 
   @override
   Future<ApiResult<TranslationEntity>> translate({
@@ -39,10 +38,9 @@ class TranslationRepositoryImpl implements TranslationRepository {
     required TranslationTone tone,
   }) async {
     try {
-      final remote = _remote;
-      if (remote != null && await _connectivity.isConnected) {
+      if (await _connectivity.isConnected) {
         try {
-          final translated = await remote.translate(
+          final response = await _remote.translate(
             text: text,
             from: from,
             to: to,
@@ -51,7 +49,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
           return ApiResult.success(
             TranslationEntity(
               sourceText: text,
-              translatedText: translated,
+              translatedText: response.translatedText,
               from: from,
               to: to,
               engine: TranslationEngine.online,
@@ -91,10 +89,11 @@ class TranslationRepositoryImpl implements TranslationRepository {
   }
 
   Failure _mapRemoteError(Object error) => switch (error) {
-        RemoteConnectionException(:final message) => NoConnectionFailure(message),
-        RemoteApiException(:final message) => TranslationFailure(message),
-        _ => TranslationFailure(error.toString()),
-      };
+    RemoteConnectionException(:final message) => NoConnectionFailure(message),
+    RemoteApiException(:final message) => TranslationFailure(message),
+    UnauthorizedException(:final message) => TranslationFailure(message),
+    _ => TranslationFailure(error.toString()),
+  };
 
   @override
   Future<ApiResult<bool>> areModelsDownloaded({
@@ -123,10 +122,6 @@ class TranslationRepositoryImpl implements TranslationRepository {
 
   @override
   Stream<bool> watchOnlineAvailability() async* {
-    if (_remote == null) {
-      yield false;
-      return;
-    }
     // Connectivity is a platform channel: `checkConnectivity` throws on some
     // Android configurations and the change stream can emit errors. Both are
     // contained here at the data boundary (CLAUDE.md §A-3) and reported as

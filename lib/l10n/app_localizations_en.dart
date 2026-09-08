@@ -105,4 +105,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translateErrorNoConnection => 'No internet connection.';
+
+  @override
+  String get signInTitle => 'Welcome back';
+
+  @override
+  String get signInSubtitle =>
+      'Sign in to sync your translations across devices.';
+
+  @override
+  String get signInEmailLabel => 'Email';
+
+  @override
+  String get signInEmailHint => 'you@example.com';
+
+  @override
+  String get signInPasswordLabel => 'Password';
+
+  @override
+  String get signInPasswordHint => 'Enter your password';
+
+  @override
+  String get signInRememberMe => 'Remember me';
+
+  @override
+  String get signInForgotPassword => 'Forgot password?';
+
+  @override
+  String get signInSubmit => 'Sign in';
+
+  @override
+  String get signInOrContinueWith => 'Or continue with';
+
+  @override
+  String get signInNoAccount => 'Don\'t have an account?';
+
+  @override
+  String get signInCreateAccount => 'Create account';
+
+  @override
+  String get signInComingSoon => 'Coming soon';
+
+  @override
+  String get signInShowPassword => 'Show password';
+
+  @override
+  String get signInHidePassword => 'Hide password';
+
+  @override
+  String get signInBack => 'Back';
+
+  @override
+  String get authErrorEmailRequired => 'Enter your email address.';
+
+  @override
+  String get authErrorEmailInvalid => 'Enter a valid email address.';
+
+  @override
+  String get authErrorPasswordRequired => 'Enter your password.';
+
+  @override
+  String get authErrorPasswordTooShort =>
+      'Password must be at least 6 characters.';
+
+  @override
+  String get authErrorInvalidCredentials => 'Incorrect email or password.';
+
+  @override
+  String get authErrorUserDisabled => 'This account has been disabled.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Too many attempts. Please try again later.';
+
+  @override
+  String get authErrorNoConnection => 'No internet connection.';
+
+  @override
+  String get authErrorUnavailable => 'Sign-in isn\'t available right now.';
+
+  @override
+  String get authErrorGeneric => 'Couldn\'t sign in. Please try again.';
+
+  @override
+  String get authErrorSessionExpired =>
+      'Your session has expired. Please sign in again.';
+
+  @override
+  String get authSignOut => 'Sign out';
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507923045845",
+    "project_id": "transly-ai-e7eb3",
+    "storage_bucket": "transly-ai-e7eb3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507923045845:android:108c1bf8d376f4a01bf15c",
+        "android_client_info": {
+          "package_name": "com.example.transly_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-jortZ9Ih4i_3SEWykPRHa7MCr-WYbTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

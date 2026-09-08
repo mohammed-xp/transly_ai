@@ -23,17 +23,22 @@ void main() {
     // a shared default, so a future required-param addition fails loudly here
     // instead of silently passing null.
 
-    testWidgets('idle with text shows the output and enables actions',
-        (tester) async {
-      await tester.pumpWidget(_wrap(TranslationOutputCard(
-        language: 'العربية',
-        text: 'مرحبا',
-        textDirection: TextDirection.rtl,
-        busyLabel: null,
-        errorMessage: null,
-        onCopy: () {},
-        onSpeak: () {},
-      )));
+    testWidgets('idle with text shows the output and enables actions', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(
+          TranslationOutputCard(
+            language: 'العربية',
+            text: 'مرحبا',
+            textDirection: TextDirection.rtl,
+            busyLabel: null,
+            errorMessage: null,
+            onCopy: () {},
+            onSpeak: () {},
+          ),
+        ),
+      );
       await tester.pump();
 
       expect(find.text('مرحبا'), findsOneWidget);
@@ -45,17 +50,22 @@ void main() {
       expect(speaker.onTap, isNotNull);
     });
 
-    testWidgets('busy hides the stale text and shows the skeleton + dots',
-        (tester) async {
-      await tester.pumpWidget(_wrap(TranslationOutputCard(
-        language: 'العربية',
-        text: 'stale previous output',
-        textDirection: TextDirection.rtl,
-        busyLabel: 'Translating',
-        errorMessage: null,
-        onCopy: null,
-        onSpeak: null,
-      )));
+    testWidgets('busy hides the stale text and shows the skeleton + dots', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(
+          TranslationOutputCard(
+            language: 'العربية',
+            text: 'stale previous output',
+            textDirection: TextDirection.rtl,
+            busyLabel: 'Translating',
+            errorMessage: null,
+            onCopy: null,
+            onSpeak: null,
+          ),
+        ),
+      );
       // Animated widgets — a single frame is enough to assert structure.
       await tester.pump();
 
@@ -73,15 +83,19 @@ void main() {
     });
 
     testWidgets('error shows the message without a skeleton', (tester) async {
-      await tester.pumpWidget(_wrap(TranslationOutputCard(
-        language: 'العربية',
-        text: '',
-        textDirection: TextDirection.rtl,
-        busyLabel: null,
-        errorMessage: "Couldn't translate. Please try again.",
-        onCopy: null,
-        onSpeak: null,
-      )));
+      await tester.pumpWidget(
+        _wrap(
+          TranslationOutputCard(
+            language: 'العربية',
+            text: '',
+            textDirection: TextDirection.rtl,
+            busyLabel: null,
+            errorMessage: "Couldn't translate. Please try again.",
+            onCopy: null,
+            onSpeak: null,
+          ),
+        ),
+      );
       await tester.pump();
 
       expect(

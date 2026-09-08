@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transly_ai/app.dart';
 import 'package:transly_ai/core/di/injection.dart';
 import 'package:transly_ai/core/theme/app_colors.dart';
 import 'package:transly_ai/features/splash/presentation/cubit/splash_cubit.dart';
 
 void main() {
-  setUpAll(configureDependencies);
+  setUpAll(() {
+    SharedPreferences.setMockInitialValues({});
+    return configureDependencies();
+  });
 
-  testWidgets('TranslyApp builds and applies the design-system theme',
-      (tester) async {
+  testWidgets('TranslyApp builds and applies the design-system theme', (
+    tester,
+  ) async {
     await tester.pumpWidget(const TranslyApp());
     // The initial splash route animates continuously, so pumpAndSettle would
     // never converge — a single frame is enough to assert the app/theme setup.

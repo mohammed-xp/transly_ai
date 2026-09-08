@@ -8,10 +8,7 @@ class CheckTranslationModelsUseCase {
 
   final TranslationRepository _repository;
 
-  Future<ApiResult<bool>> call({
-    required Language from,
-    required Language to,
-  }) {
+  Future<ApiResult<bool>> call({required Language from, required Language to}) {
     return _repository.areModelsDownloaded(from: from, to: to);
   }
 }

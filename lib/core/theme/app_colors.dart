@@ -9,15 +9,21 @@ abstract final class AppColors {
   static const Color accentDark2 = Color(0xFFFF8A66); // secondary accent (dark)
   static const Color gradientStart = Color(0xFFFF7A4D);
   static const Color gradientDeepEnd = Color(0xFFD5300F); // onboarding hero end
-  static const Color brandShadow = Color(0xFF781400); // deep coral drop-shadow tint
+  static const Color brandShadow = Color(
+    0xFF781400,
+  ); // deep coral drop-shadow tint
 
   // ── Coral tints (light) ──
   static const Color outputBgLight = Color(0xFFFFF4F0); // output/icon-chip bg
   static const Color outputBgLight2 = Color(0xFFFFEAE2); // output gradient end
   static const Color tintBorderLight = Color(0xFFFFD8C9);
-  static const Color spinnerTrackLight = Color(0xFFFFE0D5); // splash loader track
+  static const Color spinnerTrackLight = Color(
+    0xFFFFE0D5,
+  ); // splash loader track
   static const Color rtlLabelLight = Color(0xFFC0461F); // Arabic label on light
-  static const Color progressTrackLight = Color(0xFFFFE8E0); // language-bar progress track
+  static const Color progressTrackLight = Color(
+    0xFFFFE8E0,
+  ); // language-bar progress track
 
   // ── Light neutrals ──
   static const Color inkLight = Color(0xFF16181D); // primary text
