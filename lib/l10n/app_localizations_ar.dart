@@ -191,4 +191,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authSignOut => 'تسجيل الخروج';
+
+  @override
+  String get conversationComingSoonTitle => 'وضع الصوت';
+
+  @override
+  String get conversationComingSoonBody =>
+      'قريبًا — تحدّث واحصل على ترجمة فورية.';
+
+  @override
+  String get cameraScanComingSoonTitle => 'وضع الكاميرا';
+
+  @override
+  String get cameraScanComingSoonBody =>
+      'قريبًا — وجّه الكاميرا لترجمة النص فورًا.';
 }

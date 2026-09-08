@@ -457,6 +457,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get authSignOut;
+
+  /// Title of the placeholder shown on the voice-input tab before it is built.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice mode'**
+  String get conversationComingSoonTitle;
+
+  /// Body text of the placeholder shown on the voice-input tab before it is built.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon — speak and get an instant translation.'**
+  String get conversationComingSoonBody;
+
+  /// Title of the placeholder shown on the camera-input tab before it is built.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera mode'**
+  String get cameraScanComingSoonTitle;
+
+  /// Body text of the placeholder shown on the camera-input tab before it is built.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon — point your camera to translate text instantly.'**
+  String get cameraScanComingSoonBody;
 }
 
 class _AppLocalizationsDelegate

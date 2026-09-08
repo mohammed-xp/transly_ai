@@ -59,5 +59,9 @@
   "authErrorUnavailable": "تسجيل الدخول غير متاح حاليًا.",
   "authErrorGeneric": "تعذّر تسجيل الدخول. حاول مرة أخرى.",
   "authErrorSessionExpired": "انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.",
-  "authSignOut": "تسجيل الخروج"
+  "authSignOut": "تسجيل الخروج",
+  "conversationComingSoonTitle": "وضع الصوت",
+  "conversationComingSoonBody": "قريبًا — تحدّث واحصل على ترجمة فورية.",
+  "cameraScanComingSoonTitle": "وضع الكاميرا",
+  "cameraScanComingSoonBody": "قريبًا — وجّه الكاميرا لترجمة النص فورًا."
 }

@@ -239,5 +239,21 @@
   "authSignOut": "Sign out",
   "@authSignOut": {
     "description": "Tooltip/label for the sign-out action on the translate screen."
+  },
+  "conversationComingSoonTitle": "Voice mode",
+  "@conversationComingSoonTitle": {
+    "description": "Title of the placeholder shown on the voice-input tab before it is built."
+  },
+  "conversationComingSoonBody": "Coming soon — speak and get an instant translation.",
+  "@conversationComingSoonBody": {
+    "description": "Body text of the placeholder shown on the voice-input tab before it is built."
+  },
+  "cameraScanComingSoonTitle": "Camera mode",
+  "@cameraScanComingSoonTitle": {
+    "description": "Title of the placeholder shown on the camera-input tab before it is built."
+  },
+  "cameraScanComingSoonBody": "Coming soon — point your camera to translate text instantly.",
+  "@cameraScanComingSoonBody": {
+    "description": "Body text of the placeholder shown on the camera-input tab before it is built."
   }
 }

@@ -1,17 +1,29 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 
-/// Bottom input dock with three input modes. Keyboard is the active mode; Voice
-/// and Camera navigate to their screens (design `02 · Translate`).
+/// The three input modes the translate shell can display. Declaration order
+/// defines the shell branch order — `app_router.dart` builds
+/// `StatefulShellBranch`es from `TranslateInputMode.values` in this order.
+enum TranslateInputMode { keyboard, voice, camera }
+
+/// Bottom input-mode dock (design `02 · Translate`). Stateless and
+/// router-agnostic — [currentMode] marks the active tab and [onModeSelected]
+/// fires when another tab is tapped; the active tab stays inert. Owned by
+/// `TranslateShell`, which keeps it mounted while the content above it swaps.
 class InputDock extends StatelessWidget {
-  const InputDock({super.key});
+  const InputDock({
+    super.key,
+    required this.currentMode,
+    required this.onModeSelected,
+  });
+
+  final TranslateInputMode currentMode;
+  final ValueChanged<TranslateInputMode> onModeSelected;
 
   /// Design bottom margin (28) — grown when the device's bottom inset
   /// (gesture bar / home indicator) would otherwise overlap the dock.
@@ -53,24 +65,30 @@ class InputDock extends StatelessWidget {
             child: _DockTab(
               icon: Icons.keyboard_alt_outlined,
               label: l10n.translateDockKeyboard,
-              active: true,
-              onTap: null, // already the active input mode
+              active: currentMode == TranslateInputMode.keyboard,
+              onTap: currentMode == TranslateInputMode.keyboard
+                  ? null
+                  : () => onModeSelected(TranslateInputMode.keyboard),
             ),
           ),
           Expanded(
             child: _DockTab(
               icon: Icons.mic_none_rounded,
               label: l10n.translateDockVoice,
-              active: false,
-              onTap: () => context.goNamed(AppRoutes.conversationName),
+              active: currentMode == TranslateInputMode.voice,
+              onTap: currentMode == TranslateInputMode.voice
+                  ? null
+                  : () => onModeSelected(TranslateInputMode.voice),
             ),
           ),
           Expanded(
             child: _DockTab(
               icon: Icons.photo_camera_outlined,
               label: l10n.translateDockCamera,
-              active: false,
-              onTap: () => context.goNamed(AppRoutes.cameraScanName),
+              active: currentMode == TranslateInputMode.camera,
+              onTap: currentMode == TranslateInputMode.camera
+                  ? null
+                  : () => onModeSelected(TranslateInputMode.camera),
             ),
           ),
         ],
@@ -99,26 +117,30 @@ class _DockTab extends StatelessWidget {
     final color = active ? c.coral : c.textMuted;
     final radius = BorderRadius.circular(AppDimens.radiusChipL);
 
-    return Material(
-      color: Colors.transparent,
-      borderRadius: radius,
-      child: InkWell(
-        onTap: onTap,
+    return Semantics(
+      selected: active,
+      button: !active,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: radius,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
-          child: Column(
-            children: [
-              Icon(icon, size: 22, color: color),
-              const SizedBox(height: 3),
-              Text(
-                label,
-                style: textTheme.labelSmall?.copyWith(
-                  color: color,
-                  fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: radius,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
+            child: Column(
+              children: [
+                Icon(icon, size: 22, color: color),
+                const SizedBox(height: 3),
+                Text(
+                  label,
+                  style: textTheme.labelSmall?.copyWith(
+                    color: color,
+                    fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

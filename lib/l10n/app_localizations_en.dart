@@ -193,4 +193,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSignOut => 'Sign out';
+
+  @override
+  String get conversationComingSoonTitle => 'Voice mode';
+
+  @override
+  String get conversationComingSoonBody =>
+      'Coming soon — speak and get an instant translation.';
+
+  @override
+  String get cameraScanComingSoonTitle => 'Camera mode';
+
+  @override
+  String get cameraScanComingSoonBody =>
+      'Coming soon — point your camera to translate text instantly.';
 }
