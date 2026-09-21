@@ -50,6 +50,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   fake_async: ^1.3.3
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -57,3 +58,36 @@ flutter:
 
   assets:
     - assets/images/
+
+# Launcher icons — regenerate with `dart run flutter_launcher_icons`.
+#
+# Heads up: v0.14.4 rewrites the first `ASSETCATALOG_COMPILER_*` line it finds in
+# each iOS build configuration, which flips
+# `ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS` from `YES` to
+# `AppIcon`. That key is a boolean — revert `ios/Runner.xcodeproj/project.pbxproj`
+# after every run; the icons themselves live in the asset catalog, not there.
+#
+# `app_icon.png` is the master artwork (rounded tile on transparent). The three
+# layers beside it are derived from it: iOS and Windows need a square, opaque,
+# un-rounded icon because both platforms apply their own corner mask, and
+# Android's adaptive icon needs the gradient and the mark as separate layers so
+# the launcher mask can crop the background without clipping the mark.
+flutter_icons:
+  # image_path: "assets/icon/app_icon_full.png"
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+
+  # android: "ic_launcher"
+  # adaptive_icon_background: "assets/icon/app_icon_background.png"
+  # adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  # The mark already sits inside the 66% safe zone, so it must not be inset again.
+  # adaptive_icon_foreground_inset: 0
+  android: true
+  ios: true
+  # The App Store rejects icons carrying an alpha channel.
+  # remove_alpha_ios: true
+
+  windows:
+    generate: true
+    icon_size: 256

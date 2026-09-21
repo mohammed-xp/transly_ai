@@ -3,7 +3,7 @@
          call our backend API — not just Firebase/ML Kit's own SDKs. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="transly_ai"
+        android:label="Transly AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
