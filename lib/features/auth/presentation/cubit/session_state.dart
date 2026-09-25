@@ -7,14 +7,13 @@ class SessionActive extends SessionState {
   const SessionActive();
 }
 
-/// The backend rejected the session token (HTTP 401) on an authenticated
-/// request — the app must route back to sign-in.
+/// The backend rejected the session token — the app must route back to
+/// sign-in and tell the user why.
 class SessionExpired extends SessionState {
   const SessionExpired();
 }
 
-/// The user signed out deliberately (as opposed to the token being
-/// rejected) — the app routes back to sign-in with no error message.
+/// The user signed out deliberately — route back to sign-in silently.
 class SessionSignedOut extends SessionState {
   const SessionSignedOut();
 }

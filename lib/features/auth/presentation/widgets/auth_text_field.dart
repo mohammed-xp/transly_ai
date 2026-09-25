@@ -3,13 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 
-/// Labeled input field matching design `01b · Sign In`: a 13/600 caption
-/// above a 54px-tall field, radius 14, with a coral focus ring
-/// (`box-shadow 0 0 0 4px`). Reused for the email and password fields, so it
-/// earns its place as a widget rather than being duplicated (CLAUDE.md §A-2).
-///
-/// [controller] and [focusNode] are owned by the screen's `State` — created
-/// in `initState`, disposed in `dispose` — never built here (CLAUDE.md §B-7).
 class AuthTextField extends StatefulWidget {
   const AuthTextField({
     super.key,
@@ -59,8 +52,6 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   void didUpdateWidget(AuthTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The node is owned by the caller; if it swaps one in, the focus-ring
-    // listener has to follow it or the ring silently stops updating.
     if (oldWidget.focusNode != widget.focusNode) {
       oldWidget.focusNode.removeListener(_onFocusChange);
       widget.focusNode.addListener(_onFocusChange);
@@ -137,13 +128,6 @@ class _AuthTextFieldState extends State<AuthTextField> {
                   autofillHints: widget.autofillHints,
                   onSubmitted: widget.onFieldSubmitted,
                   style: textTheme.bodyMedium?.copyWith(color: c.ink),
-                  // The container above already paints the fill, border and
-                  // focus ring. `border:` alone would not undo the app-wide
-                  // `inputDecorationTheme`: `enabledBorder`/`focusedBorder`
-                  // take precedence over it, so the themed outline would be
-                  // drawn *inside* the container's, reading as a doubled,
-                  // embossed edge — and `filled: true` would paint over the
-                  // container's fill. Every slot is neutralised explicitly.
                   decoration: InputDecoration(
                     hintText: widget.hint,
                     hintStyle: textTheme.bodyMedium?.copyWith(color: c.hint),

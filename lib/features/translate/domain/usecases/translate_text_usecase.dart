@@ -1,20 +1,18 @@
+import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/result/api_result.dart';
-import '../entities/language.dart';
 import '../entities/translation_entity.dart';
-import '../entities/translation_tone.dart';
-import '../repos/translation_repository.dart';
+import '../repos/translation_repo.dart';
 
-/// Translates [text] from [from] to [to] with the requested [tone].
 class TranslateTextUseCase {
   const TranslateTextUseCase(this._repository);
 
-  final TranslationRepository _repository;
+  final TranslationRepo _repository;
 
   Future<ApiResult<TranslationEntity>> call({
     required String text,
-    required Language from,
-    required Language to,
-    required TranslationTone tone,
+    required LanguageEntity from,
+    required LanguageEntity to,
+    required String tone,
   }) {
     return _repository.translate(text: text, from: from, to: to, tone: tone);
   }

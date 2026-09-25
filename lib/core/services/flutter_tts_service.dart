@@ -3,21 +3,13 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 import 'tts_service.dart';
 
-/// [TtsService] implementation backed by [FlutterTts] — the only file in the
-/// project that imports `package:flutter_tts`.
 class FlutterTtsService implements TtsService {
   FlutterTtsService(this._tts);
 
   final FlutterTts _tts;
 
-  /// Region-qualified BCP-47 tags preferred over the bare domain code, since
-  /// iOS voice lookup is region-qualified.
   static const Map<String, String> _regionTags = {'en': 'en-US', 'ar': 'ar-SA'};
 
-  /// Caches only *successful* tag resolutions, so a repeated tap skips the
-  /// probe round-trip. Failures are deliberately not cached: the user may
-  /// install the missing voice from system settings, or the probe may have
-  /// failed transiently — either way the next tap re-checks.
   final Map<String, String> _resolvedTags = {};
 
   @override
@@ -54,8 +46,6 @@ class FlutterTtsService implements TtsService {
     }
   }
 
-  /// Picks the best usable tag for [languageCode], or null when the device
-  /// can't speak it. Prefers the region-qualified tag, then the bare code.
   Future<String?> _resolveTag(String languageCode) async {
     final cached = _resolvedTags[languageCode];
     if (cached != null) return cached;
@@ -76,13 +66,6 @@ class FlutterTtsService implements TtsService {
     return null;
   }
 
-  /// Whether [tag] can actually produce audio.
-  ///
-  /// Prefers `isLanguageInstalled`, which verifies the voice data is actually
-  /// downloaded — `isLanguageAvailable` also returns true for languages the
-  /// engine merely knows about, which would leave us speaking into silence.
-  /// `isLanguageInstalled` is Android-only, so when it isn't implemented we
-  /// fall back to the portable check rather than treating it as unsupported.
   Future<bool> _isUsable(String tag) async {
     try {
       final installed = await _tts.isLanguageInstalled(tag);

@@ -1,33 +1,43 @@
-import '../../../../core/errors/app_exceptions.dart';
+import '../../domain/entities/translation_engine.dart';
+import '../../domain/entities/translation_entity.dart';
+import 'language_model.dart';
 
-/// Decoded response body of `POST /v1/translations`. Only [translatedText]
-/// feeds the domain today; [model] and [createdAt] are carried for a future
-/// history feature without changing this shape again.
 class TranslationResponseModel {
+  final String sourceText;
+  final String translatedText;
+  final LanguageModel sourceLanguage;
+  final LanguageModel targetLanguage;
+  final String model;
+  final DateTime createdAt;
+
   const TranslationResponseModel({
+    required this.sourceText,
     required this.translatedText,
-    this.model,
-    this.createdAt,
+    required this.sourceLanguage,
+    required this.targetLanguage,
+    required this.model,
+    required this.createdAt,
   });
 
   factory TranslationResponseModel.fromJson(dynamic json) {
-    if (json is! Map<String, dynamic>) {
-      throw const RemoteApiException('Unexpected response shape');
-    }
-
-    final translatedText = json['translatedText'];
-    if (translatedText is! String || translatedText.isEmpty) {
-      throw const RemoteApiException('Missing translatedText in response');
-    }
-
     return TranslationResponseModel(
-      translatedText: translatedText,
-      model: json['model'] as String?,
-      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
+      sourceText: json['sourceText'],
+      translatedText: json['translatedText'],
+      sourceLanguage: LanguageModel.fromJson(json['sourceLanguage']),
+      targetLanguage: LanguageModel.fromJson(json['targetLanguage']),
+      model: json['model'],
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
-  final String translatedText;
-  final String? model;
-  final DateTime? createdAt;
+  TranslationEntity toEntity(TranslationEngine engine) {
+    return TranslationEntity(
+      sourceText: sourceText,
+      translatedText: translatedText,
+      from: sourceLanguage.toEntity(),
+      to: targetLanguage.toEntity(),
+      model: model,
+      engine: engine,
+    );
+  }
 }

@@ -1,5 +1,4 @@
-
-import 'package:transly_ai/features/auth/data/models/user_login_model.dart';
+import '../models/user_login_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserLoginModel> signInWithEmail({

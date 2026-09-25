@@ -1,22 +1,19 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/l10n/failure_message.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/sign_in_form_errors.dart';
 
-/// Presentation-only mappers from domain values to localized strings. Keeps
-/// the domain/data layers free of UI text (CLAUDE.md §B-5).
-
+/// Sign-in specific wording: a 401 from the login endpoint means wrong
+/// credentials, not an expired session.
 String authFailureMessage(BuildContext context, Failure failure) {
   final l10n = AppLocalizations.of(context)!;
-  if (failure is! AuthFailure) return l10n.authErrorGeneric;
-  return switch (failure.reason) {
-    AuthFailureReason.invalidCredentials => l10n.authErrorInvalidCredentials,
-    AuthFailureReason.userDisabled => l10n.authErrorUserDisabled,
-    AuthFailureReason.tooManyRequests => l10n.authErrorTooManyRequests,
-    AuthFailureReason.network => l10n.authErrorNoConnection,
-    AuthFailureReason.unavailable => l10n.authErrorUnavailable,
-    AuthFailureReason.unknown => l10n.authErrorGeneric,
+  return switch (failure) {
+    UnauthorizedFailure() => l10n.authErrorInvalidCredentials,
+    TooManyRequestsFailure() => l10n.authErrorTooManyRequests,
+    NetworkFailure() => l10n.authErrorNoConnection,
+    _ => failureMessage(context, failure),
   };
 }
 

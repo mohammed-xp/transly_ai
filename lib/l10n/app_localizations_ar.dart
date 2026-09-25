@@ -125,9 +125,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInPasswordHint => 'أدخل كلمة المرور';
 
   @override
-  String get signInRememberMe => 'تذكّرني';
-
-  @override
   String get signInForgotPassword => 'نسيت كلمة المرور؟';
 
   @override
@@ -205,4 +202,37 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get cameraScanComingSoonBody =>
       'قريبًا — وجّه الكاميرا لترجمة النص فورًا.';
+
+  @override
+  String get errorNetwork =>
+      'لا يوجد اتصال بالإنترنت. تحقّق من الشبكة وحاول مرة أخرى.';
+
+  @override
+  String get errorServer => 'حدث خطأ من جهتنا. حاول مرة أخرى لاحقًا.';
+
+  @override
+  String get errorUnauthorized => 'انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.';
+
+  @override
+  String get errorValidation => 'بعض البيانات التي أدخلتها غير صحيحة.';
+
+  @override
+  String get errorClient => 'تعذّر إتمام الطلب.';
+
+  @override
+  String get errorTooManyRequests =>
+      'محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.';
+
+  @override
+  String get errorNotFound => 'لم نعثر على ما تبحث عنه.';
+
+  @override
+  String get errorFormat => 'وصلنا رد غير متوقع. حاول مرة أخرى.';
+
+  @override
+  String get errorUnsupportedLanguage =>
+      'هذه اللغة غير متاحة بدون إنترنت حاليًا.';
+
+  @override
+  String get errorUnknown => 'حدث خطأ ما. حاول مرة أخرى.';
 }

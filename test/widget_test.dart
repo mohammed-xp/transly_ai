@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:transly_ai/app.dart';
-import 'package:transly_ai/core/di/injection.dart';
+import 'package:transly_ai/core/di/service_locator.dart';
 import 'package:transly_ai/core/theme/app_colors.dart';
 import 'package:transly_ai/features/splash/presentation/cubit/splash_cubit.dart';
+import 'package:transly_ai/main.dart';
 
 void main() {
-  setUpAll(() {
-    SharedPreferences.setMockInitialValues({});
-    return configureDependencies();
-  });
+  setUpAll(configureDependencies);
 
   testWidgets('TranslyApp builds and applies the design-system theme', (
     tester,

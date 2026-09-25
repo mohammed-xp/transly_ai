@@ -1,10 +1,10 @@
-import '../repos/translation_repository.dart';
+import '../repos/translation_repo.dart';
 
 /// Watches whether the online (tone-aware) translation source is available.
 class WatchOnlineAvailabilityUseCase {
   const WatchOnlineAvailabilityUseCase(this._repository);
 
-  final TranslationRepository _repository;
+  final TranslationRepo _repository;
 
   Stream<bool> call() => _repository.watchOnlineAvailability();
 }

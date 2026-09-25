@@ -326,12 +326,6 @@ abstract class AppLocalizations {
   /// **'Enter your password'**
   String get signInPasswordHint;
 
-  /// Label for the remember-me checkbox on the sign-in screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Remember me'**
-  String get signInRememberMe;
-
   /// Forgot-password link on the sign-in screen.
   ///
   /// In en, this message translates to:
@@ -481,6 +475,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon — point your camera to translate text instantly.'**
   String get cameraScanComingSoonBody;
+
+  /// A request failed because the device is offline or the server is unreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your network and try again.'**
+  String get errorNetwork;
+
+  /// The server returned a 5xx error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our side. Please try again later.'**
+  String get errorServer;
+
+  /// The server rejected the request as unauthorized (401).
+  ///
+  /// In en, this message translates to:
+  /// **'Your session is no longer valid. Please sign in again.'**
+  String get errorUnauthorized;
+
+  /// The server rejected the request's input (422) without a readable message.
+  ///
+  /// In en, this message translates to:
+  /// **'Some of the information you entered isn\'t valid.'**
+  String get errorValidation;
+
+  /// A generic 4xx error without a readable backend message.
+  ///
+  /// In en, this message translates to:
+  /// **'The request couldn\'t be completed.'**
+  String get errorClient;
+
+  /// The server rate-limited the request (429) or it timed out (408).
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait a moment and try again.'**
+  String get errorTooManyRequests;
+
+  /// The server returned 404.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find what you were looking for.'**
+  String get errorNotFound;
+
+  /// The server response didn't match the expected shape.
+  ///
+  /// In en, this message translates to:
+  /// **'We received an unexpected response. Please try again.'**
+  String get errorFormat;
+
+  /// The on-device translation engine doesn't support the selected language.
+  ///
+  /// In en, this message translates to:
+  /// **'This language isn\'t available offline yet.'**
+  String get errorUnsupportedLanguage;
+
+  /// Fallback for any unexpected error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorUnknown;
 }
 
 class _AppLocalizationsDelegate

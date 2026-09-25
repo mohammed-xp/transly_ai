@@ -1,10 +1,7 @@
+import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/errors/failure.dart';
-import '../../domain/entities/language.dart';
 import '../../domain/entities/translation_tone.dart';
 
-/// The async phase of translation. Sealed so the UI matches exhaustively. Pure
-/// Dart — no Flutter imports (CLAUDE.md §B-3). [TranslationError] carries the
-/// typed [Failure]; the presentation layer maps it to a localized message.
 sealed class TranslationStatus {
   const TranslationStatus();
 }
@@ -47,13 +44,14 @@ class TranslateState {
     required this.lastEngineWasOnline,
   });
 
-  /// Offline default: English → Arabic, formal tone. [isOnlineAvailable] starts
-  /// `false` only because it is the pre-first-emission value of the
-  /// availability stream, which reports the real answer immediately.
+  /// Default language pair (same as `HomeState.initial`), formal tone.
+  /// [isOnlineAvailable] starts `false` only because it is the
+  /// pre-first-emission value of the availability stream, which reports the
+  /// real answer immediately.
   factory TranslateState.initial() => const TranslateState(
     sourceText: '',
-    from: Language.english,
-    to: Language.arabic,
+    from: LanguageEntity.defaultSource,
+    to: LanguageEntity.defaultTarget,
     tone: TranslationTone.formal,
     translatedText: '',
     status: TranslationIdle(),
@@ -62,8 +60,8 @@ class TranslateState {
   );
 
   final String sourceText;
-  final Language from;
-  final Language to;
+  final LanguageEntity from;
+  final LanguageEntity to;
   final TranslationTone tone;
   final String translatedText;
   final TranslationStatus status;
@@ -91,8 +89,8 @@ class TranslateState {
 
   TranslateState copyWith({
     String? sourceText,
-    Language? from,
-    Language? to,
+    LanguageEntity? from,
+    LanguageEntity? to,
     TranslationTone? tone,
     String? translatedText,
     TranslationStatus? status,

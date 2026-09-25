@@ -1,52 +1,55 @@
-/// Typed failures that flow up from the data layer to presentation. Pure Dart —
-/// no Flutter imports (CLAUDE.md §B-3). Carries an optional [debugMessage] for
-/// logging only; user-facing text is mapped in the presentation layer.
+import '../domain/entities/error_entity.dart';
+
 sealed class Failure {
-  const Failure([this.debugMessage]);
+  const Failure({this.statusCode, this.error});
 
-  /// Developer-facing detail (exception text). Never shown to users directly.
-  final String? debugMessage;
+  final int? statusCode;
+
+  final ErrorEntity? error;
 }
 
-/// The translation call itself failed (engine/platform error, unsupported pair).
-class TranslationFailure extends Failure {
-  const TranslationFailure([super.debugMessage]);
+class NetworkFailure extends Failure {
+  const NetworkFailure();
 }
 
-/// Downloading an on-device translation model failed.
+class ServerFailure extends Failure {
+  const ServerFailure({super.statusCode});
+}
+
+class UnauthorizedFailure extends Failure {
+  const UnauthorizedFailure();
+}
+
+class ValidationFailure extends Failure {
+  const ValidationFailure(ErrorEntity error) : super(error: error);
+}
+
+class NotFoundFailure extends Failure {
+  const NotFoundFailure();
+}
+
+/// Generic 4xx (400, 409, ...) — carries the backend message when present.
+class ClientFailure extends Failure {
+  const ClientFailure({super.statusCode, super.error});
+}
+
+/// 429 Too Many Requests or 408 Request Timeout.
+class TooManyRequestsFailure extends Failure {
+  const TooManyRequestsFailure({super.statusCode});
+}
+
+class FormatFailure extends Failure {
+  const FormatFailure();
+}
+
+class UnsupportedLanguageFailure extends Failure {
+  const UnsupportedLanguageFailure();
+}
+
 class ModelDownloadFailure extends Failure {
-  const ModelDownloadFailure([super.debugMessage]);
+  const ModelDownloadFailure();
 }
 
-/// No network connection while an online-only source was required. Unused by
-/// the offline path; the repository's remote (backend API) branch must map
-/// its connectivity errors here so `translateErrorNoConnection` becomes
-/// reachable.
-class NoConnectionFailure extends Failure {
-  const NoConnectionFailure([super.debugMessage]);
-}
-
-/// Anything the data layer could not classify.
 class UnknownFailure extends Failure {
-  const UnknownFailure([super.debugMessage]);
-}
-
-/// Reasons a sign-in attempt can fail, mapped from the auth provider's error
-/// codes in the data layer so presentation never sees provider-specific text.
-enum AuthFailureReason {
-  invalidCredentials,
-  userDisabled,
-  tooManyRequests,
-  network,
-
-  /// No auth provider is configured (e.g. Firebase config files are missing).
-  unavailable,
-  unknown,
-}
-
-/// A sign-in (or other auth) call failed.
-class AuthFailure extends Failure {
-  const AuthFailure(this.reason, [super.debugMessage]);
-
-  final AuthFailureReason reason;
+  const UnknownFailure();
 }

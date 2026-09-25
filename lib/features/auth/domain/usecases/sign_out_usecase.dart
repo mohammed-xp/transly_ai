@@ -1,12 +1,9 @@
-import '../../../../core/result/api_result.dart';
-import '../repos/auth_repository.dart';
+import '../../../../core/session/session_manager.dart';
 
-/// Clears the persisted session token — an ordinary, user-initiated
-/// sign-out (as opposed to the backend rejecting the token).
 class SignOutUseCase {
-  const SignOutUseCase(this._repository);
+  const SignOutUseCase(this._session);
 
-  final AuthRepository _repository;
+  final SessionManager _session;
 
-  Future<ApiResult<void>> call() => _repository.signOut();
+  Future<void> call() => _session.signOut();
 }

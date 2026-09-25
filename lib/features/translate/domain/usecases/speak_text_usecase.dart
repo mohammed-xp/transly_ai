@@ -1,5 +1,5 @@
+import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/services/tts_service.dart';
-import '../entities/language.dart';
 
 /// Speaks or stops speaking translate-screen text through the device's TTS
 /// engine.
@@ -9,7 +9,7 @@ class SpeakTextUseCase {
   final TtsService _tts;
 
   /// Speaks [text] in [language]. No-op on blank text (handled by [TtsService]).
-  Future<void> call({required String text, required Language language}) {
+  Future<void> call({required String text, required LanguageEntity language}) {
     return _tts.speak(text: text, languageCode: language.code);
   }
 

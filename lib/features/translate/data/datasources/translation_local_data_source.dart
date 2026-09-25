@@ -1,67 +1,71 @@
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
-import '../../domain/entities/language.dart';
-import '../mappers/translate_language_mapper.dart';
+import '../../../../core/errors/app_exceptions.dart';
+import '../models/language_model.dart';
 
-/// On-device translation source. Abstracted so the repository can be tested with
-/// a fake and so a future remote source sits behind the same repository.
 abstract class TranslationLocalDataSource {
-  Future<bool> areModelsDownloaded(Language from, Language to);
-  Future<void> downloadModels(Language from, Language to);
-  Future<String> translate(String text, Language from, Language to);
+  Future<bool> areModelsDownloaded(LanguageModel from, LanguageModel to);
+  Future<void> downloadModels(LanguageModel from, LanguageModel to);
+  Future<String> translate(String text, LanguageModel from, LanguageModel to);
 }
 
-/// ML Kit implementation. Owns a single [OnDeviceTranslator] for the app
-/// session, recreated only when the language pair changes (swap), which keeps
-/// native resources bounded. Registered as a lazy singleton.
 class MlKitTranslationLocalDataSource implements TranslationLocalDataSource {
   MlKitTranslationLocalDataSource(this._modelManager);
 
   final OnDeviceTranslatorModelManager _modelManager;
 
   OnDeviceTranslator? _translator;
-  (Language, Language)? _activePair;
+  (String, String)? _activePair;
 
   @override
-  Future<bool> areModelsDownloaded(Language from, Language to) async {
+  Future<bool> areModelsDownloaded(LanguageModel from, LanguageModel to) async {
     final fromDownloaded = await _modelManager.isModelDownloaded(
-      toMlKitLanguage(from).bcpCode,
+      _mlKitLanguage(from.code).bcpCode,
     );
     final toDownloaded = await _modelManager.isModelDownloaded(
-      toMlKitLanguage(to).bcpCode,
+      _mlKitLanguage(to.code).bcpCode,
     );
     return fromDownloaded && toDownloaded;
   }
 
   @override
-  Future<void> downloadModels(Language from, Language to) async {
-    for (final language in {from, to}) {
-      final code = toMlKitLanguage(language).bcpCode;
-      if (!await _modelManager.isModelDownloaded(code)) {
+  Future<void> downloadModels(LanguageModel from, LanguageModel to) async {
+    for (final code in {from.code, to.code}) {
+      final bcpCode = _mlKitLanguage(code).bcpCode;
+      if (!await _modelManager.isModelDownloaded(bcpCode)) {
         // Allow cellular downloads — models are fetched on demand at first use.
-        await _modelManager.downloadModel(code, isWifiRequired: false);
+        await _modelManager.downloadModel(bcpCode, isWifiRequired: false);
       }
     }
   }
 
   @override
-  Future<String> translate(String text, Language from, Language to) async {
-    final translator = await _translatorFor(from, to);
+  Future<String> translate(
+    String text,
+    LanguageModel from,
+    LanguageModel to,
+  ) async {
+    final translator = await _translatorFor(from.code, to.code);
     return translator.translateText(text);
   }
 
-  /// Returns a translator for the pair, closing and recreating the cached one
-  /// only when the pair changed. The close is awaited so an in-flight native
-  /// call can't run against a translator that is being torn down (swap race).
-  Future<OnDeviceTranslator> _translatorFor(Language from, Language to) async {
+  Future<OnDeviceTranslator> _translatorFor(String from, String to) async {
     if (_activePair != (from, to)) {
       await _translator?.close();
       _translator = OnDeviceTranslator(
-        sourceLanguage: toMlKitLanguage(from),
-        targetLanguage: toMlKitLanguage(to),
+        sourceLanguage: _mlKitLanguage(from),
+        targetLanguage: _mlKitLanguage(to),
       );
       _activePair = (from, to);
     }
     return _translator!;
+  }
+
+  TranslateLanguage _mlKitLanguage(String code) {
+    final normalized = code.toLowerCase();
+    for (final language in TranslateLanguage.values) {
+      if (language.bcpCode == normalized) return language;
+    }
+    throw const UnsupportedLanguageException();
   }
 }

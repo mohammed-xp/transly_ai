@@ -2,34 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/domain/entities/language_entity.dart';
+import '../../../../core/l10n/failure_message.dart';
+import '../../../../core/l10n/language_label.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/language.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../cubit/translate_cubit.dart';
 import '../cubit/translate_state.dart';
-import '../utils/translate_l10n.dart';
 import '../widgets/source_card.dart';
 import '../widgets/tone_selector.dart';
 import '../widgets/translate_busy_note.dart';
 import '../widgets/translation_output_card.dart';
 
-/// Keyboard-mode content of the translate shell (design `02 · Translate`): the
-/// scrollable source card, AI output, busy note and tone selector. The
-/// header, language bar and input dock are owned by `TranslateShell`, which
-/// keeps them mounted across all three input modes — this widget is just the
-/// [TranslateInputMode.keyboard] branch's middle content, driven by the
-/// [TranslateCubit] provided above it in the shell.
 class TranslateScreen extends StatelessWidget {
   const TranslateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // No bottom padding here: this branch is rendered inside `TranslateShell`'s
-    // `Scaffold` body, which (with `resizeToAvoidBottomInset` at its default)
-    // consumes `viewInsets.bottom` for its own layout — a read here would
-    // always see zero. The shell fills the gap left when it hides the dock
-    // for the keyboard instead.
     return ListView(
       padding: const EdgeInsets.fromLTRB(
         AppDimens.spaceL,
@@ -49,14 +39,17 @@ class TranslateScreen extends StatelessWidget {
   }
 }
 
-/// Selects the source-side fields (text + from language) for the editable card.
 class _SourceSection extends StatelessWidget {
   const _SourceSection();
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<TranslateCubit, TranslateState, (String, Language)>(
+    return BlocSelector<
+      TranslateCubit,
+      TranslateState,
+      (String, LanguageEntity)
+    >(
       selector: (state) => (state.sourceText, state.from),
       builder: (context, data) {
         final cubit = context.read<TranslateCubit>();
@@ -86,7 +79,7 @@ class _OutputSection extends StatelessWidget {
     return BlocSelector<
       TranslateCubit,
       TranslateState,
-      (String, Language, TranslationStatus)
+      (String, LanguageEntity, TranslationStatus)
     >(
       selector: (state) => (state.translatedText, state.to, state.status),
       builder: (context, data) {
@@ -123,8 +116,6 @@ class _OutputSection extends StatelessWidget {
   }
 }
 
-/// Shows the AI-analyzing / model-download caption under the output card
-/// while [TranslateState.isBusy] — hidden the rest of the time.
 class _BusyNoteSection extends StatelessWidget {
   const _BusyNoteSection();
 

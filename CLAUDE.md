@@ -78,7 +78,8 @@ Rules below only cover things that OVERRIDE defaults or encode project decisions
 - Keep `setState` scoped to the smallest widget possible to avoid redundant rebuilds up the tree
 
 ## 2) No Code Generation
-- **No Freezed. No build_runner.** Use Dart 3+ native features instead:
+- **No Freezed. No build_runner** — with one exception: `build_runner` + `hive_ce_generator` is allowed **only** to generate Hive `TypeAdapter`s. The generated `*.g.dart` files and `lib/hive_registrar.g.dart` are committed; regenerate with `dart run build_runner build --delete-conflicting-outputs`.
+- For everything else, use Dart 3+ native features instead:
   - `sealed class` for state unions with exhaustive pattern matching
   - `switch` expressions and records for lightweight data
 

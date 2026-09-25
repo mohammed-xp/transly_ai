@@ -2,9 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// A faint full track with a brighter leading arc, continuously rotating.
-/// House-style loader used by the splash screen and the translate output
-/// card's AI badge (CLAUDE.md §A-2: shared across 2+ places lives in `core/`).
 class SpinningRing extends StatefulWidget {
   const SpinningRing({
     super.key,
@@ -61,9 +58,6 @@ class _SpinningRingState extends State<SpinningRing>
   }
 }
 
-/// Draws a full faint track plus a brighter leading quarter-turn arc starting
-/// at the top (−90°). Static by itself — wrap in a [RotationTransition] (see
-/// [SpinningRing]) to make the arc sweep.
 class RingPainter extends CustomPainter {
   const RingPainter({
     required this.stroke,

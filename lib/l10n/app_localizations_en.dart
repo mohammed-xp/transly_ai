@@ -126,9 +126,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInPasswordHint => 'Enter your password';
 
   @override
-  String get signInRememberMe => 'Remember me';
-
-  @override
   String get signInForgotPassword => 'Forgot password?';
 
   @override
@@ -207,4 +204,41 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cameraScanComingSoonBody =>
       'Coming soon — point your camera to translate text instantly.';
+
+  @override
+  String get errorNetwork =>
+      'No internet connection. Check your network and try again.';
+
+  @override
+  String get errorServer =>
+      'Something went wrong on our side. Please try again later.';
+
+  @override
+  String get errorUnauthorized =>
+      'Your session is no longer valid. Please sign in again.';
+
+  @override
+  String get errorValidation =>
+      'Some of the information you entered isn\'t valid.';
+
+  @override
+  String get errorClient => 'The request couldn\'t be completed.';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please wait a moment and try again.';
+
+  @override
+  String get errorNotFound => 'We couldn\'t find what you were looking for.';
+
+  @override
+  String get errorFormat =>
+      'We received an unexpected response. Please try again.';
+
+  @override
+  String get errorUnsupportedLanguage =>
+      'This language isn\'t available offline yet.';
+
+  @override
+  String get errorUnknown => 'Something went wrong. Please try again.';
 }

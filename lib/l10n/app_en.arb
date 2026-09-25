@@ -152,10 +152,6 @@
   "@signInPasswordHint": {
     "description": "Placeholder in the password field on the sign-in screen."
   },
-  "signInRememberMe": "Remember me",
-  "@signInRememberMe": {
-    "description": "Label for the remember-me checkbox on the sign-in screen."
-  },
   "signInForgotPassword": "Forgot password?",
   "@signInForgotPassword": {
     "description": "Forgot-password link on the sign-in screen."
@@ -255,5 +251,45 @@
   "cameraScanComingSoonBody": "Coming soon — point your camera to translate text instantly.",
   "@cameraScanComingSoonBody": {
     "description": "Body text of the placeholder shown on the camera-input tab before it is built."
+  },
+  "errorNetwork": "No internet connection. Check your network and try again.",
+  "@errorNetwork": {
+    "description": "A request failed because the device is offline or the server is unreachable."
+  },
+  "errorServer": "Something went wrong on our side. Please try again later.",
+  "@errorServer": {
+    "description": "The server returned a 5xx error."
+  },
+  "errorUnauthorized": "Your session is no longer valid. Please sign in again.",
+  "@errorUnauthorized": {
+    "description": "The server rejected the request as unauthorized (401)."
+  },
+  "errorValidation": "Some of the information you entered isn't valid.",
+  "@errorValidation": {
+    "description": "The server rejected the request's input (422) without a readable message."
+  },
+  "errorClient": "The request couldn't be completed.",
+  "@errorClient": {
+    "description": "A generic 4xx error without a readable backend message."
+  },
+  "errorTooManyRequests": "Too many attempts. Please wait a moment and try again.",
+  "@errorTooManyRequests": {
+    "description": "The server rate-limited the request (429) or it timed out (408)."
+  },
+  "errorNotFound": "We couldn't find what you were looking for.",
+  "@errorNotFound": {
+    "description": "The server returned 404."
+  },
+  "errorFormat": "We received an unexpected response. Please try again.",
+  "@errorFormat": {
+    "description": "The server response didn't match the expected shape."
+  },
+  "errorUnsupportedLanguage": "This language isn't available offline yet.",
+  "@errorUnsupportedLanguage": {
+    "description": "The on-device translation engine doesn't support the selected language."
+  },
+  "errorUnknown": "Something went wrong. Please try again.",
+  "@errorUnknown": {
+    "description": "Fallback for any unexpected error."
   }
 }

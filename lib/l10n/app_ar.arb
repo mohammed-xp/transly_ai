@@ -38,7 +38,6 @@
   "signInEmailHint": "ahmed@example.com",
   "signInPasswordLabel": "كلمة المرور",
   "signInPasswordHint": "أدخل كلمة المرور",
-  "signInRememberMe": "تذكّرني",
   "signInForgotPassword": "نسيت كلمة المرور؟",
   "signInSubmit": "تسجيل الدخول",
   "signInOrContinueWith": "أو تابع باستخدام",
@@ -63,5 +62,15 @@
   "conversationComingSoonTitle": "وضع الصوت",
   "conversationComingSoonBody": "قريبًا — تحدّث واحصل على ترجمة فورية.",
   "cameraScanComingSoonTitle": "وضع الكاميرا",
-  "cameraScanComingSoonBody": "قريبًا — وجّه الكاميرا لترجمة النص فورًا."
+  "cameraScanComingSoonBody": "قريبًا — وجّه الكاميرا لترجمة النص فورًا.",
+  "errorNetwork": "لا يوجد اتصال بالإنترنت. تحقّق من الشبكة وحاول مرة أخرى.",
+  "errorServer": "حدث خطأ من جهتنا. حاول مرة أخرى لاحقًا.",
+  "errorUnauthorized": "انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.",
+  "errorValidation": "بعض البيانات التي أدخلتها غير صحيحة.",
+  "errorClient": "تعذّر إتمام الطلب.",
+  "errorTooManyRequests": "محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
+  "errorNotFound": "لم نعثر على ما تبحث عنه.",
+  "errorFormat": "وصلنا رد غير متوقع. حاول مرة أخرى.",
+  "errorUnsupportedLanguage": "هذه اللغة غير متاحة بدون إنترنت حاليًا.",
+  "errorUnknown": "حدث خطأ ما. حاول مرة أخرى."
 }

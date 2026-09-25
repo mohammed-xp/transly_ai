@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/di/injection.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
@@ -17,20 +17,16 @@ import '../widgets/auth_back_button.dart';
 import '../widgets/auth_brand_mark.dart';
 import '../widgets/auth_divider.dart';
 import '../widgets/auth_text_field.dart';
-import '../widgets/remember_me_row.dart';
 import '../widgets/sign_up_prompt.dart';
 import '../widgets/social_auth_row.dart';
 
-/// Sign-in screen (design `01b · Sign In`, light + dark). Email/password form
-/// with "remember me" persistence; social buttons and the forgot-password /
-/// create-account links are shape-only per product decision.
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<SignInCubit>()..loadRememberedAccount(),
+      create: (_) => serviceLocator<SignInCubit>(),
       child: const _SignInView(),
     );
   }
@@ -82,36 +78,21 @@ class _SignInViewState extends State<_SignInView> {
     final textTheme = Theme.of(context).textTheme;
     final c = context.palette;
 
-    return MultiBlocListener(
-      listeners: [
-        // Fires exactly once, on the edge where the "remember me" lookup
-        // resolves — not on "whichever emit happens to land first".
-        BlocListener<SignInCubit, SignInState>(
-          listenWhen: (previous, current) =>
-              !previous.isPrefillResolved && current.isPrefillResolved,
-          listener: (context, state) {
-            if (state.email.isNotEmpty && _emailController.text.isEmpty) {
-              _emailController.text = state.email;
-            }
-          },
-        ),
-        BlocListener<SignInCubit, SignInState>(
-          listenWhen: (previous, current) => previous.status != current.status,
-          listener: (context, state) {
-            switch (state.status) {
-              case SignInSucceeded():
-                context.goNamed(AppRoutes.translateName);
-              case SignInFailed(:final failure):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(authFailureMessage(context, failure))),
-                );
-              case SignInIdle():
-              case SignInSubmitting():
-                break;
-            }
-          },
-        ),
-      ],
+    return BlocListener<SignInCubit, SignInState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        switch (state.status) {
+          case SignInSucceeded():
+            context.goNamed(AppRoutes.homeName);
+          case SignInFailed(:final failure):
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(authFailureMessage(context, failure))),
+            );
+          case SignInInitial():
+          case SignInSubmitting():
+            break;
+        }
+      },
       child: Scaffold(
         backgroundColor: c.screenBackground,
         body: Stack(
@@ -175,7 +156,7 @@ class _SignInViewState extends State<_SignInView> {
                                       context.read<SignInCubit>().submit(),
                                 ),
                                 const SizedBox(height: 14),
-                                const _RememberMeSection(),
+                                const _ForgotPasswordLink(),
                                 const SizedBox(height: 24),
                                 const _SubmitButton(),
                                 const SizedBox(height: 22),
@@ -213,9 +194,6 @@ class _EmailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // The selector yields the domain value, not its localized text: a
-    // BlocSelector only re-runs its selector on bloc emits, so resolving l10n
-    // in there would cache the message and leave it stale after a locale change.
     return BlocSelector<SignInCubit, SignInState, EmailFieldError?>(
       selector: (state) => state.showFieldErrors ? state.errors.email : null,
       builder: (context, error) {
@@ -251,8 +229,6 @@ class _PasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // See `_EmailField` — the selector deliberately carries the domain value
-    // rather than its localized text.
     return BlocSelector<SignInCubit, SignInState, (PasswordFieldError?, bool)>(
       selector: (state) => (
         state.showFieldErrors ? state.errors.password : null,
@@ -295,30 +271,37 @@ class _PasswordField extends StatelessWidget {
   }
 }
 
-class _RememberMeSection extends StatelessWidget {
-  const _RememberMeSection();
+class _ForgotPasswordLink extends StatelessWidget {
+  const _ForgotPasswordLink();
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<SignInCubit, SignInState, bool>(
-      selector: (state) => state.rememberMe,
-      builder: (context, rememberMe) {
-        return RememberMeRow(
-          value: rememberMe,
-          onChanged: context.read<SignInCubit>().rememberMeToggled,
-          onForgotPasswordTap: () => ScaffoldMessenger.of(
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () => ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(l10n.signInComingSoon))),
-        );
-      },
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              l10n.signInForgotPassword,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: context.palette.coral,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-/// Primary call-to-action — a custom gradient button (matches the design's
-/// `linear-gradient(150deg, #FF7A4D, #F5421C)`), not the flat solid-color
-/// `ElevatedButtonTheme` used elsewhere in the app.
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton();
 

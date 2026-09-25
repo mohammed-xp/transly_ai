@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/di/injection.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_palette.dart';
@@ -13,15 +13,13 @@ import '../cubit/splash_state.dart';
 import '../widgets/splash_spinner.dart';
 import '../widgets/transly_logo.dart';
 
-/// Branded launch screen (design `00 · Splash`, light + dark). Shows the logo,
-/// wordmark and tagline while [SplashCubit] runs startup, then routes onward.
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<SplashCubit>()..start(),
+      create: (_) => serviceLocator<SplashCubit>()..checkAuthStatus(),
       child: const _SplashView(),
     );
   }
@@ -78,9 +76,7 @@ class _SplashViewState extends State<_SplashView>
       listener: (context, state) {
         if (state case SplashReady(:final isAuthenticated)) {
           context.goNamed(
-            isAuthenticated
-                ? AppRoutes.translateName
-                : AppRoutes.onboardingName,
+            isAuthenticated ? AppRoutes.homeName : AppRoutes.onboardingName,
           );
         }
       },
