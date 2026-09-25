@@ -107,6 +107,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateErrorNoConnection => 'No internet connection.';
 
   @override
+  String get translateCopied => 'Translation copied';
+
+  @override
+  String get translateErrorTitle => 'Translation failed';
+
+  @override
+  String get translateRetry => 'Retry';
+
+  @override
   String get signInTitle => 'Welcome back';
 
   @override

@@ -6,6 +6,7 @@ import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/l10n/failure_message.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../cubit/translate_cubit.dart';
@@ -20,21 +21,47 @@ class TranslateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppDimens.spaceL,
-        AppDimens.spaceL - 2,
-        AppDimens.spaceL,
-        0,
+    return BlocListener<TranslateCubit, TranslateState>(
+      listenWhen: (previous, current) =>
+          previous.status != current.status &&
+          (previous.status is TranslationError ||
+              current.status is TranslationError),
+      listener: _onErrorChanged,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(
+          AppDimens.spaceL,
+          AppDimens.spaceL - 2,
+          AppDimens.spaceL,
+          0,
+        ),
+        children: const [
+          _SourceSection(),
+          SizedBox(height: AppDimens.spaceM),
+          _OutputSection(),
+          _BusyNoteSection(),
+          SizedBox(height: AppDimens.spaceM),
+          _ToneSection(),
+        ],
       ),
-      children: [
-        const _SourceSection(),
-        const SizedBox(height: AppDimens.spaceM),
-        const _OutputSection(),
-        const _BusyNoteSection(),
-        const SizedBox(height: AppDimens.spaceM),
-        const _ToneSection(),
-      ],
+    );
+  }
+
+  /// Error toast with Retry while a translation is failed; cleared as soon as
+  /// the status leaves the error (new input, retry, language change).
+  void _onErrorChanged(BuildContext context, TranslateState state) {
+    final status = state.status;
+    if (status is! TranslationError) {
+      AppToast.hide(context);
+      return;
+    }
+    final l10n = AppLocalizations.of(context)!;
+    AppToast.show(
+      context,
+      message: l10n.translateErrorTitle,
+      subtitle: failureMessage(context, status.failure),
+      type: AppToastType.error,
+      actionLabel: l10n.translateRetry,
+      onAction: context.read<TranslateCubit>().translateNow,
     );
   }
 }
@@ -103,10 +130,17 @@ class _OutputSection extends StatelessWidget {
           textDirection: to.isRtl ? TextDirection.rtl : TextDirection.ltr,
           busyLabel: busyLabel,
           errorMessage: errorMessage,
-          // No in-app confirmation — the OS shows its own copy feedback.
           onCopy: (output.isEmpty || isBusy)
               ? null
-              : () => Clipboard.setData(ClipboardData(text: output)),
+              : () async {
+                  await Clipboard.setData(ClipboardData(text: output));
+                  if (!context.mounted) return;
+                  AppToast.show(
+                    context,
+                    message: l10n.translateCopied,
+                    icon: Icons.copy_rounded,
+                  );
+                },
           // Matches TranslateCubit.speakOutput's own guard — a whitespace-only
           // output must not render an enabled button that does nothing.
           onSpeak: (output.trim().isEmpty || isBusy) ? null : cubit.speakOutput,

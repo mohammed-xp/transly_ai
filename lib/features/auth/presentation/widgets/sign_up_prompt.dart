@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../utils/coming_soon_toast.dart';
 
 /// "Don't have an account? Create account" footer (design `01b · Sign In`).
 /// The link is inert — sign-up isn't built yet — and announces "coming soon".
@@ -28,9 +29,7 @@ class SignUpPrompt extends StatelessWidget {
             button: true,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () => ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(l10n.signInComingSoon))),
+              onTap: () => showComingSoonToast(context),
               child: Padding(
                 // Widens the 14px link toward a reachable tap target.
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),

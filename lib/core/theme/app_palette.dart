@@ -32,6 +32,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.outputBorder,
     required this.actionSurface,
     required this.actionBorder,
+    required this.toastBackground,
+    required this.toastBorder,
+    required this.toastShadow,
+    required this.toastText,
+    required this.toastSubtext,
+    required this.toastNeutralChip,
+    required this.toastNeutralIcon,
+    required this.toastErrorChip,
   });
 
   final Color surface;
@@ -69,6 +77,19 @@ class AppPalette extends ThemeExtension<AppPalette> {
   /// Null in light mode — the action button has no border there.
   final Color? actionBorder;
 
+  /// Toast surface — inverted in light mode (near-black on a light screen).
+  final Color toastBackground;
+
+  /// Null in light mode — the toast has no border there.
+  final Color? toastBorder;
+
+  final Color toastShadow;
+  final Color toastText;
+  final Color toastSubtext;
+  final Color toastNeutralChip;
+  final Color toastNeutralIcon;
+  final Color toastErrorChip;
+
   static const light = AppPalette(
     surface: AppColors.surfaceLight,
     border: AppColors.borderLight,
@@ -96,6 +117,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
     outputBorder: AppColors.tintBorderLight,
     actionSurface: AppColors.surfaceLight,
     actionBorder: null,
+    toastBackground: AppColors.inkLight,
+    toastBorder: null,
+    toastShadow: AppColors.toastShadowLight,
+    toastText: Colors.white,
+    toastSubtext: AppColors.textMutedLight,
+    toastNeutralChip: Color(0x14FFFFFF),
+    toastNeutralIcon: AppColors.captionMutedLight,
+    toastErrorChip: AppColors.primary,
   );
 
   static final dark = AppPalette(
@@ -128,6 +157,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
     outputBorder: AppColors.accentDark.withValues(alpha: 0.32),
     actionSurface: Colors.white.withValues(alpha: 0.06),
     actionBorder: Colors.white.withValues(alpha: 0.08),
+    toastBackground: AppColors.chipBgDark,
+    toastBorder: AppColors.borderDark,
+    toastShadow: AppColors.toastShadowDark,
+    toastText: AppColors.textPrimaryDark,
+    toastSubtext: AppColors.textSecondaryDark,
+    toastNeutralChip: AppColors.surfaceDark,
+    toastNeutralIcon: AppColors.textSecondaryDark,
+    toastErrorChip: AppColors.accentDark,
   );
 
   @override
@@ -154,6 +191,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? outputBorder,
     Color? actionSurface,
     Color? actionBorder,
+    Color? toastBackground,
+    Color? toastBorder,
+    Color? toastShadow,
+    Color? toastText,
+    Color? toastSubtext,
+    Color? toastNeutralChip,
+    Color? toastNeutralIcon,
+    Color? toastErrorChip,
   }) {
     return AppPalette(
       surface: surface ?? this.surface,
@@ -178,6 +223,14 @@ class AppPalette extends ThemeExtension<AppPalette> {
       outputBorder: outputBorder ?? this.outputBorder,
       actionSurface: actionSurface ?? this.actionSurface,
       actionBorder: actionBorder ?? this.actionBorder,
+      toastBackground: toastBackground ?? this.toastBackground,
+      toastBorder: toastBorder ?? this.toastBorder,
+      toastShadow: toastShadow ?? this.toastShadow,
+      toastText: toastText ?? this.toastText,
+      toastSubtext: toastSubtext ?? this.toastSubtext,
+      toastNeutralChip: toastNeutralChip ?? this.toastNeutralChip,
+      toastNeutralIcon: toastNeutralIcon ?? this.toastNeutralIcon,
+      toastErrorChip: toastErrorChip ?? this.toastErrorChip,
     );
   }
 
@@ -215,6 +268,22 @@ class AppPalette extends ThemeExtension<AppPalette> {
       outputBorder: Color.lerp(outputBorder, other.outputBorder, t)!,
       actionSurface: Color.lerp(actionSurface, other.actionSurface, t)!,
       actionBorder: Color.lerp(actionBorder, other.actionBorder, t),
+      toastBackground: Color.lerp(toastBackground, other.toastBackground, t)!,
+      toastBorder: Color.lerp(toastBorder, other.toastBorder, t),
+      toastShadow: Color.lerp(toastShadow, other.toastShadow, t)!,
+      toastText: Color.lerp(toastText, other.toastText, t)!,
+      toastSubtext: Color.lerp(toastSubtext, other.toastSubtext, t)!,
+      toastNeutralChip: Color.lerp(
+        toastNeutralChip,
+        other.toastNeutralChip,
+        t,
+      )!,
+      toastNeutralIcon: Color.lerp(
+        toastNeutralIcon,
+        other.toastNeutralIcon,
+        t,
+      )!,
+      toastErrorChip: Color.lerp(toastErrorChip, other.toastErrorChip, t)!,
     );
   }
 }

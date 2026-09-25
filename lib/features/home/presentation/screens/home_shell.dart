@@ -5,6 +5,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../auth/presentation/cubit/session_cubit.dart';
 import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
 import '../../../conversation/presentation/screens/conversation_screen.dart';
@@ -78,13 +79,17 @@ class _HomeViewState extends State<_HomeView> {
                   padding: EdgeInsets.only(
                     bottom: keyboardOpen ? AppDimens.spaceL : 0,
                   ),
-                  child: IndexedStack(
-                    index: _mode.index,
-                    children: const [
-                      TranslateScreen(),
-                      ConversationScreen(),
-                      CameraScanScreen(),
-                    ],
+                  child: AppToastScope(
+                    bottomSpacing: AppDimens.spaceM,
+                    avoidSystemInsets: false,
+                    child: IndexedStack(
+                      index: _mode.index,
+                      children: const [
+                        TranslateScreen(),
+                        ConversationScreen(),
+                        CameraScanScreen(),
+                      ],
+                    ),
                   ),
                 ),
               ),

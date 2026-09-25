@@ -24,6 +24,8 @@ abstract final class AppDimens {
   static const double toggleTrackWidth = 50;
   static const double toggleTrackHeight = 30;
   static const double toggleKnobSize = 24;
+  static const double toastMinHeight = 54;
+  static const double toastIconBox = 30;
 
   // ── Icons ──
   static const double iconS = 16;

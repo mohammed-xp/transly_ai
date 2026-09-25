@@ -107,6 +107,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateErrorNoConnection => 'لا يوجد اتصال بالإنترنت.';
 
   @override
+  String get translateCopied => 'تم نسخ الترجمة';
+
+  @override
+  String get translateErrorTitle => 'تعذّرت الترجمة';
+
+  @override
+  String get translateRetry => 'إعادة';
+
+  @override
   String get signInTitle => 'أهلاً بعودتك';
 
   @override

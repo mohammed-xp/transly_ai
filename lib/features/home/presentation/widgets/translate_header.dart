@@ -7,7 +7,6 @@ import '../../../../l10n/app_localizations.dart';
 class TranslateHeader extends StatelessWidget {
   const TranslateHeader({super.key, this.onSignOut});
 
-  /// Called when the sign-out icon is tapped. `null` hides the icon.
   final VoidCallback? onSignOut;
 
   @override
@@ -30,10 +29,10 @@ class TranslateHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.translateKicker,
-                  style: textTheme.labelMedium?.copyWith(color: c.textMuted),
-                ),
+                // Text(
+                //   l10n.translateKicker,
+                //   style: textTheme.labelMedium?.copyWith(color: c.textMuted),
+                // ),
                 Text(
                   'Transly', // brand name — not localized
                   style: textTheme.headlineLarge?.copyWith(color: c.ink),

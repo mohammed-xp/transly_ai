@@ -290,6 +290,24 @@ abstract class AppLocalizations {
   /// **'No internet connection.'**
   String get translateErrorNoConnection;
 
+  /// Toast confirming the translation output was copied to the clipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation copied'**
+  String get translateCopied;
+
+  /// Title of the error toast shown when a translation fails; the failure reason is shown under it.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation failed'**
+  String get translateErrorTitle;
+
+  /// Action on the translation error toast that re-runs the translation.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get translateRetry;
+
   /// Headline on the sign-in screen.
   ///
   /// In en, this message translates to:

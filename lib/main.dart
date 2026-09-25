@@ -9,6 +9,8 @@ import 'core/init/hive_initializer.dart';
 import 'core/router/app_router.dart';
 import 'core/router/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/toast/app_toast.dart';
+import 'core/widgets/toast/app_toast_scope.dart';
 import 'features/auth/presentation/cubit/session_cubit.dart';
 import 'features/auth/presentation/cubit/session_state.dart';
 import 'firebase_options.dart';
@@ -47,6 +49,8 @@ class TranslyApp extends StatelessWidget {
           darkTheme: AppTheme.dark,
           themeMode: ThemeMode.system,
           routerConfig: appRouter,
+          builder: (context, child) =>
+              AppToastScope(child: child ?? const SizedBox.shrink()),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -60,7 +64,7 @@ class TranslyApp extends StatelessWidget {
   }
 
   /// This listener sits above [MaterialApp], so its own context has no
-  /// Navigator or ScaffoldMessenger — reach them through the router instead.
+  /// Navigator or toast scope — reach them through the router instead.
   void _onSessionExpired() {
     appRouter.goNamed(AppRoutes.signInName);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -68,9 +72,12 @@ class TranslyApp extends StatelessWidget {
       if (navContext == null) return;
       final l10n = AppLocalizations.of(navContext);
       if (l10n == null) return;
-      ScaffoldMessenger.of(
+      AppToast.show(
         navContext,
-      ).showSnackBar(SnackBar(content: Text(l10n.authErrorSessionExpired)));
+        message: l10n.authErrorSessionExpired,
+        type: AppToastType.neutral,
+        icon: Icons.lock_outline_rounded,
+      );
     });
   }
 }

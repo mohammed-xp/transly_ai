@@ -50,6 +50,10 @@ abstract final class AppColors {
   static const Color cardShadowLight = Color(0x0A141928); // subtle card lift
   static const Color dockShadowLight = Color(0x0F141928); // floating dock lift
 
+  // ── Shadows (toast) ──
+  static const Color toastShadowLight = Color(0x38141928);
+  static const Color toastShadowDark = Color(0x73000000);
+
   // ── Toggle (off track) ──
   static const Color toggleTrackOffLight = Color(0xFFE6E8ED);
   static const Color toggleTrackOffDark = borderDark;

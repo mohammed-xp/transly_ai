@@ -128,6 +128,18 @@
   "@translateErrorNoConnection": {
     "description": "Shown when an online-only translation is attempted while offline."
   },
+  "translateCopied": "Translation copied",
+  "@translateCopied": {
+    "description": "Toast confirming the translation output was copied to the clipboard."
+  },
+  "translateErrorTitle": "Translation failed",
+  "@translateErrorTitle": {
+    "description": "Title of the error toast shown when a translation fails; the failure reason is shown under it."
+  },
+  "translateRetry": "Retry",
+  "@translateRetry": {
+    "description": "Action on the translation error toast that re-runs the translation."
+  },
   "signInTitle": "Welcome back",
   "@signInTitle": {
     "description": "Headline on the sign-in screen."

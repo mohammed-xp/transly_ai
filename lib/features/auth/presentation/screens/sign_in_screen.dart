@@ -8,11 +8,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/decorative_blob.dart';
+import '../../../../core/widgets/toast/app_toast.dart';
+import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/sign_in_form_errors.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../cubit/sign_in_state.dart';
 import '../utils/auth_l10n.dart';
+import '../utils/coming_soon_toast.dart';
 import '../widgets/auth_back_button.dart';
 import '../widgets/auth_brand_mark.dart';
 import '../widgets/auth_divider.dart';
@@ -27,7 +30,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => serviceLocator<SignInCubit>(),
-      child: const _SignInView(),
+      child: const AppToastScope(child: _SignInView()),
     );
   }
 }
@@ -85,11 +88,14 @@ class _SignInViewState extends State<_SignInView> {
           case SignInSucceeded():
             context.goNamed(AppRoutes.homeName);
           case SignInFailed(:final failure):
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(authFailureMessage(context, failure))),
+            AppToast.show(
+              context,
+              message: authFailureMessage(context, failure),
+              type: AppToastType.error,
             );
-          case SignInInitial():
           case SignInSubmitting():
+            AppToast.hide(context);
+          case SignInInitial():
             break;
         }
       },
@@ -282,9 +288,7 @@ class _ForgotPasswordLink extends StatelessWidget {
       child: Semantics(
         button: true,
         child: GestureDetector(
-          onTap: () => ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(l10n.signInComingSoon))),
+          onTap: () => showComingSoonToast(context),
           behavior: HitTestBehavior.opaque,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),

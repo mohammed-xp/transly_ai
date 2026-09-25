@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../utils/coming_soon_toast.dart';
 
 /// Row of three equal-width social sign-in buttons (design `01b · Sign In`).
 /// Shape-only per product decision: tapping any of them just announces
@@ -67,7 +67,7 @@ class _SocialButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimens.radiusInput),
         child: InkWell(
           borderRadius: BorderRadius.circular(AppDimens.radiusInput),
-          onTap: () => _showComingSoon(context),
+          onTap: () => showComingSoonToast(context),
           child: Container(
             height: SocialAuthRow._height,
             decoration: BoxDecoration(
@@ -79,12 +79,6 @@ class _SocialButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context)!.signInComingSoon)),
     );
   }
 }
