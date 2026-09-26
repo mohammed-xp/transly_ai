@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/l10n/language_label.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
-import '../../../auth/presentation/cubit/session_cubit.dart';
 import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
 import '../../../conversation/presentation/screens/conversation_screen.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
@@ -70,9 +71,7 @@ class _HomeViewState extends State<_HomeView> {
           bottom: false,
           child: Column(
             children: [
-              TranslateHeader(
-                onSignOut: () => context.read<SessionCubit>().signOut(),
-              ),
+              const _HeaderSection(),
               const _LanguageBarSection(),
               Expanded(
                 child: Padding(
@@ -98,6 +97,21 @@ class _HomeViewState extends State<_HomeView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _HeaderSection extends StatelessWidget {
+  const _HeaderSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<HomeCubit, HomeState, String?>(
+      selector: (state) => state.user?.username,
+      builder: (context, userName) => TranslateHeader(
+        userName: userName,
+        onProfileTap: () => context.pushNamed(AppRoutes.profileName),
       ),
     );
   }

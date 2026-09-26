@@ -374,11 +374,11 @@ abstract class AppLocalizations {
   /// **'Create account'**
   String get signInCreateAccount;
 
-  /// Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account).
+  /// Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account, profile actions).
   ///
   /// In en, this message translates to:
   /// **'Coming soon'**
-  String get signInComingSoon;
+  String get commonComingSoon;
 
   /// Accessibility label for the button that reveals the password field's text.
   ///
@@ -392,11 +392,11 @@ abstract class AppLocalizations {
   /// **'Hide password'**
   String get signInHidePassword;
 
-  /// Accessibility label for the back button on the sign-in screen.
+  /// Accessibility label for the back button (sign-in, profile).
   ///
   /// In en, this message translates to:
   /// **'Back'**
-  String get signInBack;
+  String get commonBack;
 
   /// Shown under the email field when it is left empty.
   ///
@@ -464,11 +464,95 @@ abstract class AppLocalizations {
   /// **'Your session has expired. Please sign in again.'**
   String get authErrorSessionExpired;
 
-  /// Tooltip/label for the sign-out action on the translate screen.
+  /// Label of the sign-out button on the profile screen.
   ///
   /// In en, this message translates to:
   /// **'Sign out'**
   String get authSignOut;
+
+  /// Title of the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// Accessibility label for the avatar in the translate header that opens the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open profile'**
+  String get profileOpen;
+
+  /// Edit-profile action in the profile screen's header.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get profileEdit;
+
+  /// Accessibility label for the camera badge on the profile avatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get profileChangePhoto;
+
+  /// Heading of the account section on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get profileAccountSection;
+
+  /// Label of the name row on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get profileName;
+
+  /// Label of the email row on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileEmail;
+
+  /// Label of the native-language row on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Native language'**
+  String get profileNativeLanguage;
+
+  /// Label of the row showing how the user signed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in with'**
+  String get profileSignInMethod;
+
+  /// Value of the signed-in-with row for email/password accounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileSignInMethodEmail;
+
+  /// Heading of the privacy section on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get profilePrivacySection;
+
+  /// Label of the history-sync toggle on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync history across devices'**
+  String get profileSyncHistory;
+
+  /// Row that exports the user's data on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Download my data'**
+  String get profileDownloadData;
+
+  /// Delete-account link at the bottom of the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get profileDeleteAccount;
 
   /// Title of the placeholder shown on the voice-input tab before it is built.
   ///

@@ -7,16 +7,16 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_back_button.dart';
 import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
+import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/sign_in_form_errors.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../cubit/sign_in_state.dart';
 import '../utils/auth_l10n.dart';
-import '../utils/coming_soon_toast.dart';
-import '../widgets/auth_back_button.dart';
 import '../widgets/auth_brand_mark.dart';
 import '../widgets/auth_divider.dart';
 import '../widgets/auth_text_field.dart';
@@ -117,7 +117,7 @@ class _SignInViewState extends State<_SignInView> {
                     padding: const EdgeInsets.fromLTRB(20, 6, 20, 0),
                     child: Align(
                       alignment: AlignmentDirectional.centerStart,
-                      child: AuthBackButton(onTap: () => _handleBack(context)),
+                      child: AppBackButton(onTap: () => _handleBack(context)),
                     ),
                   ),
                   Expanded(

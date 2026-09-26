@@ -149,7 +149,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInCreateAccount => 'إنشاء حساب';
 
   @override
-  String get signInComingSoon => 'قريبًا';
+  String get commonComingSoon => 'قريبًا';
 
   @override
   String get signInShowPassword => 'إظهار كلمة المرور';
@@ -158,7 +158,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInHidePassword => 'إخفاء كلمة المرور';
 
   @override
-  String get signInBack => 'رجوع';
+  String get commonBack => 'رجوع';
 
   @override
   String get authErrorEmailRequired => 'أدخل بريدك الإلكتروني.';
@@ -197,6 +197,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authSignOut => 'تسجيل الخروج';
+
+  @override
+  String get profileTitle => 'الملف الشخصي';
+
+  @override
+  String get profileOpen => 'فتح الملف الشخصي';
+
+  @override
+  String get profileEdit => 'تعديل';
+
+  @override
+  String get profileChangePhoto => 'تغيير الصورة';
+
+  @override
+  String get profileAccountSection => 'الحساب';
+
+  @override
+  String get profileName => 'الاسم';
+
+  @override
+  String get profileEmail => 'البريد الإلكتروني';
+
+  @override
+  String get profileNativeLanguage => 'لغتي الأم';
+
+  @override
+  String get profileSignInMethod => 'تسجيل الدخول عبر';
+
+  @override
+  String get profileSignInMethodEmail => 'البريد الإلكتروني';
+
+  @override
+  String get profilePrivacySection => 'الخصوصية';
+
+  @override
+  String get profileSyncHistory => 'مزامنة السجل بين الأجهزة';
+
+  @override
+  String get profileDownloadData => 'تنزيل بياناتي';
+
+  @override
+  String get profileDeleteAccount => 'حذف الحساب';
 
   @override
   String get conversationComingSoonTitle => 'وضع الصوت';

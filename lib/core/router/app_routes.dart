@@ -7,6 +7,7 @@ abstract final class AppRoutes {
   static const String home = '/home';
   static const String history = '/history';
   static const String settings = '/settings';
+  static const String profile = '/profile';
 
   static const String splashName = 'splash';
   static const String onboardingName = 'onboarding';
@@ -14,4 +15,5 @@ abstract final class AppRoutes {
   static const String homeName = 'home';
   static const String historyName = 'history';
   static const String settingsName = 'settings';
+  static const String profileName = 'profile';
 }

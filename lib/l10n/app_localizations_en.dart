@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInCreateAccount => 'Create account';
 
   @override
-  String get signInComingSoon => 'Coming soon';
+  String get commonComingSoon => 'Coming soon';
 
   @override
   String get signInShowPassword => 'Show password';
@@ -159,7 +159,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInHidePassword => 'Hide password';
 
   @override
-  String get signInBack => 'Back';
+  String get commonBack => 'Back';
 
   @override
   String get authErrorEmailRequired => 'Enter your email address.';
@@ -199,6 +199,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authSignOut => 'Sign out';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileOpen => 'Open profile';
+
+  @override
+  String get profileEdit => 'Edit';
+
+  @override
+  String get profileChangePhoto => 'Change photo';
+
+  @override
+  String get profileAccountSection => 'Account';
+
+  @override
+  String get profileName => 'Name';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileNativeLanguage => 'Native language';
+
+  @override
+  String get profileSignInMethod => 'Signed in with';
+
+  @override
+  String get profileSignInMethodEmail => 'Email';
+
+  @override
+  String get profilePrivacySection => 'Privacy';
+
+  @override
+  String get profileSyncHistory => 'Sync history across devices';
+
+  @override
+  String get profileDownloadData => 'Download my data';
+
+  @override
+  String get profileDeleteAccount => 'Delete account';
 
   @override
   String get conversationComingSoonTitle => 'Voice mode';

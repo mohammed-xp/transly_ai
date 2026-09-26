@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../utils/coming_soon_toast.dart';
 
 /// "Don't have an account? Create account" footer (design `01b · Sign In`).
 /// The link is inert — sign-up isn't built yet — and announces "coming soon".

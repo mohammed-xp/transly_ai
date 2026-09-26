@@ -17,6 +17,7 @@ import '../../features/auth/domain/usecases/watch_session_status_usecase.dart';
 import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translate/data/datasources/api_translation_remote_data_source.dart';
 import '../../features/translate/data/datasources/translation_local_data_source.dart';
@@ -160,7 +161,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerFactory(
     () => SignInCubit(signIn: serviceLocator(), validate: serviceLocator()),
   );
-  serviceLocator.registerFactory(HomeCubit.new);
+  serviceLocator.registerFactory(
+    () => HomeCubit(getCachedUser: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => ProfileCubit(getCachedUser: serviceLocator()),
+  );
   serviceLocator.registerFactory(
     () => TranslateCubit(
       translateText: serviceLocator(),

@@ -1,0 +1,217 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/domain/entities/language_entity.dart';
+import '../../../../core/domain/entities/user_entity.dart';
+import '../../../../core/errors/failure.dart';
+import '../../../../core/l10n/failure_message.dart';
+import '../../../../core/l10n/language_label.dart';
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/toast/coming_soon_toast.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../cubit/profile_cubit.dart';
+import '../cubit/profile_state.dart';
+import '../widgets/profile_header.dart';
+import '../widgets/profile_identity.dart';
+import '../widgets/profile_row.dart';
+import '../widgets/profile_section.dart';
+import '../widgets/profile_sign_out_button.dart';
+
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => serviceLocator<ProfileCubit>()..loadProfile(),
+      child: const _ProfileView(),
+    );
+  }
+}
+
+class _ProfileView extends StatelessWidget {
+  const _ProfileView();
+
+  void _handleBack(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.goNamed(AppRoutes.homeName);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            ProfileHeader(
+              onBack: () => _handleBack(context),
+              onEdit: () => showComingSoonToast(context),
+            ),
+            Expanded(
+              child: BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) => switch (state) {
+                  ProfileInitial() => const SizedBox.shrink(),
+                  ProfileLoaded(:final user) => _ProfileContent(user: user),
+                  ProfileFailed(:final failure) => _ProfileError(
+                    failure: failure,
+                  ),
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileContent extends StatelessWidget {
+  const _ProfileContent({required this.user});
+
+  final UserEntity user;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    void comingSoon() => showComingSoonToast(context);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        AppDimens.spaceL,
+        0,
+        AppDimens.spaceL,
+        AppDimens.spaceXL,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ProfileIdentity(user: user, onChangePhoto: comingSoon),
+          const SizedBox(height: AppDimens.spaceXL),
+          ProfileSection(
+            title: l10n.profileAccountSection,
+            rows: [
+              ProfileRow(label: l10n.profileName, value: user.username),
+              ProfileRow(
+                label: l10n.profileEmail,
+                value: user.email,
+                valueDirection: TextDirection.ltr,
+              ),
+              ProfileRow(
+                label: l10n.profileNativeLanguage,
+                value: languageLabel(context, _appLanguage(context)),
+                trailing: const ProfileRowChevron(),
+                onTap: comingSoon,
+              ),
+              ProfileRow(
+                label: l10n.profileSignInMethod,
+                value: l10n.profileSignInMethodEmail,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimens.spaceXL),
+          ProfileSection(
+            title: l10n.profilePrivacySection,
+            rows: [
+              ProfileRow(
+                label: l10n.profileSyncHistory,
+                trailing: Switch(value: false, onChanged: (_) => comingSoon()),
+                onTap: comingSoon,
+              ),
+              ProfileRow(
+                label: l10n.profileDownloadData,
+                trailing: const ProfileRowChevron(),
+                onTap: comingSoon,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimens.spaceL),
+          const ProfileSignOutButton(),
+          const SizedBox(height: AppDimens.spaceM),
+          _DeleteAccountButton(onTap: comingSoon),
+        ],
+      ),
+    );
+  }
+
+  /// No native-language preference is stored yet, so the row shows the
+  /// language the app is currently displayed in.
+  static LanguageEntity _appLanguage(BuildContext context) {
+    return Localizations.localeOf(context).languageCode ==
+            LanguageEntity.arabic.code
+        ? LanguageEntity.arabic
+        : LanguageEntity.english;
+  }
+}
+
+class _DeleteAccountButton extends StatelessWidget {
+  const _DeleteAccountButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final c = context.palette;
+
+    return Center(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppDimens.radiusChip),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimens.spaceM,
+            vertical: 6,
+          ),
+          child: Text(
+            AppLocalizations.of(context)!.profileDeleteAccount,
+            style: textTheme.titleMedium?.copyWith(
+              fontSize: 14,
+              color: c.coral,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// No cached user to show. Sign-out stays reachable so the user isn't stuck
+/// on a dead screen.
+class _ProfileError extends StatelessWidget {
+  const _ProfileError({required this.failure});
+
+  final Failure failure;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final c = context.palette;
+
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppDimens.spaceL),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              failureMessage(context, failure),
+              textAlign: TextAlign.center,
+              style: textTheme.bodyMedium?.copyWith(color: c.textSecondary),
+            ),
+            const SizedBox(height: AppDimens.spaceL),
+            const ProfileSignOutButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}

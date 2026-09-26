@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/user_avatar.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class TranslateHeader extends StatelessWidget {
-  const TranslateHeader({super.key, this.onSignOut});
+  const TranslateHeader({
+    super.key,
+    required this.userName,
+    required this.onProfileTap,
+  });
 
-  final VoidCallback? onSignOut;
+  final String? userName;
+  final VoidCallback onProfileTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +35,10 @@ class TranslateHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Text(
-                //   l10n.translateKicker,
-                //   style: textTheme.labelMedium?.copyWith(color: c.textMuted),
-                // ),
+                Text(
+                  l10n.translateKicker,
+                  style: textTheme.labelMedium?.copyWith(color: c.textMuted),
+                ),
                 Text(
                   'Transly', // brand name — not localized
                   style: textTheme.headlineLarge?.copyWith(color: c.ink),
@@ -40,38 +46,45 @@ class TranslateHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (onSignOut != null) ...[
-            _SignOutButton(onTap: onSignOut!, tooltip: l10n.authSignOut),
-            const SizedBox(width: 10),
-          ],
           _AiProBadge(label: l10n.translateAiPro),
+          const SizedBox(width: 10),
+          _ProfileAvatarButton(
+            userName: userName,
+            label: l10n.profileOpen,
+            onTap: onProfileTap,
+          ),
         ],
       ),
     );
   }
 }
 
-class _SignOutButton extends StatelessWidget {
-  const _SignOutButton({required this.onTap, required this.tooltip});
+class _ProfileAvatarButton extends StatelessWidget {
+  const _ProfileAvatarButton({
+    required this.userName,
+    required this.label,
+    required this.onTap,
+  });
 
+  final String? userName;
+  final String label;
   final VoidCallback onTap;
-  final String tooltip;
+
+  static const double _size = 44;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.palette;
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        customBorder: const CircleBorder(),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Semantics(
+      button: true,
+      label: label,
+      child: GestureDetector(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(6),
-          child: Icon(
-            Icons.logout_rounded,
-            size: AppDimens.iconM,
-            color: c.textMuted,
-          ),
+        child: UserAvatar(
+          name: userName,
+          size: _size,
+          ringWidth: 2,
+          glow: !isDark,
         ),
       ),
     );

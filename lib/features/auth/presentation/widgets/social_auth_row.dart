@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
-import '../utils/coming_soon_toast.dart';
+import '../../../../core/widgets/toast/coming_soon_toast.dart';
 
 /// Row of three equal-width social sign-in buttons (design `01b · Sign In`).
 /// Shape-only per product decision: tapping any of them just announces

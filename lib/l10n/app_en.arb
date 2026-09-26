@@ -184,9 +184,9 @@
   "@signInCreateAccount": {
     "description": "Create-account link on the sign-in screen."
   },
-  "signInComingSoon": "Coming soon",
-  "@signInComingSoon": {
-    "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account)."
+  "commonComingSoon": "Coming soon",
+  "@commonComingSoon": {
+    "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account, profile actions)."
   },
   "signInShowPassword": "Show password",
   "@signInShowPassword": {
@@ -196,9 +196,9 @@
   "@signInHidePassword": {
     "description": "Accessibility label for the button that hides the password field's text."
   },
-  "signInBack": "Back",
-  "@signInBack": {
-    "description": "Accessibility label for the back button on the sign-in screen."
+  "commonBack": "Back",
+  "@commonBack": {
+    "description": "Accessibility label for the back button (sign-in, profile)."
   },
   "authErrorEmailRequired": "Enter your email address.",
   "@authErrorEmailRequired": {
@@ -246,7 +246,63 @@
   },
   "authSignOut": "Sign out",
   "@authSignOut": {
-    "description": "Tooltip/label for the sign-out action on the translate screen."
+    "description": "Label of the sign-out button on the profile screen."
+  },
+  "profileTitle": "Profile",
+  "@profileTitle": {
+    "description": "Title of the profile screen."
+  },
+  "profileOpen": "Open profile",
+  "@profileOpen": {
+    "description": "Accessibility label for the avatar in the translate header that opens the profile screen."
+  },
+  "profileEdit": "Edit",
+  "@profileEdit": {
+    "description": "Edit-profile action in the profile screen's header."
+  },
+  "profileChangePhoto": "Change photo",
+  "@profileChangePhoto": {
+    "description": "Accessibility label for the camera badge on the profile avatar."
+  },
+  "profileAccountSection": "Account",
+  "@profileAccountSection": {
+    "description": "Heading of the account section on the profile screen."
+  },
+  "profileName": "Name",
+  "@profileName": {
+    "description": "Label of the name row on the profile screen."
+  },
+  "profileEmail": "Email",
+  "@profileEmail": {
+    "description": "Label of the email row on the profile screen."
+  },
+  "profileNativeLanguage": "Native language",
+  "@profileNativeLanguage": {
+    "description": "Label of the native-language row on the profile screen."
+  },
+  "profileSignInMethod": "Signed in with",
+  "@profileSignInMethod": {
+    "description": "Label of the row showing how the user signed in."
+  },
+  "profileSignInMethodEmail": "Email",
+  "@profileSignInMethodEmail": {
+    "description": "Value of the signed-in-with row for email/password accounts."
+  },
+  "profilePrivacySection": "Privacy",
+  "@profilePrivacySection": {
+    "description": "Heading of the privacy section on the profile screen."
+  },
+  "profileSyncHistory": "Sync history across devices",
+  "@profileSyncHistory": {
+    "description": "Label of the history-sync toggle on the profile screen."
+  },
+  "profileDownloadData": "Download my data",
+  "@profileDownloadData": {
+    "description": "Row that exports the user's data on the profile screen."
+  },
+  "profileDeleteAccount": "Delete account",
+  "@profileDeleteAccount": {
+    "description": "Delete-account link at the bottom of the profile screen."
   },
   "conversationComingSoonTitle": "Voice mode",
   "@conversationComingSoonTitle": {
