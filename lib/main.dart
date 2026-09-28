@@ -63,8 +63,6 @@ class TranslyApp extends StatelessWidget {
     );
   }
 
-  /// This listener sits above [MaterialApp], so its own context has no
-  /// Navigator or toast scope — reach them through the router instead.
   void _onSessionExpired() {
     appRouter.goNamed(AppRoutes.signInName);
     WidgetsBinding.instance.addPostFrameCallback((_) {

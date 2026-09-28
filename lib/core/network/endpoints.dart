@@ -5,4 +5,5 @@ abstract final class Endpoints {
   static const String login = '$baseUrl/api/v1/auth/login';
   static const String register = '$baseUrl/api/v1/auth/register';
   static const String refreshToken = '$baseUrl/api/v1/auth/refresh-token';
+  static const String usage = '$baseUrl/api/v1/usage';
 }

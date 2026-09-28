@@ -398,6 +398,12 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get commonBack;
 
+  /// Action that repeats a request that failed to load (e.g. the plan usage on the profile screen).
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
   /// Shown under the email field when it is left empty.
   ///
   /// In en, this message translates to:
@@ -553,6 +559,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete account'**
   String get profileDeleteAccount;
+
+  /// Title of the plan card on the profile screen for users on the free plan.
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan'**
+  String get profileFreePlanTitle;
+
+  /// Countdown under the free-plan title until the usage quota resets, when an hour or more is left. {count} is {hours} written in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, =1{Usage resets in 1 hour} other{Usage resets in {count} hours}}'**
+  String profileUsageResetsInHours(int hours, String count);
+
+  /// Countdown under the free-plan title until the usage quota resets, when less than an hour is left. {count} is {minutes} written in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =1{Usage resets in 1 minute} other{Usage resets in {count} minutes}}'**
+  String profileUsageResetsInMinutes(int minutes, String count);
+
+  /// Share of today's quota already used, shown large on the free-plan card.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String profileUsagePercent(String percent);
+
+  /// Caption under the usage bar on the free-plan card.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s usage'**
+  String get profileUsageToday;
+
+  /// Share of today's quota still available, under the usage bar on the free-plan card.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% left'**
+  String profileUsageRemaining(String percent);
+
+  /// Button on the free-plan card that opens the Pro upgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Pro'**
+  String get profileUpgradeToPro;
 
   /// Title of the placeholder shown on the voice-input tab before it is built.
   ///

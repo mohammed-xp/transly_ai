@@ -17,6 +17,12 @@ import '../../features/auth/domain/usecases/watch_session_status_usecase.dart';
 import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/profile/data/datasources/plan_usage_remote_data_source.dart';
+import '../../features/profile/data/datasources/plan_usage_remote_data_source_impl.dart';
+import '../../features/profile/data/repos/plan_usage_repo_impl.dart';
+import '../../features/profile/domain/repos/plan_usage_repo.dart';
+import '../../features/profile/domain/usecases/get_plan_usage_usecase.dart';
+import '../../features/profile/presentation/cubit/plan_usage_cubit.dart';
 import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translate/data/datasources/api_translation_remote_data_source.dart';
@@ -104,6 +110,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<PlanUsageRemoteDataSource>(
+    () => PlanUsageRemoteDataSourceImpl(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -118,6 +127,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(remote: serviceLocator(), userLocal: serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<PlanUsageRepo>(
+    () => PlanUsageRepoImpl(serviceLocator()),
   );
 
   // ── Use cases ──
@@ -147,6 +159,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => GetCachedUserUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetPlanUsageUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -166,6 +181,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerFactory(
     () => ProfileCubit(getCachedUser: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => PlanUsageCubit(getPlanUsage: serviceLocator()),
   );
   serviceLocator.registerFactory(
     () => TranslateCubit(

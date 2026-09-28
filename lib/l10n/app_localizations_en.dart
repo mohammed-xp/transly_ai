@@ -162,6 +162,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonBack => 'Back';
 
   @override
+  String get commonRetry => 'Retry';
+
+  @override
   String get authErrorEmailRequired => 'Enter your email address.';
 
   @override
@@ -241,6 +244,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => 'Delete account';
+
+  @override
+  String get profileFreePlanTitle => 'Free plan';
+
+  @override
+  String profileUsageResetsInHours(int hours, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'Usage resets in $count hours',
+      one: 'Usage resets in 1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileUsageResetsInMinutes(int minutes, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Usage resets in $count minutes',
+      one: 'Usage resets in 1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileUsagePercent(String percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get profileUsageToday => 'Today\'s usage';
+
+  @override
+  String profileUsageRemaining(String percent) {
+    return '$percent% left';
+  }
+
+  @override
+  String get profileUpgradeToPro => 'Upgrade to Pro';
 
   @override
   String get conversationComingSoonTitle => 'Voice mode';

@@ -161,6 +161,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonBack => 'رجوع';
 
   @override
+  String get commonRetry => 'إعادة المحاولة';
+
+  @override
   String get authErrorEmailRequired => 'أدخل بريدك الإلكتروني.';
 
   @override
@@ -239,6 +242,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => 'حذف الحساب';
+
+  @override
+  String get profileFreePlanTitle => 'الخطة المجانية';
+
+  @override
+  String profileUsageResetsInHours(int hours, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'يتجدد الاستهلاك خلال $count ساعة',
+      few: 'يتجدد الاستهلاك خلال $count ساعات',
+      two: 'يتجدد الاستهلاك خلال ساعتين',
+      one: 'يتجدد الاستهلاك خلال ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileUsageResetsInMinutes(int minutes, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'يتجدد الاستهلاك خلال $count دقيقة',
+      few: 'يتجدد الاستهلاك خلال $count دقائق',
+      two: 'يتجدد الاستهلاك خلال دقيقتين',
+      one: 'يتجدد الاستهلاك خلال دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileUsagePercent(String percent) {
+    return '$percent٪';
+  }
+
+  @override
+  String get profileUsageToday => 'استهلاك اليوم';
+
+  @override
+  String profileUsageRemaining(String percent) {
+    return 'متبقٍ $percent٪';
+  }
+
+  @override
+  String get profileUpgradeToPro => 'الترقية إلى Pro';
 
   @override
   String get conversationComingSoonTitle => 'وضع الصوت';

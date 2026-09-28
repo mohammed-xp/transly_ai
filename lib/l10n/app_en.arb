@@ -200,6 +200,10 @@
   "@commonBack": {
     "description": "Accessibility label for the back button (sign-in, profile)."
   },
+  "commonRetry": "Retry",
+  "@commonRetry": {
+    "description": "Action that repeats a request that failed to load (e.g. the plan usage on the profile screen)."
+  },
   "authErrorEmailRequired": "Enter your email address.",
   "@authErrorEmailRequired": {
     "description": "Shown under the email field when it is left empty."
@@ -303,6 +307,64 @@
   "profileDeleteAccount": "Delete account",
   "@profileDeleteAccount": {
     "description": "Delete-account link at the bottom of the profile screen."
+  },
+  "profileFreePlanTitle": "Free plan",
+  "@profileFreePlanTitle": {
+    "description": "Title of the plan card on the profile screen for users on the free plan."
+  },
+  "profileUsageResetsInHours": "{hours, plural, =1{Usage resets in 1 hour} other{Usage resets in {count} hours}}",
+  "@profileUsageResetsInHours": {
+    "description": "Countdown under the free-plan title until the usage quota resets, when an hour or more is left. {count} is {hours} written in the locale's digits.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "count": {
+        "type": "String",
+        "example": "6"
+      }
+    }
+  },
+  "profileUsageResetsInMinutes": "{minutes, plural, =1{Usage resets in 1 minute} other{Usage resets in {count} minutes}}",
+  "@profileUsageResetsInMinutes": {
+    "description": "Countdown under the free-plan title until the usage quota resets, when less than an hour is left. {count} is {minutes} written in the locale's digits.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "count": {
+        "type": "String",
+        "example": "45"
+      }
+    }
+  },
+  "profileUsagePercent": "{percent}%",
+  "@profileUsagePercent": {
+    "description": "Share of today's quota already used, shown large on the free-plan card.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "70"
+      }
+    }
+  },
+  "profileUsageToday": "Today's usage",
+  "@profileUsageToday": {
+    "description": "Caption under the usage bar on the free-plan card."
+  },
+  "profileUsageRemaining": "{percent}% left",
+  "@profileUsageRemaining": {
+    "description": "Share of today's quota still available, under the usage bar on the free-plan card.",
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "30"
+      }
+    }
+  },
+  "profileUpgradeToPro": "Upgrade to Pro",
+  "@profileUpgradeToPro": {
+    "description": "Button on the free-plan card that opens the Pro upgrade."
   },
   "conversationComingSoonTitle": "Voice mode",
   "@conversationComingSoonTitle": {

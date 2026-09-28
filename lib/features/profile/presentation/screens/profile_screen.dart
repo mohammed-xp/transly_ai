@@ -13,22 +13,30 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_identity.dart';
+import '../widgets/profile_plan_usage.dart';
 import '../widgets/profile_row.dart';
 import '../widgets/profile_section.dart';
 import '../widgets/profile_sign_out_button.dart';
-
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => serviceLocator<ProfileCubit>()..loadProfile(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => serviceLocator<ProfileCubit>()..loadProfile(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<PlanUsageCubit>()..loadUsage(),
+        ),
+      ],
       child: const _ProfileView(),
     );
   }
@@ -94,6 +102,7 @@ class _ProfileContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ProfileIdentity(user: user, onChangePhoto: comingSoon),
+          const ProfilePlanUsage(),
           const SizedBox(height: AppDimens.spaceXL),
           ProfileSection(
             title: l10n.profileAccountSection,
