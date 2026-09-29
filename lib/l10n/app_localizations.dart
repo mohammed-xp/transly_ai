@@ -685,6 +685,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get errorUnknown;
+
+  /// Title of the optional-update bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'A new update is available'**
+  String get updateOptionalTitle;
+
+  /// Badge on the logo in the optional-update sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get updateNewBadge;
+
+  /// Latest store version under the optional-update title.
+  ///
+  /// In en, this message translates to:
+  /// **'v{version}'**
+  String updateVersionLabel(String version);
+
+  /// Heading above the release-notes list in the optional-update sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get updateWhatsNew;
+
+  /// Primary button in the optional-update sheet; opens the store.
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
+
+  /// Secondary button that dismisses the optional-update sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// Title of the required-update screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get updateRequiredTitle;
+
+  /// Explanation on the required-update screen.
+  ///
+  /// In en, this message translates to:
+  /// **'This version is no longer supported. Update Transly to keep translating.'**
+  String get updateRequiredBody;
+
+  /// Label above the installed version on the required-update screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your version'**
+  String get updateYourVersion;
+
+  /// Label above the latest store version on the required-update screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get updateLatestVersion;
+
+  /// Required-update button on iOS.
+  ///
+  /// In en, this message translates to:
+  /// **'Update from the App Store'**
+  String get updateFromAppStore;
+
+  /// Required-update button on Android.
+  ///
+  /// In en, this message translates to:
+  /// **'Update from Google Play'**
+  String get updateFromPlayStore;
+
+  /// Toast shown when the store listing can't be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the store. Please try again.'**
+  String get updateStoreOpenFailed;
 }
 
 class _AppLocalizationsDelegate

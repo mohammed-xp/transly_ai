@@ -97,5 +97,18 @@
   "errorNotFound": "لم نعثر على ما تبحث عنه.",
   "errorFormat": "وصلنا رد غير متوقع. حاول مرة أخرى.",
   "errorUnsupportedLanguage": "هذه اللغة غير متاحة بدون إنترنت حاليًا.",
-  "errorUnknown": "حدث خطأ ما. حاول مرة أخرى."
+  "errorUnknown": "حدث خطأ ما. حاول مرة أخرى.",
+  "updateOptionalTitle": "تحديث جديد متاح",
+  "updateNewBadge": "جديد",
+  "updateVersionLabel": "v{version}",
+  "updateWhatsNew": "ما الجديد",
+  "updateNow": "تحديث الآن",
+  "updateLater": "لاحقًا",
+  "updateRequiredTitle": "يلزم تحديث التطبيق",
+  "updateRequiredBody": "هذا الإصدار لم يعد مدعومًا. حدّث Transly للمتابعة في الترجمة.",
+  "updateYourVersion": "إصدارك",
+  "updateLatestVersion": "الأحدث",
+  "updateFromAppStore": "التحديث من App Store",
+  "updateFromPlayStore": "التحديث من Google Play",
+  "updateStoreOpenFailed": "تعذّر فتح المتجر. حاول مرة أخرى."
 }

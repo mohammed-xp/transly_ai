@@ -421,5 +421,63 @@
   "errorUnknown": "Something went wrong. Please try again.",
   "@errorUnknown": {
     "description": "Fallback for any unexpected error."
+  },
+  "updateOptionalTitle": "A new update is available",
+  "@updateOptionalTitle": {
+    "description": "Title of the optional-update bottom sheet."
+  },
+  "updateNewBadge": "New",
+  "@updateNewBadge": {
+    "description": "Badge on the logo in the optional-update sheet."
+  },
+  "updateVersionLabel": "v{version}",
+  "@updateVersionLabel": {
+    "description": "Latest store version under the optional-update title.",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "2.4.0"
+      }
+    }
+  },
+  "updateWhatsNew": "What's new",
+  "@updateWhatsNew": {
+    "description": "Heading above the release-notes list in the optional-update sheet."
+  },
+  "updateNow": "Update now",
+  "@updateNow": {
+    "description": "Primary button in the optional-update sheet; opens the store."
+  },
+  "updateLater": "Later",
+  "@updateLater": {
+    "description": "Secondary button that dismisses the optional-update sheet."
+  },
+  "updateRequiredTitle": "Update required",
+  "@updateRequiredTitle": {
+    "description": "Title of the required-update screen."
+  },
+  "updateRequiredBody": "This version is no longer supported. Update Transly to keep translating.",
+  "@updateRequiredBody": {
+    "description": "Explanation on the required-update screen."
+  },
+  "updateYourVersion": "Your version",
+  "@updateYourVersion": {
+    "description": "Label above the installed version on the required-update screen."
+  },
+  "updateLatestVersion": "Latest",
+  "@updateLatestVersion": {
+    "description": "Label above the latest store version on the required-update screen."
+  },
+  "updateFromAppStore": "Update from the App Store",
+  "@updateFromAppStore": {
+    "description": "Required-update button on iOS."
+  },
+  "updateFromPlayStore": "Update from Google Play",
+  "@updateFromPlayStore": {
+    "description": "Required-update button on Android."
+  },
+  "updateStoreOpenFailed": "Couldn't open the store. Please try again.",
+  "@updateStoreOpenFailed": {
+    "description": "Toast shown when the store listing can't be opened."
   }
 }

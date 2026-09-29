@@ -336,4 +336,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get updateOptionalTitle => 'A new update is available';
+
+  @override
+  String get updateNewBadge => 'New';
+
+  @override
+  String updateVersionLabel(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String get updateWhatsNew => 'What\'s new';
+
+  @override
+  String get updateNow => 'Update now';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateRequiredTitle => 'Update required';
+
+  @override
+  String get updateRequiredBody =>
+      'This version is no longer supported. Update Transly to keep translating.';
+
+  @override
+  String get updateYourVersion => 'Your version';
+
+  @override
+  String get updateLatestVersion => 'Latest';
+
+  @override
+  String get updateFromAppStore => 'Update from the App Store';
+
+  @override
+  String get updateFromPlayStore => 'Update from Google Play';
+
+  @override
+  String get updateStoreOpenFailed =>
+      'Couldn\'t open the store. Please try again.';
 }

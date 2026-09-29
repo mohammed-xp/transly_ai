@@ -11,6 +11,8 @@ import 'core/router/app_routes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/toast/app_toast.dart';
 import 'core/widgets/toast/app_toast_scope.dart';
+import 'features/app_update/presentation/cubit/app_update_cubit.dart';
+import 'features/app_update/presentation/widgets/app_update_gate.dart';
 import 'features/auth/presentation/cubit/session_cubit.dart';
 import 'features/auth/presentation/cubit/session_state.dart';
 import 'firebase_options.dart';
@@ -29,8 +31,13 @@ class TranslyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => serviceLocator<SessionCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<SessionCubit>()),
+        BlocProvider(
+          create: (_) => serviceLocator<AppUpdateCubit>()..checkForUpdate(),
+        ),
+      ],
       child: BlocListener<SessionCubit, SessionState>(
         listener: (context, state) {
           switch (state) {
@@ -49,8 +56,9 @@ class TranslyApp extends StatelessWidget {
           darkTheme: AppTheme.dark,
           themeMode: ThemeMode.system,
           routerConfig: appRouter,
-          builder: (context, child) =>
-              AppToastScope(child: child ?? const SizedBox.shrink()),
+          builder: (context, child) => AppToastScope(
+            child: AppUpdateGate(child: child ?? const SizedBox.shrink()),
+          ),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

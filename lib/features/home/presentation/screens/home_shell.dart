@@ -8,6 +8,7 @@ import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
+import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
 import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
 import '../../../conversation/presentation/screens/conversation_screen.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
@@ -35,7 +36,7 @@ class HomeShell extends StatelessWidget {
         listener: (context, state) => context
             .read<TranslateCubit>()
             .languagesChanged(from: state.from, to: state.to),
-        child: const _HomeView(),
+        child: const OptionalUpdatePrompter(child: _HomeView()),
       ),
     );
   }

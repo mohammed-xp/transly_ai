@@ -7,11 +7,11 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/decorative_blob.dart';
+import '../../../../core/widgets/transly_logo.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/splash_cubit.dart';
 import '../cubit/splash_state.dart';
 import '../widgets/splash_spinner.dart';
-import '../widgets/transly_logo.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

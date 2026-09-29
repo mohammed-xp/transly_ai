@@ -334,4 +334,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorUnknown => 'حدث خطأ ما. حاول مرة أخرى.';
+
+  @override
+  String get updateOptionalTitle => 'تحديث جديد متاح';
+
+  @override
+  String get updateNewBadge => 'جديد';
+
+  @override
+  String updateVersionLabel(String version) {
+    return 'v$version';
+  }
+
+  @override
+  String get updateWhatsNew => 'ما الجديد';
+
+  @override
+  String get updateNow => 'تحديث الآن';
+
+  @override
+  String get updateLater => 'لاحقًا';
+
+  @override
+  String get updateRequiredTitle => 'يلزم تحديث التطبيق';
+
+  @override
+  String get updateRequiredBody =>
+      'هذا الإصدار لم يعد مدعومًا. حدّث Transly للمتابعة في الترجمة.';
+
+  @override
+  String get updateYourVersion => 'إصدارك';
+
+  @override
+  String get updateLatestVersion => 'الأحدث';
+
+  @override
+  String get updateFromAppStore => 'التحديث من App Store';
+
+  @override
+  String get updateFromPlayStore => 'التحديث من Google Play';
+
+  @override
+  String get updateStoreOpenFailed => 'تعذّر فتح المتجر. حاول مرة أخرى.';
 }

@@ -1,11 +1,22 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:upgrader/upgrader.dart';
 
+import '../../features/app_update/data/datasources/app_update_data_source.dart';
+import '../../features/app_update/data/datasources/preview_app_update_data_source.dart';
+import '../../features/app_update/data/datasources/upgrader_app_update_data_source.dart';
+import '../../features/app_update/data/repos/app_update_repo_impl.dart';
+import '../../features/app_update/domain/repos/app_update_repo.dart';
+import '../../features/app_update/domain/usecases/check_for_app_update_usecase.dart';
+import '../../features/app_update/domain/usecases/mark_app_update_prompted_usecase.dart';
+import '../../features/app_update/domain/usecases/open_app_store_usecase.dart';
+import '../../features/app_update/presentation/cubit/app_update_cubit.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repos/auth_repo_impl.dart';
@@ -55,6 +66,10 @@ import '../session/session_manager.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
+/// `optional` or `required` shows the update UI with sample data in debug
+/// builds: `flutter run --dart-define=APP_UPDATE_PREVIEW=optional`.
+const String _appUpdatePreview = String.fromEnvironment('APP_UPDATE_PREVIEW');
+
 /// Requires [HiveInitializer.initHive] to have completed.
 Future<void> configureDependencies() async {
   // ── Infrastructure (networking, storage, services) ──
@@ -76,6 +91,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerSingleton<Box<UserModel>>(
     Hive.box<UserModel>(HiveInitializer.userBox),
   );
+  // The update check runs once per launch; nothing listens for the
+  // re-checks upgrader would otherwise make on every resume.
+  serviceLocator.registerLazySingleton(() => Upgrader(checkOnResume: false));
 
   // ── Session ──
   serviceLocator.registerLazySingleton<UserLocalDataSource>(
@@ -113,6 +131,13 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<PlanUsageRemoteDataSource>(
     () => PlanUsageRemoteDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<AppUpdateDataSource>(
+    () => kDebugMode && _appUpdatePreview.isNotEmpty
+        ? PreviewAppUpdateDataSource(
+            isRequired: _appUpdatePreview == 'required',
+          )
+        : UpgraderAppUpdateDataSource(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -130,6 +155,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<PlanUsageRepo>(
     () => PlanUsageRepoImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<AppUpdateRepo>(
+    () => AppUpdateRepoImpl(serviceLocator()),
   );
 
   // ── Use cases ──
@@ -162,6 +190,15 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => GetPlanUsageUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => CheckForAppUpdateUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => MarkAppUpdatePromptedUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => OpenAppStoreUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -184,6 +221,13 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerFactory(
     () => PlanUsageCubit(getPlanUsage: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => AppUpdateCubit(
+      checkForUpdate: serviceLocator(),
+      markPrompted: serviceLocator(),
+      openStore: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => TranslateCubit(

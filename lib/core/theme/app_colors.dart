@@ -58,6 +58,10 @@ abstract final class AppColors {
   static const Color toggleTrackOffLight = Color(0xFFE6E8ED);
   static const Color toggleTrackOffDark = borderDark;
 
+  // ── Bottom sheet drag handle ──
+  static const Color sheetHandleLight = Color(0xFFE6E8ED);
+  static const Color sheetHandleDark = Color(0xFF34373F);
+
   // ── Feedback ──
   static const Color error = Color(0xFFD32F2F);
 

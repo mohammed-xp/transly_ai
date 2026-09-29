@@ -49,5 +49,11 @@
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE"/>
         </intent>
+        <!-- Required on Android 11+ so upgrader's canLaunchUrl can resolve
+             the Google Play listing link behind the update buttons. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
     </queries>
 </manifest>
