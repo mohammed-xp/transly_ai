@@ -4,7 +4,7 @@ abstract final class Endpoints {
   static const String baseUrlTest = 'http://192.168.1.147:5260';
   static const String baseUrlProduction = 'https://translyai-api.jollypond-1171c5b6.uaenorth.azurecontainerapps.io';
 
-  static const String baseUrl = baseUrlTest; // kDebugMode? baseUrl : baseUrlProduction;
+  static const String baseUrl = baseUrlProduction; // kDebugMode? baseUrl : baseUrlProduction;
 
 
   static const String translations = '$baseUrl/api/v1/translations';
