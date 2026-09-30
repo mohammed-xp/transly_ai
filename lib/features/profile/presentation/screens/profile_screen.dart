@@ -18,6 +18,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
+import '../widgets/delete_account_sheet.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_identity.dart';
 import '../widgets/profile_plan_usage.dart';
@@ -156,7 +157,7 @@ class _ProfileContent extends StatelessWidget {
           const SizedBox(height: AppDimens.spaceL),
           const ProfileSignOutButton(),
           const SizedBox(height: AppDimens.spaceM),
-          _DeleteAccountButton(onTap: comingSoon),
+          _DeleteAccountButton(onTap: () => showDeleteAccountSheet(context)),
         ],
       ),
     );

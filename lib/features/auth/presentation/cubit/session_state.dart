@@ -17,3 +17,8 @@ class SessionExpired extends SessionState {
 class SessionSignedOut extends SessionState {
   const SessionSignedOut();
 }
+
+/// The user deleted their account — route back to sign-in and confirm it.
+class SessionAccountDeleted extends SessionState {
+  const SessionAccountDeleted();
+}

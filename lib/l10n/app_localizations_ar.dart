@@ -253,6 +253,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileDeleteAccount => 'حذف الحساب';
 
   @override
+  String get profileDeleteAccountTitle => 'حذف حسابك؟';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'سيتم حذف حسابك وبيانات استخدامك نهائياً، ولا يمكن التراجع عن ذلك.';
+
+  @override
+  String get profileDeleteAccountPasswordHint => 'أدخل كلمة المرور للتأكيد';
+
+  @override
+  String get profileDeleteAccountConfirm => 'حذف نهائي';
+
+  @override
+  String get profileDeleteAccountCancel => 'إلغاء';
+
+  @override
+  String get profileDeleteAccountWrongPassword => 'كلمة المرور غير صحيحة';
+
+  @override
+  String get profileDeleteAccountDone => 'تم حذف حسابك';
+
+  @override
   String get profileFreePlanTitle => 'الخطة المجانية';
 
   @override

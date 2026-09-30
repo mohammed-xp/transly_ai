@@ -19,6 +19,7 @@ class SessionCubit extends Cubit<SessionState> {
         SessionStatus.authenticated => const SessionActive(),
         SessionStatus.expired => const SessionExpired(),
         SessionStatus.signedOut => const SessionSignedOut(),
+        SessionStatus.accountDeleted => const SessionAccountDeleted(),
       });
     });
   }

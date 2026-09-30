@@ -320,6 +320,34 @@
   "@profileDeleteAccount": {
     "description": "Delete-account link at the bottom of the profile screen."
   },
+  "profileDeleteAccountTitle": "Delete your account?",
+  "@profileDeleteAccountTitle": {
+    "description": "Title of the bottom sheet that confirms deleting the account."
+  },
+  "profileDeleteAccountWarning": "This permanently deletes your account and usage data. This can't be undone.",
+  "@profileDeleteAccountWarning": {
+    "description": "Warning under the delete-account sheet title explaining what gets deleted."
+  },
+  "profileDeleteAccountPasswordHint": "Enter your password to confirm",
+  "@profileDeleteAccountPasswordHint": {
+    "description": "Hint of the password field the user fills to confirm deleting the account."
+  },
+  "profileDeleteAccountConfirm": "Delete permanently",
+  "@profileDeleteAccountConfirm": {
+    "description": "Destructive button in the delete-account sheet."
+  },
+  "profileDeleteAccountCancel": "Cancel",
+  "@profileDeleteAccountCancel": {
+    "description": "Closes the delete-account sheet without deleting anything."
+  },
+  "profileDeleteAccountWrongPassword": "Incorrect password",
+  "@profileDeleteAccountWrongPassword": {
+    "description": "Error under the password field when the delete-account password is wrong."
+  },
+  "profileDeleteAccountDone": "Your account has been deleted",
+  "@profileDeleteAccountDone": {
+    "description": "Toast on the sign-in screen after the account was deleted."
+  },
   "profileFreePlanTitle": "Free plan",
   "@profileFreePlanTitle": {
     "description": "Title of the plan card on the profile screen for users on the free plan."

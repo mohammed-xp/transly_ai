@@ -28,11 +28,17 @@ import '../../features/auth/domain/usecases/watch_session_status_usecase.dart';
 import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/profile/data/datasources/account_remote_data_source.dart';
+import '../../features/profile/data/datasources/account_remote_data_source_impl.dart';
 import '../../features/profile/data/datasources/plan_usage_remote_data_source.dart';
 import '../../features/profile/data/datasources/plan_usage_remote_data_source_impl.dart';
+import '../../features/profile/data/repos/account_repo_impl.dart';
 import '../../features/profile/data/repos/plan_usage_repo_impl.dart';
+import '../../features/profile/domain/repos/account_repo.dart';
 import '../../features/profile/domain/repos/plan_usage_repo.dart';
+import '../../features/profile/domain/usecases/delete_account_use_case.dart';
 import '../../features/profile/domain/usecases/get_plan_usage_usecase.dart';
+import '../../features/profile/presentation/cubit/delete_account_cubit.dart';
 import '../../features/profile/presentation/cubit/plan_usage_cubit.dart';
 import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/splash/presentation/cubit/splash_cubit.dart';
@@ -131,6 +137,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<PlanUsageRemoteDataSource>(
     () => PlanUsageRemoteDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<AccountRemoteDataSource>(
+    () => AccountRemoteDataSourceImpl(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<AppUpdateDataSource>(
     () => kDebugMode && _appUpdatePreview.isNotEmpty
         ? PreviewAppUpdateDataSource(
@@ -155,6 +164,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<PlanUsageRepo>(
     () => PlanUsageRepoImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<AccountRepo>(
+    () => AccountRepoImpl(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AppUpdateRepo>(
     () => AppUpdateRepoImpl(serviceLocator()),
@@ -191,6 +203,9 @@ Future<void> configureDependencies() async {
     () => GetPlanUsageUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
+    () => DeleteAccountUseCase(serviceLocator(), serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
     () => CheckForAppUpdateUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
@@ -221,6 +236,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerFactory(
     () => PlanUsageCubit(getPlanUsage: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => DeleteAccountCubit(deleteAccount: serviceLocator()),
   );
   serviceLocator.registerFactory(
     () => AppUpdateCubit(

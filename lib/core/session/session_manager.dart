@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../domain/repos/logout_repo.dart';
 
-enum SessionStatus { authenticated, expired, signedOut }
+enum SessionStatus { authenticated, expired, signedOut, accountDeleted }
 
 class SessionManager {
   SessionManager(this._logoutRepo);
@@ -24,6 +24,8 @@ class SessionManager {
   Future<void> expire() => _end(SessionStatus.expired);
 
   Future<void> signOut() => _end(SessionStatus.signedOut);
+
+  Future<void> accountDeleted() => _end(SessionStatus.accountDeleted);
 
   Future<void> _end(SessionStatus status) async {
     if (_isEnding || _status != SessionStatus.authenticated) return;

@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_back_button.dart';
+import '../../../../core/widgets/auth_text_field.dart';
 import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
@@ -19,7 +20,6 @@ import '../cubit/sign_in_state.dart';
 import '../utils/auth_l10n.dart';
 import '../widgets/auth_brand_mark.dart';
 import '../widgets/auth_divider.dart';
-import '../widgets/auth_text_field.dart';
 import '../widgets/sign_up_prompt.dart';
 import '../widgets/social_auth_row.dart';
 

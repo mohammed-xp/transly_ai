@@ -2,9 +2,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
-/// Thin abstraction over the HTTP client so data sources never depend on Dio
-/// directly and can be unit-tested with a fake. Implementations throw
-/// [DioException]; repositories map it to a `Failure` via `ErrorMapper`.
 abstract class ApiConsumer {
   const ApiConsumer();
 
@@ -30,4 +27,6 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
   });
+
+  Future<void> delete(String url, {Map<String, dynamic>? data});
 }

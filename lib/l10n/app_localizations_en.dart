@@ -256,6 +256,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileDeleteAccount => 'Delete account';
 
   @override
+  String get profileDeleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'This permanently deletes your account and usage data. This can\'t be undone.';
+
+  @override
+  String get profileDeleteAccountPasswordHint =>
+      'Enter your password to confirm';
+
+  @override
+  String get profileDeleteAccountConfirm => 'Delete permanently';
+
+  @override
+  String get profileDeleteAccountCancel => 'Cancel';
+
+  @override
+  String get profileDeleteAccountWrongPassword => 'Incorrect password';
+
+  @override
+  String get profileDeleteAccountDone => 'Your account has been deleted';
+
+  @override
   String get profileFreePlanTitle => 'Free plan';
 
   @override

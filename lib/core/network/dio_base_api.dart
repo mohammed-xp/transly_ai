@@ -161,4 +161,9 @@ class DioBaseApi extends ApiConsumer {
     );
     return result.data as Map<String, dynamic>;
   }
+
+  @override
+  Future<void> delete(String url, {Map<String, dynamic>? data}) async {
+    await _dio.delete(url, data: data);
+  }
 }

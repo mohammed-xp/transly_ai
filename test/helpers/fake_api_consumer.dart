@@ -3,12 +3,14 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:transly_ai/core/network/api_consumer.dart';
 
-/// Answers every GET with [response] and records the requested URLs.
+/// Answers every GET with [response], records the requested URLs, and records
+/// each DELETE with its body.
 class FakeApiConsumer extends ApiConsumer {
-  FakeApiConsumer(this.response);
+  FakeApiConsumer([this.response = const {}]);
 
   final Map<String, dynamic> response;
   final List<String> requestedUrls = [];
+  final List<(String, Map<String, dynamic>?)> deleteRequests = [];
 
   @override
   Future<Map<String, dynamic>> get(
@@ -39,4 +41,9 @@ class FakeApiConsumer extends ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
   }) => throw UnimplementedError();
+
+  @override
+  Future<void> delete(String url, {Map<String, dynamic>? data}) async {
+    deleteRequests.add((url, data));
+  }
 }

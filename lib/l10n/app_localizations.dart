@@ -578,6 +578,48 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get profileDeleteAccount;
 
+  /// Title of the bottom sheet that confirms deleting the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get profileDeleteAccountTitle;
+
+  /// Warning under the delete-account sheet title explaining what gets deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your account and usage data. This can\'t be undone.'**
+  String get profileDeleteAccountWarning;
+
+  /// Hint of the password field the user fills to confirm deleting the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get profileDeleteAccountPasswordHint;
+
+  /// Destructive button in the delete-account sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete permanently'**
+  String get profileDeleteAccountConfirm;
+
+  /// Closes the delete-account sheet without deleting anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileDeleteAccountCancel;
+
+  /// Error under the password field when the delete-account password is wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get profileDeleteAccountWrongPassword;
+
+  /// Toast on the sign-in screen after the account was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted'**
+  String get profileDeleteAccountDone;
+
   /// Title of the plan card on the profile screen for users on the free plan.
   ///
   /// In en, this message translates to:

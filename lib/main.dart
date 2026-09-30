@@ -42,7 +42,15 @@ class TranslyApp extends StatelessWidget {
         listener: (context, state) {
           switch (state) {
             case SessionExpired():
-              _onSessionExpired();
+              _goToSignInWithToast(
+                (l10n) => l10n.authErrorSessionExpired,
+                Icons.lock_outline_rounded,
+              );
+            case SessionAccountDeleted():
+              _goToSignInWithToast(
+                (l10n) => l10n.profileDeleteAccountDone,
+                Icons.check_rounded,
+              );
             case SessionSignedOut():
               appRouter.goNamed(AppRoutes.signInName);
             case SessionActive():
@@ -71,7 +79,10 @@ class TranslyApp extends StatelessWidget {
     );
   }
 
-  void _onSessionExpired() {
+  void _goToSignInWithToast(
+    String Function(AppLocalizations l10n) message,
+    IconData icon,
+  ) {
     appRouter.goNamed(AppRoutes.signInName);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final navContext = appRouter.routerDelegate.navigatorKey.currentContext;
@@ -80,9 +91,9 @@ class TranslyApp extends StatelessWidget {
       if (l10n == null) return;
       AppToast.show(
         navContext,
-        message: l10n.authErrorSessionExpired,
+        message: message(l10n),
         type: AppToastType.neutral,
-        icon: Icons.lock_outline_rounded,
+        icon: icon,
       );
     });
   }

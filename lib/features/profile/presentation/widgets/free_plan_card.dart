@@ -97,8 +97,6 @@ class FreePlanCard extends StatelessWidget {
   }
 }
 
-/// Holds the card's footprint while usage loads so the sections below don't
-/// jump when it arrives.
 class FreePlanCardSkeleton extends StatelessWidget {
   const FreePlanCardSkeleton({super.key});
 
