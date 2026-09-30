@@ -1,4 +1,4 @@
-package com.example.transly_ai
+package tech.mohammedadil.transly
 
 import io.flutter.embedding.android.FlutterActivity
 

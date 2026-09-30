@@ -51,18 +51,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA-jortZ9Ih4i_3SEWykPRHa7MCr-WYbTw',
-    appId: '1:507923045845:android:108c1bf8d376f4a01bf15c',
+    appId: '1:507923045845:android:b4d9daeedf9e850c1bf15c',
     messagingSenderId: '507923045845',
     projectId: 'transly-ai-e7eb3',
     storageBucket: 'transly-ai-e7eb3.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDAeAtOvD0EyJqvZMMLO-xa_NofV1WtqnQ',
-    appId: '1:507923045845:ios:1dbaa4e2a06023b11bf15c',
+    appId: '1:507923045845:ios:2d89c719e94912f31bf15c',
     messagingSenderId: '507923045845',
     projectId: 'transly-ai-e7eb3',
     storageBucket: 'transly-ai-e7eb3.firebasestorage.app',
-    iosBundleId: 'com.example.translyAi',
+    iosBundleId: 'tech.mohammedadil.transly',
   );
 }
