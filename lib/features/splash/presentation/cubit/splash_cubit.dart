@@ -10,7 +10,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   final GetCachedUserUseCase _getCachedUser;
 
-  static const Duration minSplashDuration = Duration(seconds: 5);
+  static const Duration minSplashDuration = Duration(seconds: 2);
 
   Future<void> checkAuthStatus() async {
     final result = _getCachedUser();
