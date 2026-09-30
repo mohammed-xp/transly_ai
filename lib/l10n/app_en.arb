@@ -188,6 +188,10 @@
   "@commonComingSoon": {
     "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account, profile actions)."
   },
+  "commonLinkOpenFailed": "Couldn't open the link. Please try again.",
+  "@commonLinkOpenFailed": {
+    "description": "Error toast shown when an external link can't be opened."
+  },
   "signInShowPassword": "Show password",
   "@signInShowPassword": {
     "description": "Accessibility label for the button that reveals the password field's text."
@@ -303,6 +307,14 @@
   "profileDownloadData": "Download my data",
   "@profileDownloadData": {
     "description": "Row that exports the user's data on the profile screen."
+  },
+  "profilePrivacyPolicy": "Privacy Policy",
+  "@profilePrivacyPolicy": {
+    "description": "Row in the profile privacy section that opens the hosted privacy policy."
+  },
+  "profileTermsOfService": "Terms of Service",
+  "@profileTermsOfService": {
+    "description": "Row in the profile privacy section that opens the hosted terms of service."
   },
   "profileDeleteAccount": "Delete account",
   "@profileDeleteAccount": {

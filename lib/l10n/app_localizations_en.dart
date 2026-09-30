@@ -153,6 +153,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonComingSoon => 'Coming soon';
 
   @override
+  String get commonLinkOpenFailed =>
+      'Couldn\'t open the link. Please try again.';
+
+  @override
   String get signInShowPassword => 'Show password';
 
   @override
@@ -241,6 +245,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileDownloadData => 'Download my data';
+
+  @override
+  String get profilePrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get profileTermsOfService => 'Terms of Service';
 
   @override
   String get profileDeleteAccount => 'Delete account';

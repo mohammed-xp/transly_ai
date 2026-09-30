@@ -152,6 +152,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonComingSoon => 'قريبًا';
 
   @override
+  String get commonLinkOpenFailed => 'تعذّر فتح الرابط. حاول مرة أخرى.';
+
+  @override
   String get signInShowPassword => 'إظهار كلمة المرور';
 
   @override
@@ -239,6 +242,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileDownloadData => 'تنزيل بياناتي';
+
+  @override
+  String get profilePrivacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get profileTermsOfService => 'شروط الاستخدام';
 
   @override
   String get profileDeleteAccount => 'حذف الحساب';

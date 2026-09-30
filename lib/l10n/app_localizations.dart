@@ -380,6 +380,12 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get commonComingSoon;
 
+  /// Error toast shown when an external link can't be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the link. Please try again.'**
+  String get commonLinkOpenFailed;
+
   /// Accessibility label for the button that reveals the password field's text.
   ///
   /// In en, this message translates to:
@@ -553,6 +559,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download my data'**
   String get profileDownloadData;
+
+  /// Row in the profile privacy section that opens the hosted privacy policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get profilePrivacyPolicy;
+
+  /// Row in the profile privacy section that opens the hosted terms of service.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get profileTermsOfService;
 
   /// Delete-account link at the bottom of the profile screen.
   ///

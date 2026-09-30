@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_links.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/entities/user_entity.dart';
@@ -11,6 +12,7 @@ import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/utils/open_external_url.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/plan_usage_cubit.dart';
@@ -129,15 +131,25 @@ class _ProfileContent extends StatelessWidget {
           ProfileSection(
             title: l10n.profilePrivacySection,
             rows: [
+              // ProfileRow(
+              //   label: l10n.profileSyncHistory,
+              //   trailing: Switch(value: false, onChanged: (_) => comingSoon()),
+              //   onTap: comingSoon,
+              // ),
+              // ProfileRow(
+              //   label: l10n.profileDownloadData,
+              //   trailing: const ProfileRowChevron(),
+              //   onTap: comingSoon,
+              // ),
               ProfileRow(
-                label: l10n.profileSyncHistory,
-                trailing: Switch(value: false, onChanged: (_) => comingSoon()),
-                onTap: comingSoon,
+                label: l10n.profilePrivacyPolicy,
+                trailing: const ProfileRowChevron(),
+                onTap: () => openExternalUrl(context, AppLinks.privacyPolicy),
               ),
               ProfileRow(
-                label: l10n.profileDownloadData,
+                label: l10n.profileTermsOfService,
                 trailing: const ProfileRowChevron(),
-                onTap: comingSoon,
+                onTap: () => openExternalUrl(context, AppLinks.termsOfService),
               ),
             ],
           ),
