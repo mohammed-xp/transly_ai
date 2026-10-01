@@ -5,7 +5,6 @@ import 'app_dimens.dart';
 import 'app_palette.dart';
 import 'app_typography.dart';
 
-/// App themes built from the design tokens. Source: `Transly-AI-Design-System.md`.
 abstract final class AppTheme {
   static ThemeData get light => _build(
     brightness: Brightness.light,
