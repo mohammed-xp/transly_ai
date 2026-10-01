@@ -54,7 +54,7 @@ void main() {
 
   test('emits InProgress then Failed with the failure', () async {
     final cubit = buildCubit(
-      FakeAccountRepo(const ApiResult.failure(ClientFailure(statusCode: 403))),
+      FakeAccountRepo(const ApiResult.failure(ClientFailure(statusCode: 400))),
     );
     addTearDown(cubit.close);
 
@@ -66,7 +66,7 @@ void main() {
     ]);
     expect(
       (states.last as DeleteAccountFailed).failure,
-      isA<ClientFailure>().having((f) => f.statusCode, 'statusCode', 403),
+      isA<ClientFailure>().having((f) => f.statusCode, 'statusCode', 400),
     );
   });
 
@@ -86,7 +86,7 @@ void main() {
 
   test('can retry after a failure', () async {
     final repo = FakeAccountRepo(
-      const ApiResult.failure(ClientFailure(statusCode: 403)),
+      const ApiResult.failure(ClientFailure(statusCode: 400)),
     );
     final cubit = buildCubit(repo);
     addTearDown(cubit.close);

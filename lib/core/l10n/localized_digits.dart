@@ -1,20 +1,16 @@
 import 'package:flutter/widgets.dart';
 
-import '../domain/entities/language_entity.dart';
+import '../../l10n/app_localizations.dart';
 
-const String _arabicIndicDigits = '٠١٢٣٤٥٦٧٨٩';
-
-/// [value] written in the UI language's digits. `intl` formats `ar` with
-/// Latin digits, while the design writes Arabic numbers in Arabic-Indic ones
-/// (٧٠٪, ٦ ساعات).
+/// [value] written in the UI language's digits, as listed in its ARB file.
+/// `intl` formats `ar` with Latin digits, while the design writes Arabic
+/// numbers in Arabic-Indic ones (٧٠٪, ٦ ساعات).
 String localizedDigits(BuildContext context, int value) {
   final latin = value.toString();
-  if (Localizations.localeOf(context).languageCode !=
-      LanguageEntity.arabic.code) {
-    return latin;
-  }
+  final digits = AppLocalizations.of(context)!.localeDigits.characters;
+  if (digits.length != 10) return latin;
   return latin.replaceAllMapped(
     RegExp('[0-9]'),
-    (match) => _arabicIndicDigits[int.parse(match[0]!)],
+    (match) => digits.elementAt(int.parse(match[0]!)),
   );
 }

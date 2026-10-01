@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/sheet_drag_handle.dart';
 import '../../../../core/widgets/transly_logo.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/app_update_entity.dart';
@@ -69,7 +70,7 @@ class OptionalUpdateSheet extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const _DragHandle(),
+            const SheetDragHandle(),
             const SizedBox(height: AppDimens.space2XL),
             _BadgedLogo(badge: l10n.updateNewBadge),
             const SizedBox(height: AppDimens.spaceXL),
@@ -101,24 +102,6 @@ class OptionalUpdateSheet extends StatelessWidget {
             _LaterButton(label: l10n.updateLater, onPressed: onLater),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _DragHandle extends StatelessWidget {
-  const _DragHandle();
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      width: 40,
-      height: 5,
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.sheetHandleDark : AppColors.sheetHandleLight,
-        borderRadius: BorderRadius.circular(AppDimens.radiusPill),
       ),
     );
   }

@@ -76,10 +76,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateDockCamera => 'الكاميرا';
 
   @override
-  String get languageEnglish => 'الإنجليزية';
+  String get languageNativeName => 'العربية';
 
   @override
-  String get languageArabic => 'العربية';
+  String get languageBadge => 'ع';
+
+  @override
+  String get localeDigits => '٠١٢٣٤٥٦٧٨٩';
+
+  @override
+  String languageName(String code) {
+    String _temp0 = intl.Intl.selectLogic(code, {
+      'ar': 'العربية',
+      'en': 'الإنجليزية',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get translateSourceHint => 'اكتب النص المراد ترجمته…';
@@ -226,7 +239,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileEmail => 'البريد الإلكتروني';
 
   @override
-  String get profileNativeLanguage => 'لغتي الأم';
+  String get profileAppLanguage => 'لغة التطبيق';
+
+  @override
+  String get appLanguageSheetTitle => 'لغة التطبيق';
+
+  @override
+  String get appLanguageDevice => 'لغة الجهاز';
+
+  @override
+  String get appLanguageSheetSubtitle =>
+      'لغة القوائم والأزرار فقط — لا تؤثر على لغات الترجمة.';
+
+  @override
+  String appLanguageDeviceAuto(String language) {
+    return 'تلقائي · $language';
+  }
+
+  @override
+  String get appLanguageAllLanguages => 'كل اللغات';
+
+  @override
+  String get appLanguageSave => 'حفظ';
+
+  @override
+  String get appLanguageSaveFailed => 'تعذّر تغيير اللغة. حاول مرة أخرى.';
 
   @override
   String get profileSignInMethod => 'تسجيل الدخول عبر';
@@ -365,6 +402,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorUnknown => 'حدث خطأ ما. حاول مرة أخرى.';
+
+  @override
+  String get errorEmailAlreadyRegistered =>
+      'يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.';
+
+  @override
+  String get errorQuotaExceeded => 'وصلت إلى الحد المسموح به للترجمة في خطتك.';
+
+  @override
+  String get errorTextTooLong =>
+      'النص أطول من الحد المسموح به للترجمة الواحدة في خطتك.';
+
+  @override
+  String get errorTranslationUnavailable =>
+      'الترجمة غير متاحة مؤقتًا. حاول مرة أخرى لاحقًا.';
+
+  @override
+  String get errorTranslationTimeout =>
+      'استغرقت الترجمة وقتًا أطول من اللازم. حاول مرة أخرى.';
 
   @override
   String get updateOptionalTitle => 'تحديث جديد متاح';

@@ -58,6 +58,10 @@ abstract final class AppColors {
   static const Color toggleTrackOffLight = Color(0xFFE6E8ED);
   static const Color toggleTrackOffDark = borderDark;
 
+  // ── Radio (unselected ring) ──
+  static const Color radioRingLight = Color(0xFFD5D8DF);
+  static const Color radioRingDark = Color(0xFF4A4E57);
+
   // ── Bottom sheet drag handle ──
   static const Color sheetHandleLight = Color(0xFFE6E8ED);
   static const Color sheetHandleDark = Color(0xFF34373F);

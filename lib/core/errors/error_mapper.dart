@@ -21,38 +21,51 @@ abstract final class ErrorMapper {
     }
 
     final status = e.response?.statusCode;
-    final data = e.response?.data;
+    final error = _parseError(e.response?.data);
 
     return switch (status) {
-      401 => const UnauthorizedException(),
-      404 => const NotFoundException(),
-      422 when data is Map => ValidationException(
-        ErrorModel.fromJson(Map<String, dynamic>.from(data)),
-      ),
-      429 || 408 => TooManyRequestsException(statusCode: status),
+      401 => UnauthorizedException(error: error),
+      404 => NotFoundException(error: error),
+      422 when error != null => ValidationException(error),
+      429 || 408 => TooManyRequestsException(statusCode: status, error: error),
       final int s when s >= 400 && s < 500 => ClientException(
         statusCode: s,
-        error: data is Map
-            ? ErrorModel.fromJson(Map<String, dynamic>.from(data))
-            : null,
+        error: error,
       ),
-      _ => ServerException(statusCode: status),
+      _ => ServerException(statusCode: status, error: error),
     };
+  }
+
+  /// A body that isn't a JSON object, or doesn't parse, just means there is
+  /// no backend error to show.
+  static ErrorModel? _parseError(Object? data) {
+    if (data is! Map) return null;
+    try {
+      return ErrorModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (_) {
+      return null;
+    }
   }
 
   static Failure mapExceptionToFailure(AppException e) => switch (e) {
     NetworkException() => const NetworkFailure(),
-    UnauthorizedException() => const UnauthorizedFailure(),
+    UnauthorizedException(:final error) => UnauthorizedFailure(
+      error: error?.toEntity(),
+    ),
     ValidationException(:final error) => ValidationFailure(error.toEntity()),
-    ServerException(:final statusCode) => ServerFailure(statusCode: statusCode),
-    NotFoundException() => const NotFoundFailure(),
+    ServerException(:final statusCode, :final error) => ServerFailure(
+      statusCode: statusCode,
+      error: error?.toEntity(),
+    ),
+    NotFoundException(:final error) => NotFoundFailure(
+      error: error?.toEntity(),
+    ),
     ClientException(:final statusCode, :final error) => ClientFailure(
       statusCode: statusCode,
       error: error?.toEntity(),
     ),
-    TooManyRequestsException(:final statusCode) => TooManyRequestsFailure(
-      statusCode: statusCode,
-    ),
+    TooManyRequestsException(:final statusCode, :final error) =>
+      TooManyRequestsFailure(statusCode: statusCode, error: error?.toEntity()),
     ParsingException() => const FormatFailure(),
     UnsupportedLanguageException() => const UnsupportedLanguageFailure(),
     UnknownException() => const UnknownFailure(),

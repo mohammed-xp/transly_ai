@@ -230,17 +230,29 @@ abstract class AppLocalizations {
   /// **'Camera'**
   String get translateDockCamera;
 
-  /// Display name of the English language.
+  /// This file's language written in itself. Shown in the app-language picker, whatever the UI language.
   ///
   /// In en, this message translates to:
   /// **'English'**
-  String get languageEnglish;
+  String get languageNativeName;
 
-  /// Display name of the Arabic language.
+  /// Short mark for this file's language on its badge in the app-language picker: one letter or a two-letter code.
   ///
   /// In en, this message translates to:
-  /// **'Arabic'**
-  String get languageArabic;
+  /// **'EN'**
+  String get languageBadge;
+
+  /// The digits 0 to 9, in order, as this language writes them. Exactly 10 characters.
+  ///
+  /// In en, this message translates to:
+  /// **'0123456789'**
+  String get localeDigits;
+
+  /// Name of the language with ISO code {code}, in this file's language. Add a case for every app language. Leave other empty: it means no translated name, and the app falls back to another name.
+  ///
+  /// In en, this message translates to:
+  /// **'{code, select, ar{Arabic} en{English} other{}}'**
+  String languageName(String code);
 
   /// Placeholder in the source text field before the user types.
   ///
@@ -524,11 +536,53 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get profileEmail;
 
-  /// Label of the native-language row on the profile screen.
+  /// Label of the row on the profile screen that opens the app-language picker.
   ///
   /// In en, this message translates to:
-  /// **'Native language'**
-  String get profileNativeLanguage;
+  /// **'App language'**
+  String get profileAppLanguage;
+
+  /// Title of the bottom sheet for picking the language the app is shown in.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get appLanguageSheetTitle;
+
+  /// App-language option that follows the phone's language setting. Also shown as the row value when selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Device language'**
+  String get appLanguageDevice;
+
+  /// Explanation under the app-language sheet title.
+  ///
+  /// In en, this message translates to:
+  /// **'Menus and buttons only — your translation languages stay the same.'**
+  String get appLanguageSheetSubtitle;
+
+  /// Subtitle of the device-language option. {language} is the language the device setting resolves to.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic · {language}'**
+  String appLanguageDeviceAuto(String language);
+
+  /// Caption above the list of languages in the app-language sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'All languages'**
+  String get appLanguageAllLanguages;
+
+  /// Button that applies the language picked in the app-language sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get appLanguageSave;
+
+  /// Toast shown when the chosen app language can't be saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the language. Please try again.'**
+  String get appLanguageSaveFailed;
 
   /// Label of the row showing how the user signed in.
   ///
@@ -745,6 +799,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get errorUnknown;
+
+  /// Backend error auth.email_already_registered: sign-up with an email that already has an account.
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists.'**
+  String get errorEmailAlreadyRegistered;
+
+  /// Backend error translation.quota_exceeded: the user has no characters left in their plan's quota.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached your plan\'s translation limit.'**
+  String get errorQuotaExceeded;
+
+  /// Backend error translation.text_too_long: the text exceeds the per-request character limit of the user's plan.
+  ///
+  /// In en, this message translates to:
+  /// **'This text is longer than your plan allows in one translation.'**
+  String get errorTextTooLong;
+
+  /// Backend error translation.service_unavailable: the translation provider is rate-limited or down.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation is temporarily unavailable. Please try again later.'**
+  String get errorTranslationUnavailable;
+
+  /// Backend error translation.timeout: the translation provider didn't answer in time.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation took too long. Please try again.'**
+  String get errorTranslationTimeout;
 
   /// Title of the optional-update bottom sheet.
   ///

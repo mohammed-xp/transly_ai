@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/di/service_locator.dart';
 import 'package:transly_ai/core/domain/usecases/get_cached_user_use_case.dart';
@@ -7,6 +8,9 @@ import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/session/session_manager.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
 import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
+import 'package:transly_ai/features/app_language/domain/usecases/get_app_language_usecase.dart';
+import 'package:transly_ai/features/app_language/domain/usecases/set_app_language_usecase.dart';
+import 'package:transly_ai/features/app_language/presentation/cubit/app_language_cubit.dart';
 import 'package:transly_ai/features/profile/domain/usecases/delete_account_use_case.dart';
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import 'package:transly_ai/features/profile/presentation/cubit/delete_account_cubit.dart';
@@ -16,6 +20,7 @@ import 'package:transly_ai/features/profile/presentation/screens/profile_screen.
 import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_account_repo.dart';
+import '../../../../helpers/fake_app_language_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
@@ -25,7 +30,7 @@ void main() {
 
   setUp(() {
     accountRepo = FakeAccountRepo(
-      const ApiResult.failure(ClientFailure(statusCode: 403)),
+      const ApiResult.failure(ClientFailure(statusCode: 400)),
     );
     serviceLocator
       ..registerFactory(
@@ -57,14 +62,21 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
 
+    final languageRepo = FakeAppLanguageRepo();
     await tester.pumpWidget(
-      MaterialApp(
-        theme: ThemeData(extensions: const [AppPalette.light]),
-        locale: locale,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        builder: (context, child) => AppToastScope(child: child!),
-        home: const ProfileScreen(),
+      BlocProvider(
+        create: (_) => AppLanguageCubit(
+          getLanguage: GetAppLanguageUseCase(languageRepo),
+          setLanguage: SetAppLanguageUseCase(languageRepo),
+        ),
+        child: MaterialApp(
+          theme: ThemeData(extensions: const [AppPalette.light]),
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) => AppToastScope(child: child!),
+          home: const ProfileScreen(),
+        ),
       ),
     );
     await tester.pump();

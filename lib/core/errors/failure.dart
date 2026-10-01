@@ -13,11 +13,11 @@ class NetworkFailure extends Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({super.statusCode});
+  const ServerFailure({super.statusCode, super.error});
 }
 
 class UnauthorizedFailure extends Failure {
-  const UnauthorizedFailure();
+  const UnauthorizedFailure({super.error});
 }
 
 class ValidationFailure extends Failure {
@@ -25,17 +25,17 @@ class ValidationFailure extends Failure {
 }
 
 class NotFoundFailure extends Failure {
-  const NotFoundFailure();
+  const NotFoundFailure({super.error});
 }
 
-/// Generic 4xx (400, 409, ...) — carries the backend message when present.
+/// Generic 4xx (400, 409, ...) — carries the backend error when present.
 class ClientFailure extends Failure {
   const ClientFailure({super.statusCode, super.error});
 }
 
 /// 429 Too Many Requests or 408 Request Timeout.
 class TooManyRequestsFailure extends Failure {
-  const TooManyRequestsFailure({super.statusCode});
+  const TooManyRequestsFailure({super.statusCode, super.error});
 }
 
 class FormatFailure extends Failure {

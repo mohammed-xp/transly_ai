@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transly_ai/core/domain/entities/backend_error_code.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/network/endpoints.dart';
 import 'package:transly_ai/core/result/api_result.dart';
@@ -18,12 +19,16 @@ class _ThrowingDataSource implements AccountRemoteDataSource {
   Future<void> deleteAccount({required String password}) async => throw error;
 }
 
-DioException _badResponse(int statusCode) {
+DioException _badResponse(int statusCode, {Object? data}) {
   final request = RequestOptions(path: Endpoints.deleteAccount);
   return DioException(
     requestOptions: request,
     type: DioExceptionType.badResponse,
-    response: Response(requestOptions: request, statusCode: statusCode),
+    response: Response(
+      requestOptions: request,
+      statusCode: statusCode,
+      data: data,
+    ),
   );
 }
 
@@ -41,15 +46,23 @@ void main() {
   });
 
   test(
-    'maps a 403 (wrong password) to ClientFailure with the status',
+    'maps a wrong-password 400 to ClientFailure with its error key',
     () async {
-      final repo = AccountRepoImpl(_ThrowingDataSource(_badResponse(403)));
+      final repo = AccountRepoImpl(
+        _ThrowingDataSource(
+          _badResponse(
+            400,
+            data: {'status': 400, 'detail': 'account.wrong_password'},
+          ),
+        ),
+      );
 
       final result = await repo.deleteAccount(password: 'wrong');
 
       final failure = (result as ApiFailure<void>).failure;
       expect(failure, isA<ClientFailure>());
-      expect(failure.statusCode, 403);
+      expect(failure.statusCode, 400);
+      expect(failure.error?.code, BackendErrorCode.wrongPassword);
     },
   );
 

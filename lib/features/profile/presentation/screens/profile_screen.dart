@@ -4,17 +4,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_links.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/l10n/failure_message.dart';
-import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../app_language/domain/entities/app_language.dart';
+import '../../../app_language/presentation/cubit/app_language_cubit.dart';
+import '../../../app_language/presentation/utils/app_language_l10n.dart';
+import '../../../app_language/presentation/widgets/app_language_sheet.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
@@ -116,12 +118,7 @@ class _ProfileContent extends StatelessWidget {
                 value: user.email,
                 valueDirection: TextDirection.ltr,
               ),
-              ProfileRow(
-                label: l10n.profileNativeLanguage,
-                value: languageLabel(context, _appLanguage(context)),
-                trailing: const ProfileRowChevron(),
-                onTap: comingSoon,
-              ),
+              const _AppLanguageRow(),
               ProfileRow(
                 label: l10n.profileSignInMethod,
                 value: l10n.profileSignInMethodEmail,
@@ -162,14 +159,21 @@ class _ProfileContent extends StatelessWidget {
       ),
     );
   }
+}
 
-  /// No native-language preference is stored yet, so the row shows the
-  /// language the app is currently displayed in.
-  static LanguageEntity _appLanguage(BuildContext context) {
-    return Localizations.localeOf(context).languageCode ==
-            LanguageEntity.arabic.code
-        ? LanguageEntity.arabic
-        : LanguageEntity.english;
+class _AppLanguageRow extends StatelessWidget {
+  const _AppLanguageRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppLanguageCubit, AppLanguage>(
+      builder: (context, language) => ProfileRow(
+        label: AppLocalizations.of(context)!.profileAppLanguage,
+        value: appLanguageLabel(context, language),
+        trailing: const ProfileRowChevron(),
+        onTap: () => showAppLanguageSheet(context),
+      ),
+    );
   }
 }
 

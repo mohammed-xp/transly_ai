@@ -76,10 +76,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateDockCamera => 'Camera';
 
   @override
-  String get languageEnglish => 'English';
+  String get languageNativeName => 'English';
 
   @override
-  String get languageArabic => 'Arabic';
+  String get languageBadge => 'EN';
+
+  @override
+  String get localeDigits => '0123456789';
+
+  @override
+  String languageName(String code) {
+    String _temp0 = intl.Intl.selectLogic(code, {
+      'ar': 'Arabic',
+      'en': 'English',
+      'other': '',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get translateSourceHint => 'Type text to translate…';
@@ -229,7 +242,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileEmail => 'Email';
 
   @override
-  String get profileNativeLanguage => 'Native language';
+  String get profileAppLanguage => 'App language';
+
+  @override
+  String get appLanguageSheetTitle => 'App language';
+
+  @override
+  String get appLanguageDevice => 'Device language';
+
+  @override
+  String get appLanguageSheetSubtitle =>
+      'Menus and buttons only — your translation languages stay the same.';
+
+  @override
+  String appLanguageDeviceAuto(String language) {
+    return 'Automatic · $language';
+  }
+
+  @override
+  String get appLanguageAllLanguages => 'All languages';
+
+  @override
+  String get appLanguageSave => 'Save';
+
+  @override
+  String get appLanguageSaveFailed =>
+      'Couldn\'t change the language. Please try again.';
 
   @override
   String get profileSignInMethod => 'Signed in with';
@@ -369,6 +407,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get errorEmailAlreadyRegistered =>
+      'An account with this email already exists.';
+
+  @override
+  String get errorQuotaExceeded =>
+      'You\'ve reached your plan\'s translation limit.';
+
+  @override
+  String get errorTextTooLong =>
+      'This text is longer than your plan allows in one translation.';
+
+  @override
+  String get errorTranslationUnavailable =>
+      'Translation is temporarily unavailable. Please try again later.';
+
+  @override
+  String get errorTranslationTimeout =>
+      'Translation took too long. Please try again.';
 
   @override
   String get updateOptionalTitle => 'A new update is available';

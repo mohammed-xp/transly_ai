@@ -11,6 +11,9 @@ import 'core/router/app_routes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/toast/app_toast.dart';
 import 'core/widgets/toast/app_toast_scope.dart';
+import 'features/app_language/domain/entities/app_language.dart';
+import 'features/app_language/presentation/cubit/app_language_cubit.dart';
+import 'features/app_language/presentation/utils/app_language_l10n.dart';
 import 'features/app_update/presentation/cubit/app_update_cubit.dart';
 import 'features/app_update/presentation/widgets/app_update_gate.dart';
 import 'features/auth/presentation/cubit/session_cubit.dart';
@@ -34,6 +37,7 @@ class TranslyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => serviceLocator<SessionCubit>()),
+        BlocProvider(create: (_) => serviceLocator<AppLanguageCubit>()),
         BlocProvider(
           create: (_) => serviceLocator<AppUpdateCubit>()..checkForUpdate(),
         ),
@@ -57,23 +61,28 @@ class TranslyApp extends StatelessWidget {
               break;
           }
         },
-        child: MaterialApp.router(
-          title: 'Transly AI',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: ThemeMode.system,
-          routerConfig: appRouter,
-          builder: (context, child) => AppToastScope(
-            child: AppUpdateGate(child: child ?? const SizedBox.shrink()),
+        // The language drives the whole app, so this is the one builder that
+        // sits above MaterialApp.
+        child: BlocBuilder<AppLanguageCubit, AppLanguage>(
+          builder: (context, language) => MaterialApp.router(
+            title: 'Transly AI',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: ThemeMode.system,
+            routerConfig: appRouter,
+            builder: (context, child) => AppToastScope(
+              child: AppUpdateGate(child: child ?? const SizedBox.shrink()),
+            ),
+            locale: appLanguageLocale(language),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
           ),
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
         ),
       ),
     );

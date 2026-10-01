@@ -39,7 +39,7 @@ void main() {
 
   test('keeps the session and local data when the deletion fails', () async {
     final useCase = DeleteAccountUseCase(
-      FakeAccountRepo(const ApiResult.failure(ClientFailure(statusCode: 403))),
+      FakeAccountRepo(const ApiResult.failure(ClientFailure(statusCode: 400))),
       session,
     );
 

@@ -8,11 +8,6 @@ import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../widgets/onboarding_logo.dart';
 
-/// Branded welcome screen (design `01 · Welcome`, light + dark). A single hero:
-/// floating language chips, the logo, bilingual wordmark, subtitles, a primary
-/// call-to-action and an (inert-for-now) sign-in link.
-///
-/// Presentation-only — no cubit, since there is no state or business logic yet.
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 

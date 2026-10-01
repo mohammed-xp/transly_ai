@@ -8,6 +8,13 @@ import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:upgrader/upgrader.dart';
 
+import '../../features/app_language/data/datasources/app_language_local_data_source.dart';
+import '../../features/app_language/data/datasources/app_language_local_data_source_impl.dart';
+import '../../features/app_language/data/repos/app_language_repo_impl.dart';
+import '../../features/app_language/domain/repos/app_language_repo.dart';
+import '../../features/app_language/domain/usecases/get_app_language_usecase.dart';
+import '../../features/app_language/domain/usecases/set_app_language_usecase.dart';
+import '../../features/app_language/presentation/cubit/app_language_cubit.dart';
 import '../../features/app_update/data/datasources/app_update_data_source.dart';
 import '../../features/app_update/data/datasources/preview_app_update_data_source.dart';
 import '../../features/app_update/data/datasources/upgrader_app_update_data_source.dart';
@@ -53,6 +60,7 @@ import '../../features/translate/domain/usecases/speak_text_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
+import '../../l10n/app_localizations.dart';
 import '../data/datasources/user_local_data_source.dart';
 import '../data/datasources/user_local_data_source_impl.dart';
 import '../data/models/user_model.dart';
@@ -96,6 +104,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(() => TokenStorage(serviceLocator()));
   serviceLocator.registerSingleton<Box<UserModel>>(
     Hive.box<UserModel>(HiveInitializer.userBox),
+  );
+  serviceLocator.registerSingleton<Box<String>>(
+    Hive.box<String>(HiveInitializer.settingsBox),
   );
   // The update check runs once per launch; nothing listens for the
   // re-checks upgrader would otherwise make on every resume.
@@ -147,6 +158,9 @@ Future<void> configureDependencies() async {
           )
         : UpgraderAppUpdateDataSource(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<AppLanguageLocalDataSource>(
+    () => AppLanguageLocalDataSourceImpl(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -170,6 +184,15 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<AppUpdateRepo>(
     () => AppUpdateRepoImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<AppLanguageRepo>(
+    () => AppLanguageRepoImpl(
+      serviceLocator(),
+      supportedCodes: {
+        for (final locale in AppLocalizations.supportedLocales)
+          locale.languageCode,
+      },
+    ),
   );
 
   // ── Use cases ──
@@ -214,6 +237,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => OpenAppStoreUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetAppLanguageUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SetAppLanguageUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -245,6 +274,12 @@ Future<void> configureDependencies() async {
       checkForUpdate: serviceLocator(),
       markPrompted: serviceLocator(),
       openStore: serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactory(
+    () => AppLanguageCubit(
+      getLanguage: serviceLocator(),
+      setLanguage: serviceLocator(),
     ),
   );
   serviceLocator.registerFactory(

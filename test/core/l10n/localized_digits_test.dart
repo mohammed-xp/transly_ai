@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/l10n/localized_digits.dart';
+import 'package:transly_ai/l10n/app_localizations.dart';
 
 void main() {
   Future<String> digitsIn(WidgetTester tester, Locale locale, int value) async {
@@ -8,7 +9,7 @@ void main() {
     await tester.pumpWidget(
       Localizations(
         locale: locale,
-        delegates: const [DefaultWidgetsLocalizations.delegate],
+        delegates: AppLocalizations.localizationsDelegates,
         child: Builder(
           builder: (context) {
             result = localizedDigits(context, value);

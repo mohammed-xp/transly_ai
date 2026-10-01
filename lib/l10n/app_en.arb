@@ -88,13 +88,26 @@
   "@translateDockCamera": {
     "description": "Camera input mode in the bottom input dock."
   },
-  "languageEnglish": "English",
-  "@languageEnglish": {
-    "description": "Display name of the English language."
+  "languageNativeName": "English",
+  "@languageNativeName": {
+    "description": "This file's language written in itself. Shown in the app-language picker, whatever the UI language."
   },
-  "languageArabic": "Arabic",
-  "@languageArabic": {
-    "description": "Display name of the Arabic language."
+  "languageBadge": "EN",
+  "@languageBadge": {
+    "description": "Short mark for this file's language on its badge in the app-language picker: one letter or a two-letter code."
+  },
+  "localeDigits": "0123456789",
+  "@localeDigits": {
+    "description": "The digits 0 to 9, in order, as this language writes them. Exactly 10 characters."
+  },
+  "languageName": "{code, select, ar{Arabic} en{English} other{}}",
+  "@languageName": {
+    "description": "Name of the language with ISO code {code}, in this file's language. Add a case for every app language. Leave other empty: it means no translated name, and the app falls back to another name.",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   },
   "translateSourceHint": "Type text to translate…",
   "@translateSourceHint": {
@@ -284,9 +297,43 @@
   "@profileEmail": {
     "description": "Label of the email row on the profile screen."
   },
-  "profileNativeLanguage": "Native language",
-  "@profileNativeLanguage": {
-    "description": "Label of the native-language row on the profile screen."
+  "profileAppLanguage": "App language",
+  "@profileAppLanguage": {
+    "description": "Label of the row on the profile screen that opens the app-language picker."
+  },
+  "appLanguageSheetTitle": "App language",
+  "@appLanguageSheetTitle": {
+    "description": "Title of the bottom sheet for picking the language the app is shown in."
+  },
+  "appLanguageDevice": "Device language",
+  "@appLanguageDevice": {
+    "description": "App-language option that follows the phone's language setting. Also shown as the row value when selected."
+  },
+  "appLanguageSheetSubtitle": "Menus and buttons only — your translation languages stay the same.",
+  "@appLanguageSheetSubtitle": {
+    "description": "Explanation under the app-language sheet title."
+  },
+  "appLanguageDeviceAuto": "Automatic · {language}",
+  "@appLanguageDeviceAuto": {
+    "description": "Subtitle of the device-language option. {language} is the language the device setting resolves to.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Arabic"
+      }
+    }
+  },
+  "appLanguageAllLanguages": "All languages",
+  "@appLanguageAllLanguages": {
+    "description": "Caption above the list of languages in the app-language sheet."
+  },
+  "appLanguageSave": "Save",
+  "@appLanguageSave": {
+    "description": "Button that applies the language picked in the app-language sheet."
+  },
+  "appLanguageSaveFailed": "Couldn't change the language. Please try again.",
+  "@appLanguageSaveFailed": {
+    "description": "Toast shown when the chosen app language can't be saved."
   },
   "profileSignInMethod": "Signed in with",
   "@profileSignInMethod": {
@@ -461,6 +508,26 @@
   "errorUnknown": "Something went wrong. Please try again.",
   "@errorUnknown": {
     "description": "Fallback for any unexpected error."
+  },
+  "errorEmailAlreadyRegistered": "An account with this email already exists.",
+  "@errorEmailAlreadyRegistered": {
+    "description": "Backend error auth.email_already_registered: sign-up with an email that already has an account."
+  },
+  "errorQuotaExceeded": "You've reached your plan's translation limit.",
+  "@errorQuotaExceeded": {
+    "description": "Backend error translation.quota_exceeded: the user has no characters left in their plan's quota."
+  },
+  "errorTextTooLong": "This text is longer than your plan allows in one translation.",
+  "@errorTextTooLong": {
+    "description": "Backend error translation.text_too_long: the text exceeds the per-request character limit of the user's plan."
+  },
+  "errorTranslationUnavailable": "Translation is temporarily unavailable. Please try again later.",
+  "@errorTranslationUnavailable": {
+    "description": "Backend error translation.service_unavailable: the translation provider is rate-limited or down."
+  },
+  "errorTranslationTimeout": "Translation took too long. Please try again.",
+  "@errorTranslationTimeout": {
+    "description": "Backend error translation.timeout: the translation provider didn't answer in time."
   },
   "updateOptionalTitle": "A new update is available",
   "@updateOptionalTitle": {

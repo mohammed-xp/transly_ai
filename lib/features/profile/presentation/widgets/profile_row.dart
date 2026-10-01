@@ -51,10 +51,11 @@ class ProfileRow extends StatelessWidget {
               if (value == null)
                 Expanded(child: labelText)
               else ...[
-                Flexible(flex: 2, child: labelText),
+                // Flexible(flex: 2, child: labelText),
+                labelText,
                 const SizedBox(width: AppDimens.spaceM),
                 Expanded(
-                  flex: 3,
+                  // flex: 3,
                   child: Align(
                     alignment: AlignmentDirectional.centerEnd,
                     child: Text(
