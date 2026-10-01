@@ -4,10 +4,6 @@ import '../../../../core/errors/app_exceptions.dart';
 import '../models/app_update_model.dart';
 import 'app_update_data_source.dart';
 
-/// Reads the store listing through `upgrader`: the latest version, its
-/// release notes, and the minimum supported version from the listing
-/// description (`[Minimum supported app version: x.y.z]` on Google Play,
-/// `[:mav: x.y.z]` on the App Store).
 class UpgraderAppUpdateDataSource implements AppUpdateDataSource {
   UpgraderAppUpdateDataSource(this._upgrader);
 
