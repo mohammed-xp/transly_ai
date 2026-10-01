@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme/app_dimens.dart';
 import '../theme/app_palette.dart';
@@ -19,6 +20,8 @@ class AuthTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.autofillHints,
+    this.maxLength,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final String label;
@@ -34,6 +37,8 @@ class AuthTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onFieldSubmitted;
   final Iterable<String>? autofillHints;
+  final int? maxLength;
+  final TextCapitalization textCapitalization;
 
   static const double _fieldHeight = 54;
   static const double _radius = AppDimens.radiusInput;
@@ -126,6 +131,10 @@ class _AuthTextFieldState extends State<AuthTextField> {
                   keyboardType: widget.keyboardType,
                   textInputAction: widget.textInputAction,
                   autofillHints: widget.autofillHints,
+                  textCapitalization: widget.textCapitalization,
+                  inputFormatters: widget.maxLength == null
+                      ? null
+                      : [LengthLimitingTextInputFormatter(widget.maxLength)],
                   onSubmitted: widget.onFieldSubmitted,
                   style: textTheme.bodyMedium?.copyWith(color: c.ink),
                   decoration: InputDecoration(

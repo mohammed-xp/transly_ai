@@ -215,6 +215,76 @@ class AppLocalizationsAr extends AppLocalizations {
       'انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.';
 
   @override
+  String get signUpTitle => 'أنشئ حسابك';
+
+  @override
+  String get signUpSubtitle => 'ابدأ مجانًا واحفظ ترجماتك على كل أجهزتك.';
+
+  @override
+  String get signUpNameLabel => 'الاسم الكامل';
+
+  @override
+  String get signUpNameHint => 'أحمد سالم';
+
+  @override
+  String get signUpPasswordHint => '8 أحرف على الأقل';
+
+  @override
+  String get signUpPasswordStrengthWeak => 'ضعيفة';
+
+  @override
+  String get signUpPasswordStrengthFair => 'متوسطة';
+
+  @override
+  String get signUpPasswordStrengthStrong => 'قوية';
+
+  @override
+  String get signUpPasswordStrengthVeryStrong => 'قوية جدًا';
+
+  @override
+  String signUpPasswordStrengthLabel(String strength) {
+    return 'قوة كلمة المرور: $strength';
+  }
+
+  @override
+  String get signUpAgreePrefix => 'أوافق على ';
+
+  @override
+  String get signUpAgreeAnd => ' و';
+
+  @override
+  String get signUpTermsRequired =>
+      'يجب الموافقة على شروط الاستخدام وسياسة الخصوصية.';
+
+  @override
+  String get signUpSubmit => 'إنشاء حساب';
+
+  @override
+  String get signUpOrRegisterWith => 'أو سجّل باستخدام';
+
+  @override
+  String get signUpHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get signUpSignIn => 'تسجيل الدخول';
+
+  @override
+  String get signUpAccountCreated => 'تم إنشاء حسابك. سجّل دخولك للمتابعة.';
+
+  @override
+  String get signUpErrorNameRequired => 'أدخل اسمك.';
+
+  @override
+  String get signUpErrorNameTooShort => 'يجب ألا يقل الاسم عن 3 أحرف.';
+
+  @override
+  String get signUpErrorNameTooLong => 'يجب ألا يزيد الاسم عن 50 حرفًا.';
+
+  @override
+  String get signUpErrorPasswordTooShort =>
+      'يجب ألا تقل كلمة المرور عن 8 أحرف.';
+
+  @override
   String get authSignOut => 'تسجيل الخروج';
 
   @override

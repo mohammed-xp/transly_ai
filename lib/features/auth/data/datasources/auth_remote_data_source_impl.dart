@@ -19,4 +19,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
     return UserLoginModel.fromJson(data['data']);
   }
+
+  @override
+  Future<void> signUpWithEmail({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    await _apiConsumer.post(
+      Endpoints.register,
+      data: {'email': email, 'userName': name, 'password': password},
+    );
+  }
 }

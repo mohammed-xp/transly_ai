@@ -6,4 +6,10 @@ abstract class AuthRepo {
     required String email,
     required String password,
   });
+
+  Future<ApiResult<void>> signUpWithEmail({
+    required String name,
+    required String email,
+    required String password,
+  });
 }

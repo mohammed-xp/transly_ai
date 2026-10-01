@@ -28,12 +28,16 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repos/auth_repo_impl.dart';
 import '../../features/auth/domain/repos/auth_repo.dart';
+import '../../features/auth/domain/usecases/evaluate_password_strength_usecase.dart';
 import '../../features/auth/domain/usecases/sign_in_with_email_usecase.dart';
 import '../../features/auth/domain/usecases/sign_out_usecase.dart';
+import '../../features/auth/domain/usecases/sign_up_with_email_usecase.dart';
 import '../../features/auth/domain/usecases/validate_sign_in_form_usecase.dart';
+import '../../features/auth/domain/usecases/validate_sign_up_form_usecase.dart';
 import '../../features/auth/domain/usecases/watch_session_status_usecase.dart';
 import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
+import '../../features/auth/presentation/cubit/sign_up_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../../features/profile/data/datasources/account_remote_data_source.dart';
 import '../../features/profile/data/datasources/account_remote_data_source_impl.dart';
@@ -216,6 +220,11 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton(ValidateSignInFormUseCase.new);
   serviceLocator.registerLazySingleton(
+    () => SignUpWithEmailUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(ValidateSignUpFormUseCase.new);
+  serviceLocator.registerLazySingleton(EvaluatePasswordStrengthUseCase.new);
+  serviceLocator.registerLazySingleton(
     () => WatchSessionStatusUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(() => SignOutUseCase(serviceLocator()));
@@ -256,6 +265,13 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerFactory(
     () => SignInCubit(signIn: serviceLocator(), validate: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => SignUpCubit(
+      signUp: serviceLocator(),
+      validate: serviceLocator(),
+      evaluatePasswordStrength: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => HomeCubit(getCachedUser: serviceLocator()),

@@ -386,7 +386,7 @@ abstract class AppLocalizations {
   /// **'Create account'**
   String get signInCreateAccount;
 
-  /// Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account, profile actions).
+  /// Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, profile actions).
   ///
   /// In en, this message translates to:
   /// **'Coming soon'**
@@ -487,6 +487,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your session has expired. Please sign in again.'**
   String get authErrorSessionExpired;
+
+  /// Headline on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
+  String get signUpTitle;
+
+  /// Subtitle under the headline on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Start free and save your translations on all your devices.'**
+  String get signUpSubtitle;
+
+  /// Label above the name field on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get signUpNameLabel;
+
+  /// Placeholder in the name field on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Ahmed Salem'**
+  String get signUpNameHint;
+
+  /// Placeholder in the password field on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get signUpPasswordHint;
+
+  /// Password strength meter label for a weak password.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get signUpPasswordStrengthWeak;
+
+  /// Password strength meter label for a fair password.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get signUpPasswordStrengthFair;
+
+  /// Password strength meter label for a strong password.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get signUpPasswordStrengthStrong;
+
+  /// Password strength meter label for a very strong password.
+  ///
+  /// In en, this message translates to:
+  /// **'Very strong'**
+  String get signUpPasswordStrengthVeryStrong;
+
+  /// Accessibility label of the password strength meter.
+  ///
+  /// In en, this message translates to:
+  /// **'Password strength: {strength}'**
+  String signUpPasswordStrengthLabel(String strength);
+
+  /// Text before the Terms of Service link in the sign-up agreement line (keep the trailing space if the language needs one).
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get signUpAgreePrefix;
+
+  /// Text between the Terms of Service and Privacy Policy links in the sign-up agreement line.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get signUpAgreeAnd;
+
+  /// Shown under the agreement checkbox when the user submits without accepting.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the Terms of Service and Privacy Policy.'**
+  String get signUpTermsRequired;
+
+  /// Primary submit button on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get signUpSubmit;
+
+  /// Divider label above the social buttons on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Or sign up with'**
+  String get signUpOrRegisterWith;
+
+  /// Prompt preceding the sign-in link on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get signUpHaveAccount;
+
+  /// Sign-in link on the sign-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signUpSignIn;
+
+  /// Toast shown on the sign-in screen after the account is created.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created. Sign in to continue.'**
+  String get signUpAccountCreated;
+
+  /// Shown under the name field when it is left empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name.'**
+  String get signUpErrorNameRequired;
+
+  /// Shown under the name field when it is too short.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be at least 3 characters.'**
+  String get signUpErrorNameTooShort;
+
+  /// Shown under the name field when it is too long.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be 50 characters or fewer.'**
+  String get signUpErrorNameTooLong;
+
+  /// Shown under the password field on the sign-up screen when it is too short.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters.'**
+  String get signUpErrorPasswordTooShort;
 
   /// Label of the sign-out button on the profile screen.
   ///

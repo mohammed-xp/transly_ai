@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_palette.dart';
-import '../../../../l10n/app_localizations.dart';
 
-/// "Or continue with" divider above the social sign-in row (design `01b ·
-/// Sign In`).
+/// "Or continue with" divider above the social auth row.
 class AuthDivider extends StatelessWidget {
-  const AuthDivider({super.key});
+  const AuthDivider({super.key, required this.label});
+
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class AuthDivider extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Text(
-              AppLocalizations.of(context)!.signInOrContinueWith,
+              label,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: textTheme.bodySmall?.copyWith(color: c.textMuted),

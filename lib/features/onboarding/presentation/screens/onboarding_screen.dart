@@ -183,7 +183,7 @@ class _OnboardingViewState extends State<_OnboardingView>
                                         label: l10n.onboardingGetStarted,
                                         textTheme: textTheme,
                                         onPressed: () => context.goNamed(
-                                          AppRoutes.signInName,
+                                          AppRoutes.signUpName,
                                         ),
                                       ),
                                     ),

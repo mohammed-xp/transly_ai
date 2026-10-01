@@ -20,6 +20,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.coral,
     required this.coralAccent,
     required this.coralLabel,
+    required this.success,
     required this.screenBackground,
     required this.inputFill,
     required this.spinnerTrack,
@@ -52,6 +53,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color coral;
   final Color coralAccent;
   final Color coralLabel;
+  final Color success;
 
   /// Full-screen background for screens that aren't tinted by [surface]
   /// (splash, sign-in): white/`backgroundLight` in light, near-black in dark.
@@ -101,6 +103,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coral: AppColors.primary,
     coralAccent: AppColors.primary,
     coralLabel: AppColors.rtlLabelLight,
+    success: AppColors.successLight,
     screenBackground: AppColors.surfaceLight,
     inputFill: AppColors.backgroundLight,
     spinnerTrack: AppColors.spinnerTrackLight,
@@ -138,6 +141,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     coral: AppColors.accentDark,
     coralAccent: AppColors.accentDark2,
     coralLabel: AppColors.accentDark2,
+    success: AppColors.successDark,
     screenBackground: AppColors.backgroundDark,
     inputFill: AppColors.surfaceDark,
     spinnerTrack: AppColors.borderDark,
@@ -179,6 +183,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? coral,
     Color? coralAccent,
     Color? coralLabel,
+    Color? success,
     Color? screenBackground,
     Color? inputFill,
     Color? spinnerTrack,
@@ -211,6 +216,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coral: coral ?? this.coral,
       coralAccent: coralAccent ?? this.coralAccent,
       coralLabel: coralLabel ?? this.coralLabel,
+      success: success ?? this.success,
       screenBackground: screenBackground ?? this.screenBackground,
       inputFill: inputFill ?? this.inputFill,
       spinnerTrack: spinnerTrack ?? this.spinnerTrack,
@@ -248,6 +254,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       coral: Color.lerp(coral, other.coral, t)!,
       coralAccent: Color.lerp(coralAccent, other.coralAccent, t)!,
       coralLabel: Color.lerp(coralLabel, other.coralLabel, t)!,
+      success: Color.lerp(success, other.success, t)!,
       screenBackground: Color.lerp(
         screenBackground,
         other.screenBackground,

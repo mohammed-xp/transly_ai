@@ -1,4 +1,5 @@
 import '../entities/sign_in_form_errors.dart';
+import '../validators/auth_field_validators.dart';
 
 /// Validates the sign-in form's raw field values. No I/O, no repository
 /// dependency — kept as a use case (rather than inline in the cubit) so
@@ -6,21 +7,9 @@ import '../entities/sign_in_form_errors.dart';
 class ValidateSignInFormUseCase {
   const ValidateSignInFormUseCase();
 
-  static final RegExp _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
   static const int _minPasswordLength = 6;
 
   SignInFormErrors call({required String email, required String password}) {
-    // Surrounding whitespace is insignificant in an email address; trimming
-    // here keeps live re-validation consistent with what `submit()` sends.
-    final trimmedEmail = email.trim();
-
-    final EmailFieldError? emailError = switch (trimmedEmail) {
-      '' => EmailFieldError.empty,
-      _ when !_emailPattern.hasMatch(trimmedEmail) =>
-        EmailFieldError.invalidFormat,
-      _ => null,
-    };
-
     final PasswordFieldError? passwordError = switch (password) {
       '' => PasswordFieldError.empty,
       _ when password.length < _minPasswordLength =>
@@ -28,6 +17,9 @@ class ValidateSignInFormUseCase {
       _ => null,
     };
 
-    return SignInFormErrors(email: emailError, password: passwordError);
+    return SignInFormErrors(
+      email: validateEmail(email),
+      password: passwordError,
+    );
   }
 }

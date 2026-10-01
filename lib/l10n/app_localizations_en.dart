@@ -218,6 +218,77 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your session has expired. Please sign in again.';
 
   @override
+  String get signUpTitle => 'Create your account';
+
+  @override
+  String get signUpSubtitle =>
+      'Start free and save your translations on all your devices.';
+
+  @override
+  String get signUpNameLabel => 'Full name';
+
+  @override
+  String get signUpNameHint => 'Ahmed Salem';
+
+  @override
+  String get signUpPasswordHint => 'At least 8 characters';
+
+  @override
+  String get signUpPasswordStrengthWeak => 'Weak';
+
+  @override
+  String get signUpPasswordStrengthFair => 'Fair';
+
+  @override
+  String get signUpPasswordStrengthStrong => 'Strong';
+
+  @override
+  String get signUpPasswordStrengthVeryStrong => 'Very strong';
+
+  @override
+  String signUpPasswordStrengthLabel(String strength) {
+    return 'Password strength: $strength';
+  }
+
+  @override
+  String get signUpAgreePrefix => 'I agree to the ';
+
+  @override
+  String get signUpAgreeAnd => ' and ';
+
+  @override
+  String get signUpTermsRequired =>
+      'Please accept the Terms of Service and Privacy Policy.';
+
+  @override
+  String get signUpSubmit => 'Create account';
+
+  @override
+  String get signUpOrRegisterWith => 'Or sign up with';
+
+  @override
+  String get signUpHaveAccount => 'Already have an account?';
+
+  @override
+  String get signUpSignIn => 'Sign in';
+
+  @override
+  String get signUpAccountCreated => 'Account created. Sign in to continue.';
+
+  @override
+  String get signUpErrorNameRequired => 'Enter your name.';
+
+  @override
+  String get signUpErrorNameTooShort => 'Name must be at least 3 characters.';
+
+  @override
+  String get signUpErrorNameTooLong => 'Name must be 50 characters or fewer.';
+
+  @override
+  String get signUpErrorPasswordTooShort =>
+      'Password must be at least 8 characters.';
+
+  @override
   String get authSignOut => 'Sign out';
 
   @override

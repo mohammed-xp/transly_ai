@@ -68,6 +68,8 @@ abstract final class AppColors {
 
   // ── Feedback ──
   static const Color error = Color(0xFFD32F2F);
+  static const Color successLight = Color(0xFF1F9D55);
+  static const Color successDark = Color(0xFF3CC47C);
 
   /// Buttons, mic, logo, avatars — `linear-gradient(150deg, #FF7A4D, #F5421C)`.
   static const LinearGradient brandGradient = LinearGradient(

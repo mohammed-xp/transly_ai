@@ -199,7 +199,7 @@
   },
   "commonComingSoon": "Coming soon",
   "@commonComingSoon": {
-    "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, create account, profile actions)."
+    "description": "Shown when tapping an action that isn't implemented yet (social sign-in, forgot password, profile actions)."
   },
   "commonLinkOpenFailed": "Couldn't open the link. Please try again.",
   "@commonLinkOpenFailed": {
@@ -264,6 +264,99 @@
   "authErrorSessionExpired": "Your session has expired. Please sign in again.",
   "@authErrorSessionExpired": {
     "description": "Shown when the backend rejects the session token and the user is routed back to sign-in."
+  },
+  "signUpTitle": "Create your account",
+  "@signUpTitle": {
+    "description": "Headline on the sign-up screen."
+  },
+  "signUpSubtitle": "Start free and save your translations on all your devices.",
+  "@signUpSubtitle": {
+    "description": "Subtitle under the headline on the sign-up screen."
+  },
+  "signUpNameLabel": "Full name",
+  "@signUpNameLabel": {
+    "description": "Label above the name field on the sign-up screen."
+  },
+  "signUpNameHint": "Ahmed Salem",
+  "@signUpNameHint": {
+    "description": "Placeholder in the name field on the sign-up screen."
+  },
+  "signUpPasswordHint": "At least 8 characters",
+  "@signUpPasswordHint": {
+    "description": "Placeholder in the password field on the sign-up screen."
+  },
+  "signUpPasswordStrengthWeak": "Weak",
+  "@signUpPasswordStrengthWeak": {
+    "description": "Password strength meter label for a weak password."
+  },
+  "signUpPasswordStrengthFair": "Fair",
+  "@signUpPasswordStrengthFair": {
+    "description": "Password strength meter label for a fair password."
+  },
+  "signUpPasswordStrengthStrong": "Strong",
+  "@signUpPasswordStrengthStrong": {
+    "description": "Password strength meter label for a strong password."
+  },
+  "signUpPasswordStrengthVeryStrong": "Very strong",
+  "@signUpPasswordStrengthVeryStrong": {
+    "description": "Password strength meter label for a very strong password."
+  },
+  "signUpPasswordStrengthLabel": "Password strength: {strength}",
+  "@signUpPasswordStrengthLabel": {
+    "description": "Accessibility label of the password strength meter.",
+    "placeholders": {
+      "strength": {
+        "type": "String"
+      }
+    }
+  },
+  "signUpAgreePrefix": "I agree to the ",
+  "@signUpAgreePrefix": {
+    "description": "Text before the Terms of Service link in the sign-up agreement line (keep the trailing space if the language needs one)."
+  },
+  "signUpAgreeAnd": " and ",
+  "@signUpAgreeAnd": {
+    "description": "Text between the Terms of Service and Privacy Policy links in the sign-up agreement line."
+  },
+  "signUpTermsRequired": "Please accept the Terms of Service and Privacy Policy.",
+  "@signUpTermsRequired": {
+    "description": "Shown under the agreement checkbox when the user submits without accepting."
+  },
+  "signUpSubmit": "Create account",
+  "@signUpSubmit": {
+    "description": "Primary submit button on the sign-up screen."
+  },
+  "signUpOrRegisterWith": "Or sign up with",
+  "@signUpOrRegisterWith": {
+    "description": "Divider label above the social buttons on the sign-up screen."
+  },
+  "signUpHaveAccount": "Already have an account?",
+  "@signUpHaveAccount": {
+    "description": "Prompt preceding the sign-in link on the sign-up screen."
+  },
+  "signUpSignIn": "Sign in",
+  "@signUpSignIn": {
+    "description": "Sign-in link on the sign-up screen."
+  },
+  "signUpAccountCreated": "Account created. Sign in to continue.",
+  "@signUpAccountCreated": {
+    "description": "Toast shown on the sign-in screen after the account is created."
+  },
+  "signUpErrorNameRequired": "Enter your name.",
+  "@signUpErrorNameRequired": {
+    "description": "Shown under the name field when it is left empty."
+  },
+  "signUpErrorNameTooShort": "Name must be at least 3 characters.",
+  "@signUpErrorNameTooShort": {
+    "description": "Shown under the name field when it is too short."
+  },
+  "signUpErrorNameTooLong": "Name must be 50 characters or fewer.",
+  "@signUpErrorNameTooLong": {
+    "description": "Shown under the name field when it is too long."
+  },
+  "signUpErrorPasswordTooShort": "Password must be at least 8 characters.",
+  "@signUpErrorPasswordTooShort": {
+    "description": "Shown under the password field on the sign-up screen when it is too short."
   },
   "authSignOut": "Sign out",
   "@authSignOut": {

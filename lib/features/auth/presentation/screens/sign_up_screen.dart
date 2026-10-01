@@ -12,56 +12,79 @@ import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
-import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/password_strength.dart';
 import '../../domain/entities/sign_in_form_errors.dart';
-import '../cubit/sign_in_cubit.dart';
-import '../cubit/sign_in_state.dart';
+import '../../domain/entities/sign_up_form_errors.dart';
+import '../../domain/usecases/validate_sign_up_form_usecase.dart';
+import '../cubit/sign_up_cubit.dart';
+import '../cubit/sign_up_state.dart';
 import '../utils/auth_l10n.dart';
-import '../widgets/auth_brand_mark.dart';
 import '../widgets/auth_divider.dart';
 import '../widgets/auth_switch_prompt.dart';
+import '../widgets/password_strength_meter.dart';
 import '../widgets/password_visibility_toggle.dart';
 import '../widgets/social_auth_row.dart';
+import '../widgets/terms_agreement.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => serviceLocator<SignInCubit>(),
-      child: const AppToastScope(child: _SignInView()),
+      create: (_) => serviceLocator<SignUpCubit>(),
+      // Listens above this screen's toast scope so the success toast lands in
+      // the app-wide one and stays visible on the sign-in screen.
+      child: BlocListener<SignUpCubit, SignUpState>(
+        listenWhen: (previous, current) =>
+            previous.status != current.status &&
+            current.status is SignUpSucceeded,
+        listener: (context, state) {
+          AppToast.show(
+            context,
+            message: AppLocalizations.of(context)!.signUpAccountCreated,
+          );
+          context.pushReplacementNamed(AppRoutes.signInName);
+        },
+        child: const AppToastScope(child: _SignUpView()),
+      ),
     );
   }
 }
 
-class _SignInView extends StatefulWidget {
-  const _SignInView();
+class _SignUpView extends StatefulWidget {
+  const _SignUpView();
 
   @override
-  State<_SignInView> createState() => _SignInViewState();
+  State<_SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignInViewState extends State<_SignInView> {
+class _SignUpViewState extends State<_SignUpView> {
+  late final TextEditingController _nameController;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final FocusNode _nameFocus;
   late final FocusNode _emailFocus;
   late final FocusNode _passwordFocus;
 
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _nameFocus = FocusNode();
     _emailFocus = FocusNode();
     _passwordFocus = FocusNode();
   }
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _nameFocus.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
     super.dispose();
@@ -82,21 +105,19 @@ class _SignInViewState extends State<_SignInView> {
     final textTheme = Theme.of(context).textTheme;
     final c = context.palette;
 
-    return BlocListener<SignInCubit, SignInState>(
+    return BlocListener<SignUpCubit, SignUpState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         switch (state.status) {
-          case SignInSucceeded():
-            context.goNamed(AppRoutes.homeName);
-          case SignInFailed(:final failure):
+          case SignUpFailed(:final failure):
             AppToast.show(
               context,
-              message: authFailureMessage(context, failure),
+              message: signUpFailureMessage(context, failure),
               type: AppToastType.error,
             );
-          case SignInSubmitting():
+          case SignUpSubmitting():
             AppToast.hide(context);
-          case SignInInitial():
+          case SignUpInitial() || SignUpSucceeded():
             break;
         }
       },
@@ -124,7 +145,7 @@ class _SignInViewState extends State<_SignInView> {
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) => SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(26, 22, 26, 0),
+                        padding: const EdgeInsets.fromLTRB(26, 20, 26, 0),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                             minHeight: constraints.maxHeight,
@@ -133,10 +154,8 @@ class _SignInViewState extends State<_SignInView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const AuthBrandMark(),
-                                const SizedBox(height: 20),
                                 Text(
-                                  l10n.signInTitle,
+                                  l10n.signUpTitle,
                                   style: textTheme.headlineLarge?.copyWith(
                                     fontSize: 29,
                                     color: c.ink,
@@ -144,13 +163,18 @@ class _SignInViewState extends State<_SignInView> {
                                 ),
                                 const SizedBox(height: 7),
                                 Text(
-                                  l10n.signInSubtitle,
+                                  l10n.signUpSubtitle,
                                   style: textTheme.bodyMedium?.copyWith(
                                     fontSize: 15,
                                     color: c.textMuted,
                                   ),
                                 ),
-                                const SizedBox(height: 26),
+                                const SizedBox(height: 24),
+                                _NameField(
+                                  controller: _nameController,
+                                  focusNode: _nameFocus,
+                                ),
+                                const SizedBox(height: 12),
                                 _EmailField(
                                   controller: _emailController,
                                   focusNode: _emailFocus,
@@ -160,27 +184,28 @@ class _SignInViewState extends State<_SignInView> {
                                   controller: _passwordController,
                                   focusNode: _passwordFocus,
                                   onSubmitted: () =>
-                                      context.read<SignInCubit>().submit(),
+                                      context.read<SignUpCubit>().submit(),
                                 ),
-                                const SizedBox(height: 14),
-                                const _ForgotPasswordLink(),
-                                const SizedBox(height: 24),
+                                const _PasswordStrengthIndicator(),
+                                const SizedBox(height: 16),
+                                const _TermsField(),
+                                const SizedBox(height: 20),
                                 const _SubmitButton(),
-                                const SizedBox(height: 22),
-                                AuthDivider(label: l10n.signInOrContinueWith),
-                                const SizedBox(height: 22),
+                                const SizedBox(height: 20),
+                                AuthDivider(label: l10n.signUpOrRegisterWith),
+                                const SizedBox(height: 20),
                                 const SocialAuthRow(),
                                 const Spacer(),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                    top: 22,
+                                    top: 20,
                                     bottom: 26,
                                   ),
                                   child: AuthSwitchPrompt(
-                                    question: l10n.signInNoAccount,
-                                    action: l10n.signInCreateAccount,
+                                    question: l10n.signUpHaveAccount,
+                                    action: l10n.signUpSignIn,
                                     onTap: () => context.pushReplacementNamed(
-                                      AppRoutes.signUpName,
+                                      AppRoutes.signInName,
                                     ),
                                   ),
                                 ),
@@ -201,6 +226,38 @@ class _SignInViewState extends State<_SignInView> {
   }
 }
 
+class _NameField extends StatelessWidget {
+  const _NameField({required this.controller, required this.focusNode});
+
+  final TextEditingController controller;
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return BlocSelector<SignUpCubit, SignUpState, NameFieldError?>(
+      selector: (state) => state.showFieldErrors ? state.errors.name : null,
+      builder: (context, error) {
+        return AuthTextField(
+          label: l10n.signUpNameLabel,
+          hint: l10n.signUpNameHint,
+          controller: controller,
+          focusNode: focusNode,
+          prefixIcon: Icons.person_outline_rounded,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.words,
+          maxLength: ValidateSignUpFormUseCase.maxNameLength,
+          autofillHints: const [AutofillHints.name],
+          onChanged: context.read<SignUpCubit>().nameChanged,
+          onFieldSubmitted: (_) => focusNode.nextFocus(),
+          errorText: nameFieldErrorMessage(context, error),
+        );
+      },
+    );
+  }
+}
+
 class _EmailField extends StatelessWidget {
   const _EmailField({required this.controller, required this.focusNode});
 
@@ -210,7 +267,7 @@ class _EmailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<SignInCubit, SignInState, EmailFieldError?>(
+    return BlocSelector<SignUpCubit, SignUpState, EmailFieldError?>(
       selector: (state) => state.showFieldErrors ? state.errors.email : null,
       builder: (context, error) {
         return AuthTextField(
@@ -221,8 +278,8 @@ class _EmailField extends StatelessWidget {
           prefixIcon: Icons.mail_outline_rounded,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
-          autofillHints: const [AutofillHints.username, AutofillHints.email],
-          onChanged: context.read<SignInCubit>().emailChanged,
+          autofillHints: const [AutofillHints.email],
+          onChanged: context.read<SignUpCubit>().emailChanged,
           onFieldSubmitted: (_) => focusNode.nextFocus(),
           errorText: emailFieldErrorMessage(context, error),
         );
@@ -245,7 +302,7 @@ class _PasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<SignInCubit, SignInState, (PasswordFieldError?, bool)>(
+    return BlocSelector<SignUpCubit, SignUpState, (PasswordFieldError?, bool)>(
       selector: (state) => (
         state.showFieldErrors ? state.errors.password : null,
         state.isPasswordVisible,
@@ -254,19 +311,20 @@ class _PasswordField extends StatelessWidget {
         final (error, isVisible) = data;
         return AuthTextField(
           label: l10n.signInPasswordLabel,
-          hint: l10n.signInPasswordHint,
+          hint: l10n.signUpPasswordHint,
           controller: controller,
           focusNode: focusNode,
           prefixIcon: Icons.lock_outline_rounded,
           obscureText: !isVisible,
           textInputAction: TextInputAction.done,
-          autofillHints: const [AutofillHints.password],
-          onChanged: context.read<SignInCubit>().passwordChanged,
+          maxLength: ValidateSignUpFormUseCase.maxPasswordLength,
+          autofillHints: const [AutofillHints.newPassword],
+          onChanged: context.read<SignUpCubit>().passwordChanged,
           onFieldSubmitted: (_) => onSubmitted(),
-          errorText: passwordFieldErrorMessage(context, error),
+          errorText: signUpPasswordErrorMessage(context, error),
           suffixIcon: PasswordVisibilityToggle(
             isVisible: isVisible,
-            onTap: context.read<SignInCubit>().passwordVisibilityToggled,
+            onTap: context.read<SignUpCubit>().passwordVisibilityToggled,
           ),
         );
       },
@@ -274,31 +332,44 @@ class _PasswordField extends StatelessWidget {
   }
 }
 
-class _ForgotPasswordLink extends StatelessWidget {
-  const _ForgotPasswordLink();
+class _PasswordStrengthIndicator extends StatelessWidget {
+  const _PasswordStrengthIndicator();
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Align(
-      alignment: AlignmentDirectional.centerEnd,
-      child: Semantics(
-        button: true,
-        child: GestureDetector(
-          onTap: () => showComingSoonToast(context),
-          behavior: HitTestBehavior.opaque,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              l10n.signInForgotPassword,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: context.palette.coral,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
+    return BlocSelector<SignUpCubit, SignUpState, PasswordStrength?>(
+      selector: (state) => state.passwordStrength,
+      builder: (context, strength) {
+        if (strength == null) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: PasswordStrengthMeter(strength: strength),
+        );
+      },
+    );
+  }
+}
+
+class _TermsField extends StatelessWidget {
+  const _TermsField();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<SignUpCubit, SignUpState, (bool, bool)>(
+      selector: (state) => (
+        state.termsAccepted,
+        state.showFieldErrors && state.errors.termsNotAccepted,
       ),
+      builder: (context, data) {
+        final (accepted, showError) = data;
+        return TermsAgreement(
+          accepted: accepted,
+          onToggle: context.read<SignUpCubit>().termsToggled,
+          errorText: showError
+              ? AppLocalizations.of(context)!.signUpTermsRequired
+              : null,
+        );
+      },
     );
   }
 }
@@ -308,13 +379,13 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<SignInCubit, SignInState, bool>(
+    return BlocSelector<SignUpCubit, SignUpState, bool>(
       selector: (state) => state.isSubmitting,
       builder: (context, isSubmitting) {
         return GradientButton(
-          label: AppLocalizations.of(context)!.signInSubmit,
+          label: AppLocalizations.of(context)!.signUpSubmit,
           isLoading: isSubmitting,
-          onPressed: () => context.read<SignInCubit>().submit(),
+          onPressed: () => context.read<SignUpCubit>().submit(),
         );
       },
     );

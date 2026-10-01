@@ -35,7 +35,9 @@ class DioBaseApi extends ApiConsumer {
   Future<bool>? _refreshInFlight;
 
   static bool _isAuthEndpoint(String path) =>
-      path.contains(Endpoints.login) || path.contains(Endpoints.refreshToken);
+      path.contains(Endpoints.login) ||
+      path.contains(Endpoints.register) ||
+      path.contains(Endpoints.refreshToken);
 
   Future<void> _onRequest(
     RequestOptions options,
@@ -50,7 +52,7 @@ class DioBaseApi extends ApiConsumer {
 
   /// A 401 from an authenticated endpoint means the access token was
   /// rejected: refresh once and replay the request, or end the session. A 401
-  /// from login itself just means wrong credentials and is passed through.
+  /// from login or register just means bad credentials and is passed through.
   Future<void> _onError(
     DioException err,
     ErrorInterceptorHandler handler,

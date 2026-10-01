@@ -7,8 +7,6 @@ import '../cubit/plan_usage_cubit.dart';
 import '../cubit/plan_usage_state.dart';
 import 'free_plan_card.dart';
 
-/// Plan card under the identity block, carrying its own top gap so nothing is
-/// left behind when a paid plan (no card yet) hides it.
 class ProfilePlanUsage extends StatelessWidget {
   const ProfilePlanUsage({super.key});
 

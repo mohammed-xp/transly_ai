@@ -33,6 +33,24 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 
+  @override
+  Future<ApiResult<void>> signUpWithEmail({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _remote.signUpWithEmail(
+        name: name,
+        email: email,
+        password: password,
+      );
+      return const ApiResult.success(null);
+    } catch (e) {
+      return ApiResult.failure(ErrorMapper.map(e));
+    }
+  }
+
   Future<void> _persistSession(UserLoginModel login) async {
     await _userLocal.cacheUserData(login.userModel);
     await _userLocal.saveTokens(
