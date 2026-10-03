@@ -61,4 +61,13 @@ void main() {
     expect(usage(used: 0).isFree, isTrue);
     expect(usage(plan: 'pro_monthly', used: 0).isFree, isFalse);
   });
+
+  test('isPro is true for every plan but the free one', () {
+    expect(usage(plan: 'pro_monthly', used: 0).isPro, isTrue);
+    expect(usage(used: 0).isPro, isFalse);
+  });
+
+  test('isProPlan is false when no plan is known yet', () {
+    expect(PlanUsageEntity.isProPlan(null), isFalse);
+  });
 }

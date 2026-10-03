@@ -38,7 +38,11 @@
   },
   "translateAiPro": "AI Pro",
   "@translateAiPro": {
-    "description": "Label of the plan badge in the translate screen header."
+    "description": "Label of the plan badge in the translate screen header for users on a Pro plan."
+  },
+  "translateAiFree": "AI Free",
+  "@translateAiFree": {
+    "description": "Label of the plan badge in the translate screen header for users on the free plan."
   },
   "translateFrom": "FROM",
   "@translateFrom": {

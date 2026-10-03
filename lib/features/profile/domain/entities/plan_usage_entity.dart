@@ -15,7 +15,13 @@ class PlanUsageEntity {
   final int charactersUsed;
   final DateTime resetsAt;
 
+  /// Every plan other than the free one is a paid Pro plan. A null [plan]
+  /// (none known yet) is not Pro.
+  static bool isProPlan(String? plan) => plan != null && plan != freePlan;
+
   bool get isFree => plan == freePlan;
+
+  bool get isPro => isProPlan(plan);
 
   double get usedFraction {
     if (charactersLimit <= 0) return 1;

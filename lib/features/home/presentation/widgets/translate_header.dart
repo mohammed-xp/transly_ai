@@ -9,10 +9,12 @@ class TranslateHeader extends StatelessWidget {
   const TranslateHeader({
     super.key,
     required this.userName,
+    required this.isPro,
     required this.onProfileTap,
   });
 
   final String? userName;
+  final bool isPro;
   final VoidCallback onProfileTap;
 
   @override
@@ -46,7 +48,10 @@ class TranslateHeader extends StatelessWidget {
               ],
             ),
           ),
-          _AiProBadge(label: l10n.translateAiPro),
+          _PlanBadge(
+            label: isPro ? l10n.translateAiPro : l10n.translateAiFree,
+            isPro: isPro,
+          ),
           const SizedBox(width: 10),
           _ProfileAvatarButton(
             userName: userName,
@@ -91,10 +96,11 @@ class _ProfileAvatarButton extends StatelessWidget {
   }
 }
 
-class _AiProBadge extends StatelessWidget {
-  const _AiProBadge({required this.label});
+class _PlanBadge extends StatelessWidget {
+  const _PlanBadge({required this.label, required this.isPro});
 
   final String label;
+  final bool isPro;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +129,10 @@ class _AiProBadge extends StatelessWidget {
           Container(
             width: 7,
             height: 7,
-            decoration: BoxDecoration(color: c.coral, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: isPro ? c.coral : c.textMuted,
+              shape: BoxShape.circle,
+            ),
           ),
           const SizedBox(width: 7),
           Text(label, style: textTheme.titleSmall?.copyWith(color: c.ink)),

@@ -48,6 +48,7 @@ import '../../features/profile/data/repos/plan_usage_repo_impl.dart';
 import '../../features/profile/domain/repos/account_repo.dart';
 import '../../features/profile/domain/repos/plan_usage_repo.dart';
 import '../../features/profile/domain/usecases/delete_account_use_case.dart';
+import '../../features/profile/domain/usecases/get_cached_plan_usecase.dart';
 import '../../features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import '../../features/profile/presentation/cubit/delete_account_cubit.dart';
 import '../../features/profile/presentation/cubit/plan_usage_cubit.dart';
@@ -118,7 +119,11 @@ Future<void> configureDependencies() async {
 
   // ── Session ──
   serviceLocator.registerLazySingleton<UserLocalDataSource>(
-    () => UserLocalDataSourceImpl(serviceLocator(), serviceLocator()),
+    () => UserLocalDataSourceImpl(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
   serviceLocator.registerLazySingleton<LogoutRepo>(
     () => LogoutRepoImpl(serviceLocator()),
@@ -181,7 +186,7 @@ Future<void> configureDependencies() async {
     () => AuthRepoImpl(remote: serviceLocator(), userLocal: serviceLocator()),
   );
   serviceLocator.registerLazySingleton<PlanUsageRepo>(
-    () => PlanUsageRepoImpl(serviceLocator()),
+    () => PlanUsageRepoImpl(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AccountRepo>(
     () => AccountRepoImpl(serviceLocator()),
@@ -235,6 +240,9 @@ Future<void> configureDependencies() async {
     () => GetPlanUsageUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
+    () => GetCachedPlanUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
     () => DeleteAccountUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
@@ -274,7 +282,11 @@ Future<void> configureDependencies() async {
     ),
   );
   serviceLocator.registerFactory(
-    () => HomeCubit(getCachedUser: serviceLocator()),
+    () => HomeCubit(
+      getCachedUser: serviceLocator(),
+      getCachedPlan: serviceLocator(),
+      getPlanUsage: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => ProfileCubit(getCachedUser: serviceLocator()),

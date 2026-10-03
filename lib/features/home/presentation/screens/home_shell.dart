@@ -27,7 +27,7 @@ class HomeShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => serviceLocator<HomeCubit>()),
+        BlocProvider(create: (_) => serviceLocator<HomeCubit>()..refreshPlan()),
         BlocProvider(create: (_) => serviceLocator<TranslateCubit>()),
       ],
       child: BlocListener<HomeCubit, HomeState>(
@@ -108,12 +108,16 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<HomeCubit, HomeState, String?>(
-      selector: (state) => state.user?.username,
-      builder: (context, userName) => TranslateHeader(
-        userName: userName,
-        onProfileTap: () => context.pushNamed(AppRoutes.profileName),
-      ),
+    return BlocSelector<HomeCubit, HomeState, (String?, bool)>(
+      selector: (state) => (state.user?.username, state.isPro),
+      builder: (context, header) {
+        final (userName, isPro) = header;
+        return TranslateHeader(
+          userName: userName,
+          isPro: isPro,
+          onProfileTap: () => context.pushNamed(AppRoutes.profileName),
+        );
+      },
     );
   }
 }

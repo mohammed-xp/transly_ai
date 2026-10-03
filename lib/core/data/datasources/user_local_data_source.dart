@@ -11,6 +11,11 @@ abstract class UserLocalDataSource {
 
   Future<String?> getRefreshToken();
 
+  Future<void> cachePlan(String plan);
+
+  String? getCachedPlan();
+
+  /// Also drops the cached plan — it belongs to the signed-in user.
   Future<void> clearCachedUserData();
 
   Future<void> clearTokens();

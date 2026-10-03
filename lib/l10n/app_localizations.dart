@@ -152,11 +152,17 @@ abstract class AppLocalizations {
   /// **'TRANSLATE'**
   String get translateKicker;
 
-  /// Label of the plan badge in the translate screen header.
+  /// Label of the plan badge in the translate screen header for users on a Pro plan.
   ///
   /// In en, this message translates to:
   /// **'AI Pro'**
   String get translateAiPro;
+
+  /// Label of the plan badge in the translate screen header for users on the free plan.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Free'**
+  String get translateAiFree;
 
   /// Source-language column label in the language switch bar.
   ///

@@ -40,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateAiPro => 'AI Pro';
 
   @override
+  String get translateAiFree => 'AI Free';
+
+  @override
   String get translateFrom => 'FROM';
 
   @override
