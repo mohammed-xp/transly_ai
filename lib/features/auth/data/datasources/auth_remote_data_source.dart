@@ -6,6 +6,9 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
+  /// Exchanges a Google ID token for the app's own session.
+  Future<UserLoginModel> signInWithGoogle({required String idToken});
+
   Future<void> signUpWithEmail({
     required String name,
     required String email,

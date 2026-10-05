@@ -21,6 +21,17 @@ String authFailureMessage(BuildContext context, Failure failure) {
   };
 }
 
+/// Google sign-in wording: there is no password to get wrong, so anything
+/// that isn't a connection or rate-limit problem reads as "couldn't sign in".
+String googleSignInFailureMessage(BuildContext context, Failure failure) {
+  final l10n = AppLocalizations.of(context)!;
+  return switch (failure) {
+    NetworkFailure() => l10n.authErrorNoConnection,
+    TooManyRequestsFailure() => l10n.authErrorTooManyRequests,
+    _ => l10n.authErrorGeneric,
+  };
+}
+
 /// Sign-up specific wording: a 409 from register means the email is taken,
 /// even when the backend sends no error key.
 String signUpFailureMessage(BuildContext context, Failure failure) {

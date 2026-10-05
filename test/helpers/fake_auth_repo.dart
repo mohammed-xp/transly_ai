@@ -5,13 +5,20 @@ import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/auth/domain/repos/auth_repo.dart';
 
 class FakeAuthRepo implements AuthRepo {
-  FakeAuthRepo(this.signUpResult);
+  FakeAuthRepo(
+    this.signUpResult, {
+    this.googleResult = const ApiResult.success(null),
+  });
 
   ApiResult<void> signUpResult;
   final List<({String name, String email, String password})> signUps = [];
 
-  /// When set, [signUpWithEmail] waits for it before answering, so a test can
-  /// observe the in-flight state.
+  /// A success carrying `null` plays the user closing the account picker.
+  ApiResult<UserEntity?> googleResult;
+  int googleSignIns = 0;
+
+  /// When set, [signUpWithEmail] and [signInWithGoogle] wait for it before
+  /// answering, so a test can observe the in-flight state.
   Completer<void>? gate;
 
   @override
@@ -23,6 +30,13 @@ class FakeAuthRepo implements AuthRepo {
     signUps.add((name: name, email: email, password: password));
     await gate?.future;
     return signUpResult;
+  }
+
+  @override
+  Future<ApiResult<UserEntity?>> signInWithGoogle() async {
+    googleSignIns++;
+    await gate?.future;
+    return googleResult;
   }
 
   @override

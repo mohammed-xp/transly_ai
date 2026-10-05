@@ -5,18 +5,22 @@ import 'package:transly_ai/core/di/service_locator.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/router/app_routes.dart';
+import 'package:transly_ai/core/session/session_manager.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
 import 'package:transly_ai/core/widgets/gradient_button.dart';
 import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
 import 'package:transly_ai/features/auth/domain/usecases/evaluate_password_strength_usecase.dart';
+import 'package:transly_ai/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:transly_ai/features/auth/domain/usecases/sign_up_with_email_usecase.dart';
 import 'package:transly_ai/features/auth/domain/usecases/validate_sign_up_form_usecase.dart';
+import 'package:transly_ai/features/auth/presentation/cubit/google_sign_in_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:transly_ai/features/auth/presentation/widgets/terms_agreement.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_auth_repo.dart';
+import '../../../../helpers/fake_logout_repo.dart';
 
 void main() {
   late FakeAuthRepo repo;
@@ -28,6 +32,12 @@ void main() {
         signUp: SignUpWithEmailUseCase(repo),
         validate: const ValidateSignUpFormUseCase(),
         evaluatePasswordStrength: const EvaluatePasswordStrengthUseCase(),
+      ),
+    );
+    // The social row on this screen owns a Google sign-in cubit.
+    serviceLocator.registerFactory(
+      () => GoogleSignInCubit(
+        SignInWithGoogleUseCase(repo, SessionManager(FakeLogoutRepo())),
       ),
     );
   });

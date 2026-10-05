@@ -7,6 +7,10 @@ abstract class AuthRepo {
     required String password,
   });
 
+  /// Succeeds with `null` when the user closed the Google account picker:
+  /// nothing went wrong, and nobody is signed in.
+  Future<ApiResult<UserEntity?>> signInWithGoogle();
+
   Future<ApiResult<void>> signUpWithEmail({
     required String name,
     required String email,

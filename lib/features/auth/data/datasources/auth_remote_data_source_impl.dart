@@ -21,6 +21,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<UserLoginModel> signInWithGoogle({required String idToken}) async {
+    final data = await _apiConsumer.post(
+      Endpoints.googleLogin,
+      data: {'idToken': idToken},
+    );
+    return UserLoginModel.fromJson(data['data']);
+  }
+
+  @override
   Future<void> signUpWithEmail({
     required String name,
     required String email,

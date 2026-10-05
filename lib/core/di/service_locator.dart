@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -30,11 +31,13 @@ import '../../features/auth/data/repos/auth_repo_impl.dart';
 import '../../features/auth/domain/repos/auth_repo.dart';
 import '../../features/auth/domain/usecases/evaluate_password_strength_usecase.dart';
 import '../../features/auth/domain/usecases/sign_in_with_email_usecase.dart';
+import '../../features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import '../../features/auth/domain/usecases/sign_out_usecase.dart';
 import '../../features/auth/domain/usecases/sign_up_with_email_usecase.dart';
 import '../../features/auth/domain/usecases/validate_sign_in_form_usecase.dart';
 import '../../features/auth/domain/usecases/validate_sign_up_form_usecase.dart';
 import '../../features/auth/domain/usecases/watch_session_status_usecase.dart';
+import '../../features/auth/presentation/cubit/google_sign_in_cubit.dart';
 import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_up_cubit.dart';
@@ -66,6 +69,9 @@ import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
 import '../../l10n/app_localizations.dart';
+import '../constants/google_auth_config.dart';
+import '../data/datasources/google_auth_data_source.dart';
+import '../data/datasources/google_auth_data_source_impl.dart';
 import '../data/datasources/user_local_data_source.dart';
 import '../data/datasources/user_local_data_source_impl.dart';
 import '../data/models/user_model.dart';
@@ -125,8 +131,15 @@ Future<void> configureDependencies() async {
       serviceLocator(),
     ),
   );
+  serviceLocator.registerLazySingleton<GoogleAuthDataSource>(
+    () => GoogleAuthDataSourceImpl(
+      GoogleSignIn.instance,
+      serverClientId: GoogleAuthConfig.serverClientId,
+      clientId: GoogleAuthConfig.iosClientId,
+    ),
+  );
   serviceLocator.registerLazySingleton<LogoutRepo>(
-    () => LogoutRepoImpl(serviceLocator()),
+    () => LogoutRepoImpl(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(() => SessionManager(serviceLocator()));
 
@@ -183,7 +196,11 @@ Future<void> configureDependencies() async {
     () => UserRepoImpl(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AuthRepo>(
-    () => AuthRepoImpl(remote: serviceLocator(), userLocal: serviceLocator()),
+    () => AuthRepoImpl(
+      remote: serviceLocator(),
+      userLocal: serviceLocator(),
+      google: serviceLocator(),
+    ),
   );
   serviceLocator.registerLazySingleton<PlanUsageRepo>(
     () => PlanUsageRepoImpl(serviceLocator(), serviceLocator()),
@@ -222,6 +239,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton(
     () => SignInWithEmailUseCase(serviceLocator(), serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SignInWithGoogleUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(ValidateSignInFormUseCase.new);
   serviceLocator.registerLazySingleton(
@@ -274,6 +294,7 @@ Future<void> configureDependencies() async {
   serviceLocator.registerFactory(
     () => SignInCubit(signIn: serviceLocator(), validate: serviceLocator()),
   );
+  serviceLocator.registerFactory(() => GoogleSignInCubit(serviceLocator()));
   serviceLocator.registerFactory(
     () => SignUpCubit(
       signUp: serviceLocator(),
