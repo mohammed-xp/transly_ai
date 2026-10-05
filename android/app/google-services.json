@@ -7,31 +7,41 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:507923045845:android:108c1bf8d376f4a01bf15c",
-        "android_client_info": {
-          "package_name": "com.example.transly_ai"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA-jortZ9Ih4i_3SEWykPRHa7MCr-WYbTw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:507923045845:android:b4d9daeedf9e850c1bf15c",
         "android_client_info": {
           "package_name": "tech.mohammedadil.transly"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "507923045845-avvmbsq5s92a6fmcfpkvfd9iop2ud569.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.mohammedadil.transly",
+            "certificate_hash": "9821b9a070904d64a7a20c54e57a87544d237890"
+          }
+        },
+        {
+          "client_id": "507923045845-mm37tvv68jdcqu5uuhv0r19tnt7jn5fm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.mohammedadil.transly",
+            "certificate_hash": "65f6e020fdb0a2c66a92b6c2bdaeaae06ffb4adc"
+          }
+        },
+        {
+          "client_id": "507923045845-pnb472aqg408g3lh7nag5en3c9oj1kif.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.mohammedadil.transly",
+            "certificate_hash": "c0ed5840afb30e5276e64a08e1aae46bc4c1fb77"
+          }
+        },
+        {
+          "client_id": "507923045845-e6u3uut1sai4aj7hqtnpj369bds9ubdv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA-jortZ9Ih4i_3SEWykPRHa7MCr-WYbTw"
@@ -39,7 +49,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507923045845-e6u3uut1sai4aj7hqtnpj369bds9ubdv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "507923045845-8gm437641js5tcaeaga0t3ap8slintn9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "tech.mohammedadil.transly"
+              }
+            }
+          ]
         }
       }
     }

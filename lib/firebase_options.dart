@@ -62,6 +62,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '507923045845',
     projectId: 'transly-ai-e7eb3',
     storageBucket: 'transly-ai-e7eb3.firebasestorage.app',
+    androidClientId: '507923045845-avvmbsq5s92a6fmcfpkvfd9iop2ud569.apps.googleusercontent.com',
+    iosClientId: '507923045845-8gm437641js5tcaeaga0t3ap8slintn9.apps.googleusercontent.com',
     iosBundleId: 'tech.mohammedadil.transly',
   );
 }
