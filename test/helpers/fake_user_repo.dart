@@ -1,13 +1,18 @@
+import 'package:transly_ai/core/domain/entities/sign_in_method.dart';
 import 'package:transly_ai/core/domain/entities/user_entity.dart';
 import 'package:transly_ai/core/domain/repos/user_repo.dart';
 
 class FakeUserRepo implements UserRepo {
-  FakeUserRepo([this.cachedUser]);
+  FakeUserRepo([this.cachedUser, this.signInMethod = SignInMethod.email]);
 
   final UserEntity? cachedUser;
+  final SignInMethod signInMethod;
 
   @override
   UserEntity? getCachedUser() => cachedUser;
+
+  @override
+  SignInMethod getSignInMethod() => signInMethod;
 }
 
 final testUser = UserEntity(

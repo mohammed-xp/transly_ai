@@ -14,4 +14,12 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
       data: {'password': password},
     );
   }
+
+  @override
+  Future<void> deleteAccountWithGoogle({required String idToken}) {
+    return _apiConsumer.delete(
+      Endpoints.deleteAccount,
+      data: {'idToken': idToken},
+    );
+  }
 }

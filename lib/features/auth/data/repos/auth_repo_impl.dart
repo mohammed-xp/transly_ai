@@ -1,5 +1,6 @@
 import '../../../../core/data/datasources/google_auth_data_source.dart';
 import '../../../../core/data/datasources/user_local_data_source.dart';
+import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/errors/error_mapper.dart';
 import '../../../../core/result/api_result.dart';
@@ -30,7 +31,7 @@ class AuthRepoImpl implements AuthRepo {
         email: email,
         password: password,
       );
-      await _persistSession(result);
+      await _persistSession(result, SignInMethod.email);
       return ApiResult.success(result.userModel.toEntity());
     } catch (e) {
       return ApiResult.failure(ErrorMapper.map(e));
@@ -44,7 +45,7 @@ class AuthRepoImpl implements AuthRepo {
       if (idToken == null) return const ApiResult.success(null);
 
       final result = await _remote.signInWithGoogle(idToken: idToken);
-      await _persistSession(result);
+      await _persistSession(result, SignInMethod.google);
       return ApiResult.success(result.userModel.toEntity());
     } catch (e) {
       return ApiResult.failure(ErrorMapper.map(e));
@@ -69,8 +70,12 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 
-  Future<void> _persistSession(UserLoginModel login) async {
+  Future<void> _persistSession(
+    UserLoginModel login,
+    SignInMethod method,
+  ) async {
     await _userLocal.cacheUserData(login.userModel);
+    await _userLocal.cacheSignInMethod(method.name);
     await _userLocal.saveTokens(
       accessToken: login.userTokenModel.accessToken,
       refreshToken: login.userTokenModel.refreshToken,

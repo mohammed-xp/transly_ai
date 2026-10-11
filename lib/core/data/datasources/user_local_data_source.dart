@@ -15,7 +15,12 @@ abstract class UserLocalDataSource {
 
   String? getCachedPlan();
 
-  /// Also drops the cached plan — it belongs to the signed-in user.
+  Future<void> cacheSignInMethod(String method);
+
+  String? getCachedSignInMethod();
+
+  /// Also drops the cached plan and sign-in method — they belong to the
+  /// signed-in user.
   Future<void> clearCachedUserData();
 
   Future<void> clearTokens();

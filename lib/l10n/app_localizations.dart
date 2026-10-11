@@ -734,6 +734,12 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get profileSignInMethodEmail;
 
+  /// Value of the signed-in-with row for users who signed in with Google.
+  ///
+  /// In en, this message translates to:
+  /// **'Google'**
+  String get profileSignInMethodGoogle;
+
   /// Heading of the privacy section on the profile screen.
   ///
   /// In en, this message translates to:
@@ -805,6 +811,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incorrect password'**
   String get profileDeleteAccountWrongPassword;
+
+  /// Line in the delete-account sheet shown instead of the password field to users who signed in with Google.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll confirm with your Google account.'**
+  String get profileDeleteAccountGoogleHint;
+
+  /// Error in the delete-account sheet when the Google account picked to confirm isn't the signed-in one.
+  ///
+  /// In en, this message translates to:
+  /// **'That isn\'t the Google account you signed in with.'**
+  String get profileDeleteAccountWrongGoogleAccount;
 
   /// Toast on the sign-in screen after the account was deleted.
   ///

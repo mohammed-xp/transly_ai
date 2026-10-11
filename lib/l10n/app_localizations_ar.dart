@@ -345,6 +345,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileSignInMethodEmail => 'البريد الإلكتروني';
 
   @override
+  String get profileSignInMethodGoogle => 'Google';
+
+  @override
   String get profilePrivacySection => 'الخصوصية';
 
   @override
@@ -380,6 +383,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileDeleteAccountWrongPassword => 'كلمة المرور غير صحيحة';
+
+  @override
+  String get profileDeleteAccountGoogleHint =>
+      'ستؤكّد الحذف بحساب Google الخاص بك.';
+
+  @override
+  String get profileDeleteAccountWrongGoogleAccount =>
+      'هذا ليس حساب Google الذي سجّلت الدخول به.';
 
   @override
   String get profileDeleteAccountDone => 'تم حذف حسابك';

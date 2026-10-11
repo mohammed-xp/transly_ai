@@ -4,8 +4,9 @@ abstract final class GoogleAuthConfig {
   /// The *Web application* client ID: the audience the backend checks the
   /// Google ID token against. Not the Android client ID.
   static const String serverClientId =
-      'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com';
+      '507923045845-e6u3uut1sai4aj7hqtnpj369bds9ubdv.apps.googleusercontent.com';
 
-  /// The *iOS* client ID. Android ignores it; leave null until iOS is set up.
-  static const String? iosClientId = null;
+  /// The *iOS* client ID. Android ignores it.
+  static const String iosClientId =
+      '507923045845-8gm437641js5tcaeaga0t3ap8slintn9.apps.googleusercontent.com';
 }

@@ -16,3 +16,18 @@ String deleteAccountFailureMessage(BuildContext context, Failure failure) {
     _ => failureMessage(context, failure),
   };
 }
+
+/// When confirming with Google there is no password to get wrong: a 400 means
+/// the picked Google account isn't the one this account signs in with,
+/// whatever error key comes with it.
+String deleteAccountWithGoogleFailureMessage(
+  BuildContext context,
+  Failure failure,
+) {
+  return switch (failure) {
+    ClientFailure(statusCode: 400) => AppLocalizations.of(
+      context,
+    )!.profileDeleteAccountWrongGoogleAccount,
+    _ => failureMessage(context, failure),
+  };
+}

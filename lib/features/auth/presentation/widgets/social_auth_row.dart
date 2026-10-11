@@ -12,10 +12,6 @@ import '../cubit/google_sign_in_cubit.dart';
 import '../cubit/google_sign_in_state.dart';
 import '../utils/auth_l10n.dart';
 
-/// Row of three equal-width social sign-in buttons (design `01b · Sign In`).
-/// Google is wired up and owns its own cubit, so the row works the same on
-/// the sign-in and sign-up screens. Apple and Facebook still just announce
-/// "coming soon".
 class SocialAuthRow extends StatelessWidget {
   const SocialAuthRow({super.key});
 

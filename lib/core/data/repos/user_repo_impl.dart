@@ -1,3 +1,4 @@
+import '../../domain/entities/sign_in_method.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repos/user_repo.dart';
 import '../datasources/user_local_data_source.dart';
@@ -10,4 +11,10 @@ class UserRepoImpl implements UserRepo {
   @override
   UserEntity? getCachedUser() =>
       _userLocalDataSource.getCachedUserData()?.toEntity();
+
+  @override
+  SignInMethod getSignInMethod() {
+    final stored = _userLocalDataSource.getCachedSignInMethod();
+    return SignInMethod.values.asNameMap()[stored] ?? SignInMethod.email;
+  }
 }

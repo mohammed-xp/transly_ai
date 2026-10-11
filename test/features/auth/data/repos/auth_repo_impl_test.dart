@@ -22,12 +22,18 @@ class _UnusedUserLocal implements UserLocalDataSource {
 /// Records what a successful sign-in persists; everything else is unused.
 class _RecordingUserLocal implements UserLocalDataSource {
   UserModel? cachedUser;
+  String? signInMethod;
   String? accessToken;
   String? refreshToken;
 
   @override
   Future<void> cacheUserData(UserModel data) async {
     cachedUser = data;
+  }
+
+  @override
+  Future<void> cacheSignInMethod(String method) async {
+    signInMethod = method;
   }
 
   @override
@@ -152,6 +158,17 @@ void main() {
     expect((result as ApiFailure<void>).failure, isA<NetworkFailure>());
   });
 
+  test('remembers that the session was started with email', () async {
+    final userLocal = _RecordingUserLocal();
+
+    await _repo(
+      FakeApiConsumer(_loginResponse),
+      userLocal: userLocal,
+    ).signInWithEmail(email: 'ahmed@example.com', password: 'secret123');
+
+    expect(userLocal.signInMethod, 'email');
+  });
+
   group('signInWithGoogle', () {
     test('posts the Google ID token and stores the session', () async {
       final api = FakeApiConsumer(_loginResponse);
@@ -171,6 +188,18 @@ void main() {
       expect(userLocal.cachedUser?.id, 'u1');
       expect(userLocal.accessToken, 'access-1');
       expect(userLocal.refreshToken, 'refresh-1');
+    });
+
+    test('remembers that the session was started with Google', () async {
+      final userLocal = _RecordingUserLocal();
+
+      await _repo(
+        FakeApiConsumer(_loginResponse),
+        userLocal: userLocal,
+        google: FakeGoogleAuthDataSource(idToken: 'google-id-token'),
+      ).signInWithGoogle();
+
+      expect(userLocal.signInMethod, 'google');
     });
 
     test('skips the API when the account picker is closed', () async {

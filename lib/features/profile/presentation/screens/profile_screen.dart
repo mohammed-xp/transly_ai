@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_links.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/l10n/failure_message.dart';
@@ -20,6 +21,7 @@ import '../../../app_language/presentation/widgets/app_language_sheet.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
+import '../utils/sign_in_method_l10n.dart';
 import '../widgets/delete_account_sheet.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_identity.dart';
@@ -72,7 +74,8 @@ class _ProfileView extends StatelessWidget {
               child: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) => switch (state) {
                   ProfileInitial() => const SizedBox.shrink(),
-                  ProfileLoaded(:final user) => _ProfileContent(user: user),
+                  ProfileLoaded(:final user, :final signInMethod) =>
+                    _ProfileContent(user: user, signInMethod: signInMethod),
                   ProfileFailed(:final failure) => _ProfileError(
                     failure: failure,
                   ),
@@ -87,9 +90,10 @@ class _ProfileView extends StatelessWidget {
 }
 
 class _ProfileContent extends StatelessWidget {
-  const _ProfileContent({required this.user});
+  const _ProfileContent({required this.user, required this.signInMethod});
 
   final UserEntity user;
+  final SignInMethod signInMethod;
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +125,7 @@ class _ProfileContent extends StatelessWidget {
               const _AppLanguageRow(),
               ProfileRow(
                 label: l10n.profileSignInMethod,
-                value: l10n.profileSignInMethodEmail,
+                value: signInMethodLabel(context, signInMethod),
               ),
             ],
           ),
@@ -154,7 +158,9 @@ class _ProfileContent extends StatelessWidget {
           const SizedBox(height: AppDimens.spaceL),
           const ProfileSignOutButton(),
           const SizedBox(height: AppDimens.spaceM),
-          _DeleteAccountButton(onTap: () => showDeleteAccountSheet(context)),
+          _DeleteAccountButton(
+            onTap: () => showDeleteAccountSheet(context, signInMethod),
+          ),
         ],
       ),
     );

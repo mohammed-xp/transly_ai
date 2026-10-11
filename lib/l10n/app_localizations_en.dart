@@ -350,6 +350,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSignInMethodEmail => 'Email';
 
   @override
+  String get profileSignInMethodGoogle => 'Google';
+
+  @override
   String get profilePrivacySection => 'Privacy';
 
   @override
@@ -386,6 +389,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileDeleteAccountWrongPassword => 'Incorrect password';
+
+  @override
+  String get profileDeleteAccountGoogleHint =>
+      'You\'ll confirm with your Google account.';
+
+  @override
+  String get profileDeleteAccountWrongGoogleAccount =>
+      'That isn\'t the Google account you signed in with.';
 
   @override
   String get profileDeleteAccountDone => 'Your account has been deleted';

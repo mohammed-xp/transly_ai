@@ -51,6 +51,7 @@ import '../../features/profile/data/repos/plan_usage_repo_impl.dart';
 import '../../features/profile/domain/repos/account_repo.dart';
 import '../../features/profile/domain/repos/plan_usage_repo.dart';
 import '../../features/profile/domain/usecases/delete_account_use_case.dart';
+import '../../features/profile/domain/usecases/delete_account_with_google_use_case.dart';
 import '../../features/profile/domain/usecases/get_cached_plan_usecase.dart';
 import '../../features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import '../../features/profile/presentation/cubit/delete_account_cubit.dart';
@@ -80,6 +81,7 @@ import '../data/repos/user_repo_impl.dart';
 import '../domain/repos/logout_repo.dart';
 import '../domain/repos/user_repo.dart';
 import '../domain/usecases/get_cached_user_use_case.dart';
+import '../domain/usecases/get_sign_in_method_use_case.dart';
 import '../init/hive_initializer.dart';
 import '../network/api_consumer.dart';
 import '../network/dio_base_api.dart';
@@ -206,7 +208,7 @@ Future<void> configureDependencies() async {
     () => PlanUsageRepoImpl(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AccountRepo>(
-    () => AccountRepoImpl(serviceLocator()),
+    () => AccountRepoImpl(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AppUpdateRepo>(
     () => AppUpdateRepoImpl(serviceLocator()),
@@ -257,6 +259,9 @@ Future<void> configureDependencies() async {
     () => GetCachedUserUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
+    () => GetSignInMethodUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
     () => GetPlanUsageUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
@@ -264,6 +269,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton(
     () => DeleteAccountUseCase(serviceLocator(), serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => DeleteAccountWithGoogleUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
     () => CheckForAppUpdateUseCase(serviceLocator()),
@@ -310,13 +318,19 @@ Future<void> configureDependencies() async {
     ),
   );
   serviceLocator.registerFactory(
-    () => ProfileCubit(getCachedUser: serviceLocator()),
+    () => ProfileCubit(
+      getCachedUser: serviceLocator(),
+      getSignInMethod: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => PlanUsageCubit(getPlanUsage: serviceLocator()),
   );
   serviceLocator.registerFactory(
-    () => DeleteAccountCubit(deleteAccount: serviceLocator()),
+    () => DeleteAccountCubit(
+      deleteAccount: serviceLocator(),
+      deleteAccountWithGoogle: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => AppUpdateCubit(

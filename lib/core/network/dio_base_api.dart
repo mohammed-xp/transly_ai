@@ -20,7 +20,7 @@ class DioBaseApi extends ApiConsumer {
         PrettyDioLogger(
           requestBody: true,
           responseBody: true,
-          filter: (options, _) => !_isAuthEndpoint(options.path),
+          // filter: (options, _) => !_isAuthEndpoint(options.path),
         ),
       );
     }
@@ -38,6 +38,7 @@ class DioBaseApi extends ApiConsumer {
       path.contains(Endpoints.login) ||
       path.contains(Endpoints.register) ||
       path.contains(Endpoints.googleLogin) ||
+      path.contains(Endpoints.deleteAccount) ||
       path.contains(Endpoints.refreshToken);
 
   Future<void> _onRequest(

@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/errors/failure.dart';
 
@@ -10,9 +11,10 @@ class ProfileInitial extends ProfileState {
 }
 
 class ProfileLoaded extends ProfileState {
-  const ProfileLoaded(this.user);
+  const ProfileLoaded(this.user, this.signInMethod);
 
   final UserEntity user;
+  final SignInMethod signInMethod;
 }
 
 class ProfileFailed extends ProfileState {

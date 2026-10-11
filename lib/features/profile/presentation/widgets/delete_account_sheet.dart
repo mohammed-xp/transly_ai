@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
@@ -15,7 +16,10 @@ import '../utils/delete_account_l10n.dart';
 /// Shows [DeleteAccountSheet]. It can't be dismissed by a tap outside or a
 /// drag, and not at all while the deletion is in flight. On success the app
 /// routes to sign-in, which removes the sheet along with the profile route.
-Future<void> showDeleteAccountSheet(BuildContext context) {
+Future<void> showDeleteAccountSheet(
+  BuildContext context,
+  SignInMethod signInMethod,
+) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
 
   return showModalBottomSheet<void>(
@@ -35,43 +39,20 @@ Future<void> showDeleteAccountSheet(BuildContext context) {
     ),
     builder: (_) => BlocProvider(
       create: (_) => serviceLocator<DeleteAccountCubit>(),
-      child: const DeleteAccountSheet(),
+      child: DeleteAccountSheet(signInMethod: signInMethod),
     ),
   );
 }
 
-class DeleteAccountSheet extends StatefulWidget {
-  const DeleteAccountSheet({super.key});
+/// The deletion is confirmed the way the session was started: an email
+/// session re-enters its password, a Google session signs in with Google
+/// again (it has no password to enter).
+class DeleteAccountSheet extends StatelessWidget {
+  const DeleteAccountSheet({super.key, required this.signInMethod});
+
+  final SignInMethod signInMethod;
 
   static const double topRadius = 28;
-
-  @override
-  State<DeleteAccountSheet> createState() => _DeleteAccountSheetState();
-}
-
-class _DeleteAccountSheetState extends State<DeleteAccountSheet> {
-  late final TextEditingController _passwordController;
-  late final FocusNode _passwordFocus;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordController = TextEditingController();
-    _passwordFocus = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _passwordFocus.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final password = _passwordController.text;
-    if (password.isEmpty) return;
-    context.read<DeleteAccountCubit>().deleteAccount(password);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,16 +99,10 @@ class _DeleteAccountSheetState extends State<DeleteAccountSheet> {
                   ),
                 ),
                 const SizedBox(height: AppDimens.spaceXL),
-                _PasswordField(
-                  controller: _passwordController,
-                  focusNode: _passwordFocus,
-                  onSubmitted: _submit,
-                ),
-                const SizedBox(height: AppDimens.spaceXL),
-                _DeleteButton(
-                  controller: _passwordController,
-                  onPressed: _submit,
-                ),
+                switch (signInMethod) {
+                  SignInMethod.email => const _PasswordConfirmation(),
+                  SignInMethod.google => const _GoogleConfirmation(),
+                },
                 const SizedBox(height: AppDimens.spaceS),
                 const _CancelButton(),
               ],
@@ -178,6 +153,61 @@ class _WarningIcon extends StatelessWidget {
   }
 }
 
+class _PasswordConfirmation extends StatefulWidget {
+  const _PasswordConfirmation();
+
+  @override
+  State<_PasswordConfirmation> createState() => _PasswordConfirmationState();
+}
+
+class _PasswordConfirmationState extends State<_PasswordConfirmation> {
+  late final TextEditingController _passwordController;
+  late final FocusNode _passwordFocus;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordController = TextEditingController();
+    _passwordFocus = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final password = _passwordController.text;
+    if (password.isEmpty) return;
+    context.read<DeleteAccountCubit>().deleteAccount(password);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _PasswordField(
+          controller: _passwordController,
+          focusNode: _passwordFocus,
+          onSubmitted: _submit,
+        ),
+        const SizedBox(height: AppDimens.spaceXL),
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: _passwordController,
+          builder: (context, value, _) => _DeleteButton(
+            isEnabled: value.text.isNotEmpty,
+            onPressed: _submit,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PasswordField extends StatelessWidget {
   const _PasswordField({
     required this.controller,
@@ -217,11 +247,67 @@ class _PasswordField extends StatelessWidget {
   }
 }
 
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton({required this.controller, required this.onPressed});
+class _GoogleConfirmation extends StatelessWidget {
+  const _GoogleConfirmation();
 
-  final TextEditingController controller;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.profileDeleteAccountGoogleHint,
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: context.palette.textMuted),
+        ),
+        const _GoogleConfirmationError(),
+        const SizedBox(height: AppDimens.spaceXL),
+        _DeleteButton(
+          onPressed: () =>
+              context.read<DeleteAccountCubit>().deleteAccountWithGoogle(),
+        ),
+      ],
+    );
+  }
+}
+
+class _GoogleConfirmationError extends StatelessWidget {
+  const _GoogleConfirmationError();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<DeleteAccountCubit, DeleteAccountState, Failure?>(
+      selector: (state) => switch (state) {
+        DeleteAccountFailed(:final failure) => failure,
+        _ => null,
+      },
+      builder: (context, failure) {
+        if (failure == null) return const SizedBox.shrink();
+        final theme = Theme.of(context);
+
+        return Padding(
+          padding: const EdgeInsets.only(top: AppDimens.spaceS),
+          child: Text(
+            deleteAccountWithGoogleFailureMessage(context, failure),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton({required this.onPressed, this.isEnabled = true});
+
   final VoidCallback onPressed;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -232,43 +318,38 @@ class _DeleteButton extends StatelessWidget {
 
     return BlocSelector<DeleteAccountCubit, DeleteAccountState, bool>(
       selector: (state) => state.isBusy,
-      builder: (context, isBusy) => ValueListenableBuilder<TextEditingValue>(
-        valueListenable: controller,
-        builder: (context, value, _) {
-          final isEnabled = !isBusy && value.text.isNotEmpty;
+      builder: (context, isBusy) {
+        final canTap = isEnabled && !isBusy;
 
-          return Material(
-            color: isEnabled || isBusy
-                ? c.coral
-                : c.coral.withValues(alpha: 0.4),
+        return Material(
+          color: canTap || isBusy ? c.coral : c.coral.withValues(alpha: 0.4),
+          borderRadius: radius,
+          child: InkWell(
+            onTap: canTap ? onPressed : null,
             borderRadius: radius,
-            child: InkWell(
-              onTap: isEnabled ? onPressed : null,
-              borderRadius: radius,
-              child: SizedBox(
-                height: AppDimens.buttonHeight,
-                child: Center(
-                  child: isBusy
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.4,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text(
-                          label,
-                          style: textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                          ),
+            child: SizedBox(
+              height: AppDimens.buttonHeight,
+              child: Center(
+                child: isBusy
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
                         ),
-                ),
+                      )
+                    : Text(
+                        label,
+                        style: textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -9,6 +9,7 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   static const _currentUserKey = 'currentUser';
   static const _planKey = 'userPlan';
+  static const _signInMethodKey = 'signInMethod';
 
   final Box<UserModel> _box;
   final Box<String> _settingsBox;
@@ -27,9 +28,17 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   String? getCachedPlan() => _settingsBox.get(_planKey);
 
   @override
+  Future<void> cacheSignInMethod(String method) =>
+      _settingsBox.put(_signInMethodKey, method);
+
+  @override
+  String? getCachedSignInMethod() => _settingsBox.get(_signInMethodKey);
+
+  @override
   Future<void> clearCachedUserData() async {
     await _box.delete(_currentUserKey);
     await _settingsBox.delete(_planKey);
+    await _settingsBox.delete(_signInMethodKey);
   }
 
   @override

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/di/service_locator.dart';
+import 'package:transly_ai/core/domain/entities/sign_in_method.dart';
 import 'package:transly_ai/core/domain/usecases/get_cached_user_use_case.dart';
+import 'package:transly_ai/core/domain/usecases/get_sign_in_method_use_case.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
@@ -25,16 +27,20 @@ import '../../../../helpers/fake_user_repo.dart';
 void main() {
   late FakePlanUsageRepo usageRepo;
   late FakeAppLanguageRepo languageRepo;
+  late SignInMethod signInMethod;
 
   setUp(() {
     usageRepo = FakePlanUsageRepo(ApiResult.success(testFreeUsage));
     languageRepo = FakeAppLanguageRepo();
+    signInMethod = SignInMethod.email;
     serviceLocator
-      ..registerFactory(
-        () => ProfileCubit(
-          getCachedUser: GetCachedUserUseCase(FakeUserRepo(testUser)),
-        ),
-      )
+      ..registerFactory(() {
+        final userRepo = FakeUserRepo(testUser, signInMethod);
+        return ProfileCubit(
+          getCachedUser: GetCachedUserUseCase(userRepo),
+          getSignInMethod: GetSignInMethodUseCase(userRepo),
+        );
+      })
       ..registerFactory(
         () => PlanUsageCubit(getPlanUsage: GetPlanUsageUseCase(usageRepo)),
       );
@@ -82,6 +88,25 @@ void main() {
     expect(find.text('Ahmed Hassan'), findsNWidgets(2));
     expect(find.text('ahmed.hassan@gmail.com'), findsNWidgets(2));
     expect(find.text('Sign out'), findsOneWidget);
+  });
+
+  testWidgets('names email as the sign-in method of an email session', (
+    tester,
+  ) async {
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Email'), findsNWidgets(2));
+    expect(find.text('Google'), findsNothing);
+  });
+
+  testWidgets('names Google as the sign-in method of a Google session', (
+    tester,
+  ) async {
+    signInMethod = SignInMethod.google;
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Google'), findsOneWidget);
   });
 
   testWidgets('lays out in Arabic without overflowing', (tester) async {

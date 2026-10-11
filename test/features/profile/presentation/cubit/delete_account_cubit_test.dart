@@ -5,6 +5,7 @@ import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/session/session_manager.dart';
 import 'package:transly_ai/features/profile/domain/usecases/delete_account_use_case.dart';
+import 'package:transly_ai/features/profile/domain/usecases/delete_account_with_google_use_case.dart';
 import 'package:transly_ai/features/profile/presentation/cubit/delete_account_cubit.dart';
 import 'package:transly_ai/features/profile/presentation/cubit/delete_account_state.dart';
 
@@ -12,9 +13,13 @@ import '../../../../helpers/fake_account_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 
 void main() {
-  DeleteAccountCubit buildCubit(FakeAccountRepo repo) => DeleteAccountCubit(
-    deleteAccount: DeleteAccountUseCase(repo, SessionManager(FakeLogoutRepo())),
-  );
+  DeleteAccountCubit buildCubit(FakeAccountRepo repo) {
+    final session = SessionManager(FakeLogoutRepo());
+    return DeleteAccountCubit(
+      deleteAccount: DeleteAccountUseCase(repo, session),
+      deleteAccountWithGoogle: DeleteAccountWithGoogleUseCase(repo, session),
+    );
+  }
 
   Future<List<DeleteAccountState>> statesOf(
     DeleteAccountCubit cubit,
@@ -110,5 +115,73 @@ void main() {
 
     await expectLater(deletion, completes);
     await closing;
+  });
+
+  group('deleteAccountWithGoogle', () {
+    FakeAccountRepo repoWith(ApiResult<bool> googleResult) => FakeAccountRepo(
+      const ApiResult.success(null),
+      googleResult: googleResult,
+    );
+
+    test(
+      'emits InProgress then Succeeded when the account is deleted',
+      () async {
+        final repo = repoWith(const ApiResult.success(true));
+        final cubit = buildCubit(repo);
+        addTearDown(cubit.close);
+
+        final states = await statesOf(cubit, cubit.deleteAccountWithGoogle);
+
+        expect(states, [
+          isA<DeleteAccountInProgress>(),
+          isA<DeleteAccountSucceeded>(),
+        ]);
+        expect(repo.googleDeletions, 1);
+      },
+    );
+
+    test('returns to Initial when the account picker is closed', () async {
+      final cubit = buildCubit(repoWith(const ApiResult.success(false)));
+      addTearDown(cubit.close);
+
+      final states = await statesOf(cubit, cubit.deleteAccountWithGoogle);
+
+      expect(states, [
+        isA<DeleteAccountInProgress>(),
+        isA<DeleteAccountInitial>(),
+      ]);
+    });
+
+    test('emits InProgress then Failed with the failure', () async {
+      final cubit = buildCubit(
+        repoWith(const ApiResult.failure(ClientFailure(statusCode: 400))),
+      );
+      addTearDown(cubit.close);
+
+      final states = await statesOf(cubit, cubit.deleteAccountWithGoogle);
+
+      expect(states, [
+        isA<DeleteAccountInProgress>(),
+        isA<DeleteAccountFailed>(),
+      ]);
+      expect(
+        (states.last as DeleteAccountFailed).failure,
+        isA<ClientFailure>().having((f) => f.statusCode, 'statusCode', 400),
+      );
+    });
+
+    test('ignores a second request while one is in flight', () async {
+      final repo = repoWith(const ApiResult.success(true))
+        ..gate = Completer<void>();
+      final cubit = buildCubit(repo);
+      addTearDown(cubit.close);
+
+      final first = cubit.deleteAccountWithGoogle();
+      await cubit.deleteAccountWithGoogle();
+      repo.gate!.complete();
+      await first;
+
+      expect(repo.googleDeletions, 1);
+    });
   });
 }
