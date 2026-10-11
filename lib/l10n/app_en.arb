@@ -20,17 +20,17 @@
   "@onboardingCaption": {
     "description": "Secondary caption under the subtitle on the onboarding welcome screen."
   },
-  "onboardingGetStarted": "Get Started",
-  "@onboardingGetStarted": {
-    "description": "Primary call-to-action button on the onboarding welcome screen."
-  },
-  "onboardingHaveAccount": "Have an account?",
-  "@onboardingHaveAccount": {
-    "description": "Prompt preceding the sign-in link on the onboarding welcome screen."
-  },
   "onboardingSignIn": "Sign in",
   "@onboardingSignIn": {
-    "description": "Sign-in link on the onboarding welcome screen."
+    "description": "Primary call-to-action button on the onboarding welcome screen."
+  },
+  "onboardingNoAccount": "Don't have an account?",
+  "@onboardingNoAccount": {
+    "description": "Prompt preceding the create-account link on the onboarding welcome screen."
+  },
+  "onboardingCreateAccount": "Create account",
+  "@onboardingCreateAccount": {
+    "description": "Create-account link on the onboarding welcome screen."
   },
   "translateKicker": "TRANSLATE",
   "@translateKicker": {

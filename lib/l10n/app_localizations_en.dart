@@ -25,13 +25,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingCaption => 'Speak, type or scan — translate in seconds.';
 
   @override
-  String get onboardingGetStarted => 'Get Started';
-
-  @override
-  String get onboardingHaveAccount => 'Have an account?';
-
-  @override
   String get onboardingSignIn => 'Sign in';
+
+  @override
+  String get onboardingNoAccount => 'Don\'t have an account?';
+
+  @override
+  String get onboardingCreateAccount => 'Create account';
 
   @override
   String get translateKicker => 'TRANSLATE';

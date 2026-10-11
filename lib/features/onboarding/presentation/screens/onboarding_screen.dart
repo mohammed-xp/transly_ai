@@ -178,17 +178,17 @@ class _OnboardingViewState extends State<_OnboardingView>
                                     const SizedBox(height: 30),
                                     SizedBox(
                                       width: double.infinity,
-                                      child: _GetStartedButton(
+                                      child: _SignInButton(
                                         isDark: isDark,
-                                        label: l10n.onboardingGetStarted,
+                                        label: l10n.onboardingSignIn,
                                         textTheme: textTheme,
-                                        onPressed: () => context.goNamed(
-                                          AppRoutes.signUpName,
+                                        onPressed: () => context.pushNamed(
+                                          AppRoutes.signInName,
                                         ),
                                       ),
                                     ),
                                     const SizedBox(height: 18),
-                                    _SignInRow(
+                                    _SignUpRow(
                                       isDark: isDark,
                                       textTheme: textTheme,
                                     ),
@@ -343,10 +343,11 @@ class _Wordmark extends StatelessWidget {
   }
 }
 
-/// Primary call-to-action. Light: white fill + coral label. Dark: gradient fill
-/// + white label. The trailing arrow points in the reading direction (flips RTL).
-class _GetStartedButton extends StatelessWidget {
-  const _GetStartedButton({
+/// Primary call-to-action — routes to the sign-in screen. Light: white fill +
+/// coral label. Dark: gradient fill + white label. The trailing arrow points in
+/// the reading direction (flips RTL).
+class _SignInButton extends StatelessWidget {
+  const _SignInButton({
     required this.isDark,
     required this.label,
     required this.textTheme,
@@ -411,9 +412,9 @@ class _GetStartedButton extends StatelessWidget {
   }
 }
 
-/// "Have an account? Sign in" — routes to the sign-in screen.
-class _SignInRow extends StatelessWidget {
-  const _SignInRow({required this.isDark, required this.textTheme});
+/// "Don't have an account? Create account" — routes to the sign-up screen.
+class _SignUpRow extends StatelessWidget {
+  const _SignUpRow({required this.isDark, required this.textTheme});
 
   final bool isDark;
   final TextTheme textTheme;
@@ -432,13 +433,13 @@ class _SignInRow extends StatelessWidget {
         spacing: AppDimens.spaceXS,
         children: [
           Text(
-            l10n.onboardingHaveAccount,
+            l10n.onboardingNoAccount,
             style: textTheme.bodySmall?.copyWith(color: promptColor),
           ),
           GestureDetector(
-            onTap: () => context.pushNamed(AppRoutes.signInName),
+            onTap: () => context.goNamed(AppRoutes.signUpName),
             child: Text(
-              l10n.onboardingSignIn,
+              l10n.onboardingCreateAccount,
               style: textTheme.bodySmall?.copyWith(
                 color: linkColor,
                 fontWeight: FontWeight.w600,

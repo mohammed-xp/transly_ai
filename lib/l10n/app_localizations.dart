@@ -131,20 +131,20 @@ abstract class AppLocalizations {
   /// Primary call-to-action button on the onboarding welcome screen.
   ///
   /// In en, this message translates to:
-  /// **'Get Started'**
-  String get onboardingGetStarted;
-
-  /// Prompt preceding the sign-in link on the onboarding welcome screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Have an account?'**
-  String get onboardingHaveAccount;
-
-  /// Sign-in link on the onboarding welcome screen.
-  ///
-  /// In en, this message translates to:
   /// **'Sign in'**
   String get onboardingSignIn;
+
+  /// Prompt preceding the create-account link on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get onboardingNoAccount;
+
+  /// Create-account link on the onboarding welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get onboardingCreateAccount;
 
   /// Uppercase kicker above the title on the translate screen.
   ///

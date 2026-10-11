@@ -25,13 +25,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingCaption => 'تحدّث أو اكتب أو صوّر — وترجم في ثوانٍ.';
 
   @override
-  String get onboardingGetStarted => 'ابدأ الآن';
-
-  @override
-  String get onboardingHaveAccount => 'لديك حساب؟';
-
-  @override
   String get onboardingSignIn => 'تسجيل الدخول';
+
+  @override
+  String get onboardingNoAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get onboardingCreateAccount => 'إنشاء حساب';
 
   @override
   String get translateKicker => 'الترجمة';
