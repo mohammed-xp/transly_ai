@@ -42,7 +42,7 @@ class TranslateHeader extends StatelessWidget {
                   style: textTheme.labelMedium?.copyWith(color: c.textMuted),
                 ),
                 Text(
-                  'Transly', // brand name — not localized
+                  'Traduly', // brand name — not localized
                   style: textTheme.headlineLarge?.copyWith(color: c.ink),
                 ),
               ],

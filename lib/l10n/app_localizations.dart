@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The application title.
   ///
   /// In en, this message translates to:
-  /// **'Transly AI'**
+  /// **'Traduly AI'**
   String get appTitle;
 
   /// Subtitle shown under the wordmark on the splash screen.
@@ -1031,7 +1031,7 @@ abstract class AppLocalizations {
   /// Explanation on the required-update screen.
   ///
   /// In en, this message translates to:
-  /// **'This version is no longer supported. Update Transly to keep translating.'**
+  /// **'This version is no longer supported. Update Traduly to keep translating.'**
   String get updateRequiredBody;
 
   /// Label above the installed version on the required-update screen.

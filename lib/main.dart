@@ -65,7 +65,7 @@ class TranslyApp extends StatelessWidget {
         // sits above MaterialApp.
         child: BlocBuilder<AppLanguageCubit, AppLanguage>(
           builder: (context, language) => MaterialApp.router(
-            title: 'Transly AI',
+            onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,

@@ -113,7 +113,7 @@ class _SplashViewState extends State<_SplashView>
                       const SizedBox(height: 24),
                       Text.rich(
                         TextSpan(
-                          text: 'Transly',
+                          text: 'Traduly',
                           children: [
                             TextSpan(
                               text: ' AI',

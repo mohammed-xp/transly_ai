@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Transly AI",
+  "appTitle": "Traduly AI",
   "@appTitle": {
     "description": "The application title."
   },
@@ -672,7 +672,7 @@
   "@updateRequiredTitle": {
     "description": "Title of the required-update screen."
   },
-  "updateRequiredBody": "This version is no longer supported. Update Transly to keep translating.",
+  "updateRequiredBody": "This version is no longer supported. Update Traduly to keep translating.",
   "@updateRequiredBody": {
     "description": "Explanation on the required-update screen."
   },

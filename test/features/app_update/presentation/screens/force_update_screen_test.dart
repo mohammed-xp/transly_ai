@@ -56,7 +56,7 @@ void main() {
     expect(
       find.text(
         'This version is no longer supported. '
-        'Update Transly to keep translating.',
+        'Update Traduly to keep translating.',
       ),
       findsOneWidget,
     );

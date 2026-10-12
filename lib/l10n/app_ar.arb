@@ -1,6 +1,6 @@
 {
   "@@locale": "ar",
-  "appTitle": "ترانسلي AI",
+  "appTitle": "Traduly AI",
   "splashTagline": "ترجمة بالذكاء الاصطناعي",
   "splashPoweredBy": "مدعوم بالذكاء الاصطناعي",
   "onboardingSubtitle": "ترجمة فورية ودقيقة بالذكاء الاصطناعي — أكثر من ٩٠ لغة بين يديك.",
@@ -155,7 +155,7 @@
   "updateNow": "تحديث الآن",
   "updateLater": "لاحقًا",
   "updateRequiredTitle": "يلزم تحديث التطبيق",
-  "updateRequiredBody": "هذا الإصدار لم يعد مدعومًا. حدّث Transly للمتابعة في الترجمة.",
+  "updateRequiredBody": "هذا الإصدار لم يعد مدعومًا. حدّث Traduly للمتابعة في الترجمة.",
   "updateYourVersion": "إصدارك",
   "updateLatestVersion": "الأحدث",
   "updateFromAppStore": "التحديث من App Store",

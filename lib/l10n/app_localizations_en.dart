@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Transly AI';
+  String get appTitle => 'Traduly AI';
 
   @override
   String get splashTagline => 'AI-powered translation';
@@ -538,7 +538,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateRequiredBody =>
-      'This version is no longer supported. Update Transly to keep translating.';
+      'This version is no longer supported. Update Traduly to keep translating.';
 
   @override
   String get updateYourVersion => 'Your version';

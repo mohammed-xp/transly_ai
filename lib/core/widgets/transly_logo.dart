@@ -4,7 +4,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_dimens.dart';
 import 'transly_glyph_painter.dart';
 
-/// The gradient logo tile with the white translate glyph.
+/// The gradient logo tile with the white Transly mark.
 ///
 /// The default size is the 104px hero tile (design `00 · Splash`,
 /// `13b · Update`); [TranslyLogo.compact] is the 76px tile on the

@@ -312,7 +312,7 @@ class _LanguageChips extends StatelessWidget {
   }
 }
 
-/// "Transly AI" wordmark — brand name, not localized.
+/// "Traduly AI" wordmark — brand name, not localized.
 class _Wordmark extends StatelessWidget {
   const _Wordmark({required this.isDark, required this.textTheme});
 
@@ -327,7 +327,7 @@ class _Wordmark extends StatelessWidget {
     );
     return Text.rich(
       TextSpan(
-        text: 'Transly',
+        text: 'Traduly',
         style: base,
         children: [
           TextSpan(

@@ -7,8 +7,8 @@ import '../../../../core/widgets/transly_glyph_painter.dart';
 /// The 76px logo tile on the onboarding welcome screen (design `01 · Welcome`).
 ///
 /// Theme-aware, matching the two variants in the design:
-/// - **Light:** white tile, two-tone glyph (coral mark + ink "A").
-/// - **Dark:** gradient tile, white glyph.
+/// - **Light:** white tile, coral mark with the back ring faded.
+/// - **Dark:** gradient tile, white mark.
 ///
 /// The tile uses the shared `AppDimens.logoSize` (76); its radius (22) and glyph
 /// (40) are onboarding-specific and stay local — same convention as `TranslyLogo`.
@@ -45,10 +45,10 @@ class OnboardingLogo extends StatelessWidget {
           height: _glyphSize,
           child: CustomPaint(
             painter: isDark
-                ? const TranslyGlyphPainter(color: Colors.white)
-                : const TranslyGlyphPainter(
-                    color: AppColors.deep,
-                    strokeBColor: AppColors.inkLight,
+                ? const TranslyGlyphPainter()
+                : TranslyGlyphPainter(
+                    color: AppColors.primary,
+                    secondaryColor: AppColors.primary.withValues(alpha: 0.42),
                   ),
           ),
         ),

@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'ترانسلي AI';
+  String get appTitle => 'Traduly AI';
 
   @override
   String get splashTagline => 'ترجمة بالذكاء الاصطناعي';
@@ -531,7 +531,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updateRequiredBody =>
-      'هذا الإصدار لم يعد مدعومًا. حدّث Transly للمتابعة في الترجمة.';
+      'هذا الإصدار لم يعد مدعومًا. حدّث Traduly للمتابعة في الترجمة.';
 
   @override
   String get updateYourVersion => 'إصدارك';

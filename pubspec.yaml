@@ -1,5 +1,5 @@
 name: transly_ai
-description: "Transly AI — bilingual AI-powered translation app (Arabic / English)."
+description: "Traduly AI — bilingual AI-powered translation app (Arabic / English)."
 publish_to: 'none'
 version: 1.1.1+3
 
@@ -86,10 +86,11 @@ flutter:
 # un-rounded icon because both platforms apply their own corner mask, and
 # Android's adaptive icon needs the gradient and the mark as separate layers so
 # the launcher mask can crop the background without clipping the mark.
-flutter_icons:
+flutter_launcher_icons:
   # image_path: "assets/icon/app_icon_full.png"
   image_path: "assets/icon/app_icon.png"
-  adaptive_icon_background: "#ffffff"
+  image_path_ios: "assets/icon/app_icon_ios.png"
+  adaptive_icon_background: "#FF5836"
   adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
 
   # android: "ic_launcher"
@@ -100,8 +101,5 @@ flutter_icons:
   android: true
   ios: true
   # The App Store rejects icons carrying an alpha channel.
-  # remove_alpha_ios: true
+  remove_alpha_ios: true
 
-  windows:
-    generate: true
-    icon_size: 256
