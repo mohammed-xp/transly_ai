@@ -16,6 +16,13 @@ import '../../features/app_language/domain/repos/app_language_repo.dart';
 import '../../features/app_language/domain/usecases/get_app_language_usecase.dart';
 import '../../features/app_language/domain/usecases/set_app_language_usecase.dart';
 import '../../features/app_language/presentation/cubit/app_language_cubit.dart';
+import '../../features/app_theme/data/datasources/app_theme_local_data_source.dart';
+import '../../features/app_theme/data/datasources/app_theme_local_data_source_impl.dart';
+import '../../features/app_theme/data/repos/app_theme_repo_impl.dart';
+import '../../features/app_theme/domain/repos/app_theme_repo.dart';
+import '../../features/app_theme/domain/usecases/get_app_theme_mode_usecase.dart';
+import '../../features/app_theme/domain/usecases/set_app_theme_mode_usecase.dart';
+import '../../features/app_theme/presentation/cubit/app_theme_cubit.dart';
 import '../../features/app_update/data/datasources/app_update_data_source.dart';
 import '../../features/app_update/data/datasources/preview_app_update_data_source.dart';
 import '../../features/app_update/data/datasources/upgrader_app_update_data_source.dart';
@@ -185,6 +192,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<AppLanguageLocalDataSource>(
     () => AppLanguageLocalDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<AppThemeLocalDataSource>(
+    () => AppThemeLocalDataSourceImpl(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -221,6 +231,9 @@ Future<void> configureDependencies() async {
           locale.languageCode,
       },
     ),
+  );
+  serviceLocator.registerLazySingleton<AppThemeRepo>(
+    () => AppThemeRepoImpl(serviceLocator()),
   );
 
   // ── Use cases ──
@@ -288,6 +301,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => SetAppLanguageUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetAppThemeModeUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SetAppThemeModeUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -343,6 +362,12 @@ Future<void> configureDependencies() async {
     () => AppLanguageCubit(
       getLanguage: serviceLocator(),
       setLanguage: serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactory(
+    () => AppThemeCubit(
+      getThemeMode: serviceLocator(),
+      setThemeMode: serviceLocator(),
     ),
   );
   serviceLocator.registerFactory(

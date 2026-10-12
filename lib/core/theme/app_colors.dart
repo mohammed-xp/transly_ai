@@ -62,6 +62,11 @@ abstract final class AppColors {
   static const Color radioRingLight = Color(0xFFD5D8DF);
   static const Color radioRingDark = Color(0xFF4A4E57);
 
+  // ── Segmented control (selected pill) ──
+  static const Color segmentSelectedDark = Color(0xFF3A3D45);
+  static const Color segmentShadowLight = Color(0x1F141928);
+  static const Color segmentShadowDark = Color(0x66000000);
+
   // ── Bottom sheet drag handle ──
   static const Color sheetHandleLight = Color(0xFFE6E8ED);
   static const Color sheetHandleDark = Color(0xFF34373F);

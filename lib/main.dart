@@ -14,6 +14,9 @@ import 'core/widgets/toast/app_toast_scope.dart';
 import 'features/app_language/domain/entities/app_language.dart';
 import 'features/app_language/presentation/cubit/app_language_cubit.dart';
 import 'features/app_language/presentation/utils/app_language_l10n.dart';
+import 'features/app_theme/domain/entities/app_theme_mode.dart';
+import 'features/app_theme/presentation/cubit/app_theme_cubit.dart';
+import 'features/app_theme/presentation/utils/app_theme_l10n.dart';
 import 'features/app_update/presentation/cubit/app_update_cubit.dart';
 import 'features/app_update/presentation/widgets/app_update_gate.dart';
 import 'features/auth/presentation/cubit/session_cubit.dart';
@@ -38,6 +41,7 @@ class TranslyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => serviceLocator<SessionCubit>()),
         BlocProvider(create: (_) => serviceLocator<AppLanguageCubit>()),
+        BlocProvider(create: (_) => serviceLocator<AppThemeCubit>()),
         BlocProvider(
           create: (_) => serviceLocator<AppUpdateCubit>()..checkForUpdate(),
         ),
@@ -61,28 +65,34 @@ class TranslyApp extends StatelessWidget {
               break;
           }
         },
-        // The language drives the whole app, so this is the one builder that
-        // sits above MaterialApp.
+        // The language and the appearance drive the whole app, so these are
+        // the only builders that sit above MaterialApp.
         child: BlocBuilder<AppLanguageCubit, AppLanguage>(
-          builder: (context, language) => MaterialApp.router(
-            onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: ThemeMode.system,
-            routerConfig: appRouter,
-            builder: (context, child) => AppToastScope(
-              child: AppUpdateGate(child: child ?? const SizedBox.shrink()),
-            ),
-            locale: appLanguageLocale(language),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-          ),
+          builder: (context, language) =>
+              BlocBuilder<AppThemeCubit, AppThemeMode>(
+                builder: (context, themeMode) => MaterialApp.router(
+                  onGenerateTitle: (context) =>
+                      AppLocalizations.of(context)!.appTitle,
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.light,
+                  darkTheme: AppTheme.dark,
+                  themeMode: materialThemeMode(themeMode),
+                  routerConfig: appRouter,
+                  builder: (context, child) => AppToastScope(
+                    child: AppUpdateGate(
+                      child: child ?? const SizedBox.shrink(),
+                    ),
+                  ),
+                  locale: appLanguageLocale(language),
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
+                ),
+              ),
         ),
       ),
     );

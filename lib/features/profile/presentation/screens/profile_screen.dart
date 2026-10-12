@@ -12,12 +12,16 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
+import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../app_language/domain/entities/app_language.dart';
 import '../../../app_language/presentation/cubit/app_language_cubit.dart';
 import '../../../app_language/presentation/utils/app_language_l10n.dart';
 import '../../../app_language/presentation/widgets/app_language_sheet.dart';
+import '../../../app_theme/domain/entities/app_theme_mode.dart';
+import '../../../app_theme/presentation/cubit/app_theme_cubit.dart';
+import '../../../app_theme/presentation/widgets/app_theme_segmented_control.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
@@ -114,6 +118,11 @@ class _ProfileContent extends StatelessWidget {
           const ProfilePlanUsage(),
           const SizedBox(height: AppDimens.spaceXL),
           ProfileSection(
+            title: l10n.profilePreferencesSection,
+            rows: const [_AppLanguageRow(), _AppThemeRow()],
+          ),
+          const SizedBox(height: AppDimens.spaceXL),
+          ProfileSection(
             title: l10n.profileAccountSection,
             rows: [
               ProfileRow(label: l10n.profileName, value: user.username),
@@ -122,7 +131,6 @@ class _ProfileContent extends StatelessWidget {
                 value: user.email,
                 valueDirection: TextDirection.ltr,
               ),
-              const _AppLanguageRow(),
               ProfileRow(
                 label: l10n.profileSignInMethod,
                 value: signInMethodLabel(context, signInMethod),
@@ -178,6 +186,33 @@ class _AppLanguageRow extends StatelessWidget {
         value: appLanguageLabel(context, language),
         trailing: const ProfileRowChevron(),
         onTap: () => showAppLanguageSheet(context),
+      ),
+    );
+  }
+}
+
+class _AppThemeRow extends StatelessWidget {
+  const _AppThemeRow();
+
+  Future<void> _change(BuildContext context, AppThemeMode mode) async {
+    final saved = await context.read<AppThemeCubit>().changeThemeMode(mode);
+    if (saved || !context.mounted) return;
+    AppToast.show(
+      context,
+      message: AppLocalizations.of(context)!.appThemeSaveFailed,
+      type: AppToastType.error,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppThemeCubit, AppThemeMode>(
+      builder: (context, mode) => ProfileRow(
+        label: AppLocalizations.of(context)!.profileAppearance,
+        trailing: AppThemeSegmentedControl(
+          selected: mode,
+          onChanged: (picked) => _change(context, picked),
+        ),
       ),
     );
   }

@@ -303,6 +303,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileChangePhoto => 'تغيير الصورة';
 
   @override
+  String get profilePreferencesSection => 'التفضيلات';
+
+  @override
   String get profileAccountSection => 'الحساب';
 
   @override
@@ -337,6 +340,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appLanguageSaveFailed => 'تعذّر تغيير اللغة. حاول مرة أخرى.';
+
+  @override
+  String get profileAppearance => 'المظهر';
+
+  @override
+  String get appThemeLight => 'فاتح';
+
+  @override
+  String get appThemeDark => 'داكن';
+
+  @override
+  String get appThemeSystem => 'تلقائي';
+
+  @override
+  String get appThemeSaveFailed => 'تعذّر تغيير المظهر. حاول مرة أخرى.';
 
   @override
   String get profileSignInMethod => 'تسجيل الدخول عبر';

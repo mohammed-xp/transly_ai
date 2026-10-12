@@ -656,6 +656,12 @@ abstract class AppLocalizations {
   /// **'Change photo'**
   String get profileChangePhoto;
 
+  /// Heading of the preferences section on the profile screen (app language, appearance).
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profilePreferencesSection;
+
   /// Heading of the account section on the profile screen.
   ///
   /// In en, this message translates to:
@@ -721,6 +727,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t change the language. Please try again.'**
   String get appLanguageSaveFailed;
+
+  /// Label of the row on the profile screen that holds the light/dark/automatic appearance picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileAppearance;
+
+  /// Appearance option that always uses the light theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appThemeLight;
+
+  /// Appearance option that always uses the dark theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appThemeDark;
+
+  /// Appearance option that follows the phone's light/dark setting. Keep it short; it sits in a three-segment control.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get appThemeSystem;
+
+  /// Toast shown when the chosen appearance can't be saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the appearance. Please try again.'**
+  String get appThemeSaveFailed;
 
   /// Label of the row showing how the user signed in.
   ///

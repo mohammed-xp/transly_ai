@@ -13,6 +13,10 @@ import 'package:transly_ai/features/app_language/domain/entities/app_language.da
 import 'package:transly_ai/features/app_language/domain/usecases/get_app_language_usecase.dart';
 import 'package:transly_ai/features/app_language/domain/usecases/set_app_language_usecase.dart';
 import 'package:transly_ai/features/app_language/presentation/cubit/app_language_cubit.dart';
+import 'package:transly_ai/features/app_theme/domain/entities/app_theme_mode.dart';
+import 'package:transly_ai/features/app_theme/domain/usecases/get_app_theme_mode_usecase.dart';
+import 'package:transly_ai/features/app_theme/domain/usecases/set_app_theme_mode_usecase.dart';
+import 'package:transly_ai/features/app_theme/presentation/cubit/app_theme_cubit.dart';
 import 'package:transly_ai/features/profile/domain/entities/plan_usage_entity.dart';
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import 'package:transly_ai/features/profile/presentation/cubit/plan_usage_cubit.dart';
@@ -21,17 +25,20 @@ import 'package:transly_ai/features/profile/presentation/screens/profile_screen.
 import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_app_language_repo.dart';
+import '../../../../helpers/fake_app_theme_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
 
 void main() {
   late FakePlanUsageRepo usageRepo;
   late FakeAppLanguageRepo languageRepo;
+  late FakeAppThemeRepo themeRepo;
   late SignInMethod signInMethod;
 
   setUp(() {
     usageRepo = FakePlanUsageRepo(ApiResult.success(testFreeUsage));
     languageRepo = FakeAppLanguageRepo();
+    themeRepo = FakeAppThemeRepo();
     signInMethod = SignInMethod.email;
     serviceLocator
       ..registerFactory(() {
@@ -54,11 +61,21 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      BlocProvider(
-        create: (_) => AppLanguageCubit(
-          getLanguage: GetAppLanguageUseCase(languageRepo),
-          setLanguage: SetAppLanguageUseCase(languageRepo),
-        ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AppLanguageCubit(
+              getLanguage: GetAppLanguageUseCase(languageRepo),
+              setLanguage: SetAppLanguageUseCase(languageRepo),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => AppThemeCubit(
+              getThemeMode: GetAppThemeModeUseCase(themeRepo),
+              setThemeMode: SetAppThemeModeUseCase(themeRepo),
+            ),
+          ),
+        ],
         child: MaterialApp(
           theme: ThemeData(extensions: const [AppPalette.light]),
           locale: locale,
@@ -296,5 +313,54 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Device language'), findsOneWidget);
+  });
+
+  testWidgets('the appearance row offers light, dark and automatic', (
+    tester,
+  ) async {
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Preferences'), findsOneWidget);
+    expect(find.text('Appearance'), findsOneWidget);
+    expect(find.text('Light'), findsOneWidget);
+    expect(find.text('Dark'), findsOneWidget);
+    expect(find.text('Auto'), findsOneWidget);
+  });
+
+  testWidgets('picking an appearance saves it straight away', (tester) async {
+    await pumpScreen(tester, const Locale('en'));
+
+    await tester.tap(find.text('Dark'));
+    await tester.pumpAndSettle();
+
+    expect(themeRepo.saved, AppThemeMode.dark);
+  });
+
+  testWidgets('lays out the appearance row in Arabic without overflowing', (
+    tester,
+  ) async {
+    await pumpScreen(tester, const Locale('ar'));
+
+    expect(find.text('المظهر'), findsOneWidget);
+    expect(find.text('تلقائي'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('shows an error toast when the appearance cannot be saved', (
+    tester,
+  ) async {
+    themeRepo.saveResult = const ApiResult.failure(UnknownFailure());
+    await pumpScreen(tester, const Locale('en'));
+
+    await tester.tap(find.text('Dark'));
+    await tester.pump();
+
+    expect(
+      find.text("Couldn't change the appearance. Please try again."),
+      findsOneWidget,
+    );
+    expect(themeRepo.saved, AppThemeMode.system);
+
+    await dismissToast(tester);
   });
 }

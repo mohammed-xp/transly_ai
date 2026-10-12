@@ -382,6 +382,10 @@
   "@profileChangePhoto": {
     "description": "Accessibility label for the camera badge on the profile avatar."
   },
+  "profilePreferencesSection": "Preferences",
+  "@profilePreferencesSection": {
+    "description": "Heading of the preferences section on the profile screen (app language, appearance)."
+  },
   "profileAccountSection": "Account",
   "@profileAccountSection": {
     "description": "Heading of the account section on the profile screen."
@@ -431,6 +435,26 @@
   "appLanguageSaveFailed": "Couldn't change the language. Please try again.",
   "@appLanguageSaveFailed": {
     "description": "Toast shown when the chosen app language can't be saved."
+  },
+  "profileAppearance": "Appearance",
+  "@profileAppearance": {
+    "description": "Label of the row on the profile screen that holds the light/dark/automatic appearance picker."
+  },
+  "appThemeLight": "Light",
+  "@appThemeLight": {
+    "description": "Appearance option that always uses the light theme."
+  },
+  "appThemeDark": "Dark",
+  "@appThemeDark": {
+    "description": "Appearance option that always uses the dark theme."
+  },
+  "appThemeSystem": "Auto",
+  "@appThemeSystem": {
+    "description": "Appearance option that follows the phone's light/dark setting. Keep it short; it sits in a three-segment control."
+  },
+  "appThemeSaveFailed": "Couldn't change the appearance. Please try again.",
+  "@appThemeSaveFailed": {
+    "description": "Toast shown when the chosen appearance can't be saved."
   },
   "profileSignInMethod": "Signed in with",
   "@profileSignInMethod": {

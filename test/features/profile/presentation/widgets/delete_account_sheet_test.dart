@@ -13,6 +13,9 @@ import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
 import 'package:transly_ai/features/app_language/domain/usecases/get_app_language_usecase.dart';
 import 'package:transly_ai/features/app_language/domain/usecases/set_app_language_usecase.dart';
 import 'package:transly_ai/features/app_language/presentation/cubit/app_language_cubit.dart';
+import 'package:transly_ai/features/app_theme/domain/usecases/get_app_theme_mode_usecase.dart';
+import 'package:transly_ai/features/app_theme/domain/usecases/set_app_theme_mode_usecase.dart';
+import 'package:transly_ai/features/app_theme/presentation/cubit/app_theme_cubit.dart';
 import 'package:transly_ai/features/profile/domain/usecases/delete_account_use_case.dart';
 import 'package:transly_ai/features/profile/domain/usecases/delete_account_with_google_use_case.dart';
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
@@ -24,6 +27,7 @@ import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_account_repo.dart';
 import '../../../../helpers/fake_app_language_repo.dart';
+import '../../../../helpers/fake_app_theme_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
@@ -72,12 +76,23 @@ void main() {
     addTearDown(tester.view.reset);
 
     final languageRepo = FakeAppLanguageRepo();
+    final themeRepo = FakeAppThemeRepo();
     await tester.pumpWidget(
-      BlocProvider(
-        create: (_) => AppLanguageCubit(
-          getLanguage: GetAppLanguageUseCase(languageRepo),
-          setLanguage: SetAppLanguageUseCase(languageRepo),
-        ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AppLanguageCubit(
+              getLanguage: GetAppLanguageUseCase(languageRepo),
+              setLanguage: SetAppLanguageUseCase(languageRepo),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => AppThemeCubit(
+              getThemeMode: GetAppThemeModeUseCase(themeRepo),
+              setThemeMode: SetAppThemeModeUseCase(themeRepo),
+            ),
+          ),
+        ],
         child: MaterialApp(
           theme: ThemeData(extensions: const [AppPalette.light]),
           locale: locale,

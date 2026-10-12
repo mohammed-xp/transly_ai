@@ -307,6 +307,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileChangePhoto => 'Change photo';
 
   @override
+  String get profilePreferencesSection => 'Preferences';
+
+  @override
   String get profileAccountSection => 'Account';
 
   @override
@@ -342,6 +345,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appLanguageSaveFailed =>
       'Couldn\'t change the language. Please try again.';
+
+  @override
+  String get profileAppearance => 'Appearance';
+
+  @override
+  String get appThemeLight => 'Light';
+
+  @override
+  String get appThemeDark => 'Dark';
+
+  @override
+  String get appThemeSystem => 'Auto';
+
+  @override
+  String get appThemeSaveFailed =>
+      'Couldn\'t change the appearance. Please try again.';
 
   @override
   String get profileSignInMethod => 'Signed in with';
