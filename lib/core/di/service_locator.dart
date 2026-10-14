@@ -83,10 +83,14 @@ import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translate/data/datasources/api_translation_remote_data_source.dart';
 import '../../features/translate/data/datasources/translation_local_data_source.dart';
 import '../../features/translate/data/datasources/translation_remote_data_source.dart';
+import '../../features/translate/data/datasources/translation_settings_local_data_source.dart';
+import '../../features/translate/data/datasources/translation_settings_local_data_source_impl.dart';
 import '../../features/translate/data/repos/translation_repo_impl.dart';
 import '../../features/translate/domain/repos/translation_repo.dart';
 import '../../features/translate/domain/usecases/check_translation_models_usecase.dart';
 import '../../features/translate/domain/usecases/download_translation_models_usecase.dart';
+import '../../features/translate/domain/usecases/get_saved_tone_usecase.dart';
+import '../../features/translate/domain/usecases/save_tone_usecase.dart';
 import '../../features/translate/domain/usecases/speak_text_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
@@ -188,6 +192,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<TranslationRemoteDataSource>(
     () => ApiTranslationRemoteDataSource(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<TranslationSettingsLocalDataSource>(
+    () => TranslationSettingsLocalDataSourceImpl(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(serviceLocator()),
   );
@@ -223,6 +230,7 @@ Future<void> configureDependencies() async {
       local: serviceLocator(),
       connectivity: serviceLocator(),
       remote: serviceLocator(),
+      settings: serviceLocator(),
     ),
   );
   serviceLocator.registerLazySingleton<UserRepo>(
@@ -276,6 +284,10 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => WatchOnlineAvailabilityUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetSavedToneUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(() => SaveToneUseCase(serviceLocator()));
   serviceLocator.registerLazySingleton(
     () => SignInWithEmailUseCase(serviceLocator(), serviceLocator()),
   );
@@ -435,6 +447,8 @@ Future<void> configureDependencies() async {
       downloadModels: serviceLocator(),
       speakText: serviceLocator(),
       watchOnlineAvailability: serviceLocator(),
+      getSavedTone: serviceLocator(),
+      saveTone: serviceLocator(),
     ),
   );
 }

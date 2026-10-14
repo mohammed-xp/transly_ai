@@ -5,9 +5,11 @@ import '../../../../core/result/api_result.dart';
 import '../../../../core/services/connectivity_service.dart';
 import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_entity.dart';
+import '../../domain/entities/translation_tone.dart';
 import '../../domain/repos/translation_repo.dart';
 import '../datasources/translation_local_data_source.dart';
 import '../datasources/translation_remote_data_source.dart';
+import '../datasources/translation_settings_local_data_source.dart';
 import '../../../../core/data/models/language_model.dart';
 
 /// Online (backend API) when connected, on-device ML Kit when offline. A
@@ -17,13 +19,16 @@ class TranslationRepoImpl implements TranslationRepo {
     required TranslationLocalDataSource local,
     required ConnectivityService connectivity,
     required TranslationRemoteDataSource remote,
+    required TranslationSettingsLocalDataSource settings,
   }) : _local = local,
        _connectivity = connectivity,
-       _remote = remote;
+       _remote = remote,
+       _settings = settings;
 
   final TranslationLocalDataSource _local;
   final ConnectivityService _connectivity;
   final TranslationRemoteDataSource _remote;
+  final TranslationSettingsLocalDataSource _settings;
 
   @override
   Future<ApiResult<TranslationEntity>> translate({
@@ -109,5 +114,27 @@ class TranslationRepoImpl implements TranslationRepo {
       yield false;
     }
     yield* _connectivity.onConnectedChanged.handleError((_) {});
+  }
+
+  /// Nothing saved, a tone the app no longer knows, or a box that can't be
+  /// read all fall back to formal.
+  @override
+  TranslationTone getSavedTone() {
+    try {
+      final name = _settings.getToneName();
+      return TranslationTone.values.asNameMap()[name] ?? TranslationTone.formal;
+    } catch (_) {
+      return TranslationTone.formal;
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> saveTone(TranslationTone tone) async {
+    try {
+      await _settings.saveToneName(tone.name);
+      return const ApiResult.success(null);
+    } catch (e) {
+      return ApiResult.failure(ErrorMapper.map(e));
+    }
   }
 }

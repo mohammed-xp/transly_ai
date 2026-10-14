@@ -44,17 +44,20 @@ class TranslateState {
     required this.lastEngineWasOnline,
   });
 
-  /// Default language pair (same as `HomeState.initial`), formal tone.
+  /// Default language pair (same as `HomeState.initial`), formal tone unless
+  /// a saved one is passed in.
   /// [isOnlineAvailable] starts `false` only because it is the
   /// pre-first-emission value of the availability stream, which reports the
   /// real answer immediately.
-  factory TranslateState.initial() => const TranslateState(
+  factory TranslateState.initial({
+    TranslationTone tone = TranslationTone.formal,
+  }) => TranslateState(
     sourceText: '',
     from: LanguageEntity.defaultSource,
     to: LanguageEntity.defaultTarget,
-    tone: TranslationTone.formal,
+    tone: tone,
     translatedText: '',
-    status: TranslationIdle(),
+    status: const TranslationIdle(),
     isOnlineAvailable: false,
     lastEngineWasOnline: true,
   );

@@ -7,6 +7,8 @@ import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../../domain/usecases/check_translation_models_usecase.dart';
 import '../../domain/usecases/download_translation_models_usecase.dart';
+import '../../domain/usecases/get_saved_tone_usecase.dart';
+import '../../domain/usecases/save_tone_usecase.dart';
 import '../../domain/usecases/speak_text_usecase.dart';
 import '../../domain/usecases/translate_text_usecase.dart';
 import '../../domain/usecases/watch_online_availability_usecase.dart';
@@ -19,11 +21,14 @@ class TranslateCubit extends Cubit<TranslateState> {
     required DownloadTranslationModelsUseCase downloadModels,
     required SpeakTextUseCase speakText,
     required WatchOnlineAvailabilityUseCase watchOnlineAvailability,
+    required GetSavedToneUseCase getSavedTone,
+    required SaveToneUseCase saveTone,
   }) : _translateText = translateText,
        _checkModels = checkModels,
        _downloadModels = downloadModels,
        _speakText = speakText,
-       super(TranslateState.initial()) {
+       _saveTone = saveTone,
+       super(TranslateState.initial(tone: getSavedTone())) {
     _onlineAvailabilitySubscription = watchOnlineAvailability().listen(
       (available) {
         if (isClosed) return;
@@ -44,6 +49,7 @@ class TranslateCubit extends Cubit<TranslateState> {
   final CheckTranslationModelsUseCase _checkModels;
   final DownloadTranslationModelsUseCase _downloadModels;
   final SpeakTextUseCase _speakText;
+  final SaveToneUseCase _saveTone;
 
   late final StreamSubscription<bool> _onlineAvailabilitySubscription;
 
@@ -97,8 +103,9 @@ class TranslateCubit extends Cubit<TranslateState> {
   }
 
   void toneChanged(TranslationTone tone) {
-    if (!state.isToneEnabled) return;
+    if (!state.isToneEnabled || tone == state.tone) return;
     emit(state.copyWith(tone: tone));
+    unawaited(_saveTone(tone));
     if (state.sourceText.trim().isNotEmpty) _translate();
   }
 
