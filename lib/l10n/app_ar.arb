@@ -166,5 +166,13 @@
   "updateLatestVersion": "الأحدث",
   "updateFromAppStore": "التحديث من App Store",
   "updateFromPlayStore": "التحديث من Google Play",
-  "updateStoreOpenFailed": "تعذّر فتح المتجر. حاول مرة أخرى."
+  "updateStoreOpenFailed": "تعذّر فتح المتجر. حاول مرة أخرى.",
+  "languagePickerTitle": "اختر اللغة",
+  "languagePickerSearchHint": "ابحث عن لغة…",
+  "languagePickerRecent": "مؤخراً",
+  "languagePickerAllLanguages": "كل اللغات · {count}",
+  "languagePickerSourceTag": "لغة المصدر",
+  "languagePickerTargetTag": "لغة الهدف",
+  "languagePickerSwap": "تبديل",
+  "languagePickerNoResults": "لا توجد لغة تطابق بحثك."
 }

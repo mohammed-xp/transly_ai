@@ -1,5 +1,6 @@
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/entities/user_entity.dart';
+import '../../../language_picker/domain/entities/language_pair.dart';
 
 class HomeState {
   const HomeState({
@@ -9,13 +10,19 @@ class HomeState {
     this.isPro = false,
   });
 
-  factory HomeState.initial({UserEntity? user, bool isPro = false}) =>
-      HomeState(
-        from: LanguageEntity.defaultSource,
-        to: LanguageEntity.defaultTarget,
-        user: user,
-        isPro: isPro,
-      );
+  factory HomeState.initial({
+    UserEntity? user,
+    bool isPro = false,
+    LanguagePair languages = (
+      from: LanguageEntity.defaultSource,
+      to: LanguageEntity.defaultTarget,
+    ),
+  }) => HomeState(
+    from: languages.from,
+    to: languages.to,
+    user: user,
+    isPro: isPro,
+  );
 
   final LanguageEntity from;
   final LanguageEntity to;

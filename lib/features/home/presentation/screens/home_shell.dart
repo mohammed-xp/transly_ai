@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
+import '../../../../core/domain/entities/language_side.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
@@ -11,6 +12,7 @@ import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
 import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
 import '../../../conversation/presentation/screens/conversation_screen.dart';
+import '../../../language_picker/presentation/widgets/language_picker_sheet.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
 import '../../../translate/presentation/cubit/translate_state.dart';
 import '../../../translate/presentation/screens/translate_screen.dart';
@@ -28,7 +30,13 @@ class HomeShell extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => serviceLocator<HomeCubit>()..refreshPlan()),
-        BlocProvider(create: (_) => serviceLocator<TranslateCubit>()),
+        BlocProvider(
+          create: (context) {
+            final home = context.read<HomeCubit>().state;
+            return serviceLocator<TranslateCubit>()
+              ..languagesChanged(from: home.from, to: home.to);
+          },
+        ),
       ],
       child: BlocListener<HomeCubit, HomeState>(
         listenWhen: (previous, current) =>
@@ -125,6 +133,19 @@ class _HeaderSection extends StatelessWidget {
 class _LanguageBarSection extends StatelessWidget {
   const _LanguageBarSection();
 
+  Future<void> _openPicker(BuildContext context, LanguageSide side) async {
+    // A second tap that lands together with the first must not stack another
+    // sheet: closing the lower one would put its stale pair back.
+    if (ModalRoute.of(context)?.isCurrent == false) return;
+    final homeCubit = context.read<HomeCubit>();
+    final pair = await showLanguagePickerSheet(
+      context,
+      initialSide: side,
+      initialPair: (from: homeCubit.state.from, to: homeCubit.state.to),
+    );
+    if (!homeCubit.isClosed) homeCubit.setLanguages(pair);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocSelector<HomeCubit, HomeState, (LanguageEntity, LanguageEntity)>(
@@ -137,6 +158,8 @@ class _LanguageBarSection extends StatelessWidget {
             fromLanguage: languageLabel(context, from),
             toLanguage: languageLabel(context, to),
             onSwap: context.read<HomeCubit>().swapLanguages,
+            onFromTap: () => _openPicker(context, LanguageSide.source),
+            onToTap: () => _openPicker(context, LanguageSide.target),
             isBusy: isBusy,
           ),
         );

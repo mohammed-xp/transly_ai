@@ -1099,6 +1099,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open the store. Please try again.'**
   String get updateStoreOpenFailed;
+
+  /// Title of the translation-language picker sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose language'**
+  String get languagePickerTitle;
+
+  /// Placeholder of the search field in the translation-language picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a language…'**
+  String get languagePickerSearchHint;
+
+  /// Caption above the recently picked languages in the translation-language picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get languagePickerRecent;
+
+  /// Caption above the full language list in the translation-language picker. {count} is the number of languages, already written in the UI language's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'All languages · {count}'**
+  String languagePickerAllLanguages(String count);
+
+  /// Tag on the row of the current source language while the target language is being picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Source language'**
+  String get languagePickerSourceTag;
+
+  /// Tag on the row of the current target language while the source language is being picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Target language'**
+  String get languagePickerTargetTag;
+
+  /// Pill on the row of the other side's language: picking it swaps the source and target languages.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get languagePickerSwap;
+
+  /// Shown in the translation-language picker when the search matches no language.
+  ///
+  /// In en, this message translates to:
+  /// **'No language matches your search.'**
+  String get languagePickerNoResults;
 }
 
 class _AppLocalizationsDelegate

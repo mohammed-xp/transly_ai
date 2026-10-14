@@ -574,4 +574,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get updateStoreOpenFailed =>
       'Couldn\'t open the store. Please try again.';
+
+  @override
+  String get languagePickerTitle => 'Choose language';
+
+  @override
+  String get languagePickerSearchHint => 'Search for a language…';
+
+  @override
+  String get languagePickerRecent => 'Recent';
+
+  @override
+  String languagePickerAllLanguages(String count) {
+    return 'All languages · $count';
+  }
+
+  @override
+  String get languagePickerSourceTag => 'Source language';
+
+  @override
+  String get languagePickerTargetTag => 'Target language';
+
+  @override
+  String get languagePickerSwap => 'Swap';
+
+  @override
+  String get languagePickerNoResults => 'No language matches your search.';
 }

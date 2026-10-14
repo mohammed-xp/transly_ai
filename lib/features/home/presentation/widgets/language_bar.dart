@@ -12,12 +12,16 @@ class LanguageBar extends StatelessWidget {
     required this.fromLanguage,
     required this.toLanguage,
     required this.onSwap,
+    required this.onFromTap,
+    required this.onToTap,
     required this.isBusy,
   });
 
   final String fromLanguage;
   final String toLanguage;
   final VoidCallback onSwap;
+  final VoidCallback onFromTap;
+  final VoidCallback onToTap;
   final bool isBusy;
 
   static const double _swapButtonSize = 42;
@@ -56,6 +60,7 @@ class LanguageBar extends StatelessWidget {
                     child: _LanguageColumn(
                       label: l10n.translateFrom,
                       language: fromLanguage,
+                      onTap: onFromTap,
                     ),
                   ),
                   _SwapButton(onTap: onSwap),
@@ -63,6 +68,7 @@ class LanguageBar extends StatelessWidget {
                     child: _LanguageColumn(
                       label: l10n.translateTo,
                       language: toLanguage,
+                      onTap: onToTap,
                     ),
                   ),
                 ],
@@ -83,26 +89,46 @@ class LanguageBar extends StatelessWidget {
 }
 
 class _LanguageColumn extends StatelessWidget {
-  const _LanguageColumn({required this.label, required this.language});
+  const _LanguageColumn({
+    required this.label,
+    required this.language,
+    required this.onTap,
+  });
 
   final String label;
   final String language;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final c = context.palette;
+    final radius = BorderRadius.circular(AppDimens.radiusChipL);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: textTheme.labelSmall?.copyWith(color: c.textMuted),
+    return Semantics(
+      button: true,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: radius,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: radius,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
+            child: Column(
+              children: [
+                Text(
+                  label,
+                  style: textTheme.labelSmall?.copyWith(color: c.textMuted),
+                ),
+                Text(
+                  language,
+                  style: textTheme.titleMedium?.copyWith(color: c.ink),
+                ),
+              ],
+            ),
           ),
-          Text(language, style: textTheme.titleMedium?.copyWith(color: c.ink)),
-        ],
+        ),
       ),
     );
   }

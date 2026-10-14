@@ -8,7 +8,7 @@ import '../../domain/entities/translation_entity.dart';
 import '../../domain/repos/translation_repo.dart';
 import '../datasources/translation_local_data_source.dart';
 import '../datasources/translation_remote_data_source.dart';
-import '../models/language_model.dart';
+import '../../../../core/data/models/language_model.dart';
 
 /// Online (backend API) when connected, on-device ML Kit when offline. A
 /// failed online call surfaces as a failure rather than falling back.

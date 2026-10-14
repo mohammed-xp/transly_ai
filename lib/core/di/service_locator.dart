@@ -49,6 +49,21 @@ import '../../features/auth/presentation/cubit/session_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_in_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_up_cubit.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/language_picker/data/datasources/languages_local_data_source.dart';
+import '../../features/language_picker/data/datasources/languages_local_data_source_impl.dart';
+import '../../features/language_picker/data/datasources/languages_remote_data_source.dart';
+import '../../features/language_picker/data/datasources/languages_remote_data_source_impl.dart';
+import '../../features/language_picker/data/repos/languages_repo_impl.dart';
+import '../../features/language_picker/domain/repos/languages_repo.dart';
+import '../../features/language_picker/domain/usecases/add_recent_language_usecase.dart';
+import '../../features/language_picker/domain/entities/language_pair.dart';
+import '../../features/language_picker/domain/usecases/get_cached_languages_usecase.dart';
+import '../../features/language_picker/domain/usecases/get_recent_languages_usecase.dart';
+import '../../features/language_picker/domain/usecases/get_saved_language_pair_usecase.dart';
+import '../../features/language_picker/domain/usecases/save_language_pair_usecase.dart';
+import '../../features/language_picker/domain/usecases/select_language_usecase.dart';
+import '../../features/language_picker/domain/usecases/sync_languages_usecase.dart';
+import '../../features/language_picker/presentation/cubit/language_picker_cubit.dart';
 import '../../features/profile/data/datasources/account_remote_data_source.dart';
 import '../../features/profile/data/datasources/account_remote_data_source_impl.dart';
 import '../../features/profile/data/datasources/plan_usage_remote_data_source.dart';
@@ -195,6 +210,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<AppThemeLocalDataSource>(
     () => AppThemeLocalDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<LanguagesRemoteDataSource>(
+    () => LanguagesRemoteDataSourceImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<LanguagesLocalDataSource>(
+    () => LanguagesLocalDataSourceImpl(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -234,6 +255,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<AppThemeRepo>(
     () => AppThemeRepoImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<LanguagesRepo>(
+    () => LanguagesRepoImpl(remote: serviceLocator(), local: serviceLocator()),
   );
 
   // ── Use cases ──
@@ -307,10 +331,32 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => SetAppThemeModeUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetCachedLanguagesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SyncLanguagesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(SelectLanguageUseCase.new);
+  serviceLocator.registerLazySingleton(
+    () => GetSavedLanguagePairUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SaveLanguagePairUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => GetRecentLanguagesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => AddRecentLanguageUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
-    () => SplashCubit(getCachedUserUseCase: serviceLocator()),
+    () => SplashCubit(
+      getCachedUserUseCase: serviceLocator(),
+      syncLanguages: serviceLocator(),
+    ),
   );
   serviceLocator.registerFactory(
     () => SessionCubit(
@@ -334,6 +380,18 @@ Future<void> configureDependencies() async {
       getCachedUser: serviceLocator(),
       getCachedPlan: serviceLocator(),
       getPlanUsage: serviceLocator(),
+      getSavedLanguagePair: serviceLocator(),
+      saveLanguagePair: serviceLocator(),
+    ),
+  );
+  serviceLocator.registerFactoryParam<LanguagePickerCubit, LanguagePair, void>(
+    (initialPair, _) => LanguagePickerCubit(
+      initialPair: initialPair,
+      getCachedLanguages: serviceLocator(),
+      syncLanguages: serviceLocator(),
+      getRecentLanguages: serviceLocator(),
+      addRecentLanguage: serviceLocator(),
+      selectLanguage: serviceLocator(),
     ),
   );
   serviceLocator.registerFactory(

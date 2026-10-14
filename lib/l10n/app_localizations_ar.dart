@@ -565,4 +565,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updateStoreOpenFailed => 'تعذّر فتح المتجر. حاول مرة أخرى.';
+
+  @override
+  String get languagePickerTitle => 'اختر اللغة';
+
+  @override
+  String get languagePickerSearchHint => 'ابحث عن لغة…';
+
+  @override
+  String get languagePickerRecent => 'مؤخراً';
+
+  @override
+  String languagePickerAllLanguages(String count) {
+    return 'كل اللغات · $count';
+  }
+
+  @override
+  String get languagePickerSourceTag => 'لغة المصدر';
+
+  @override
+  String get languagePickerTargetTag => 'لغة الهدف';
+
+  @override
+  String get languagePickerSwap => 'تبديل';
+
+  @override
+  String get languagePickerNoResults => 'لا توجد لغة تطابق بحثك.';
 }

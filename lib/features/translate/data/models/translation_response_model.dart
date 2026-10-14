@@ -1,6 +1,6 @@
 import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_entity.dart';
-import 'language_model.dart';
+import '../../../../core/data/models/language_model.dart';
 
 class TranslationResponseModel {
   final String sourceText;

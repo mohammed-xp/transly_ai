@@ -1,4 +1,4 @@
-import '../../../../core/domain/entities/language_entity.dart';
+import '../../domain/entities/language_entity.dart';
 
 class LanguageModel {
   final String code;
@@ -28,6 +28,13 @@ class LanguageModel {
     nativeName: entity.nativeName,
     isRtl: entity.isRtl,
   );
+
+  Map<String, dynamic> toJson() => {
+    'code': code,
+    'name': name,
+    'nativeName': nativeName,
+    'isRtl': isRtl,
+  };
 
   LanguageEntity toEntity() => LanguageEntity(
     code: code,

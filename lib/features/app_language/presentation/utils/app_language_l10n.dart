@@ -16,9 +16,6 @@ Locale? appLanguageLocale(AppLanguage language) {
 String nativeLanguageName(String code) =>
     lookupAppLocalizations(Locale(code)).languageNativeName;
 
-String appLanguageBadge(String code) =>
-    lookupAppLocalizations(Locale(code)).languageBadge;
-
 String appLanguageLabel(BuildContext context, AppLanguage language) {
   final code = language.code;
   if (code == null) return AppLocalizations.of(context)!.appLanguageDevice;

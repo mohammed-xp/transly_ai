@@ -1,7 +1,7 @@
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
 import '../../../../core/errors/app_exceptions.dart';
-import '../models/language_model.dart';
+import '../../../../core/data/models/language_model.dart';
 
 abstract class TranslationLocalDataSource {
   Future<bool> areModelsDownloaded(LanguageModel from, LanguageModel to);

@@ -29,11 +29,9 @@ void main() {
     ]);
   });
 
-  test('reads native names and badges from each language\'s own file', () {
+  test('reads native names from each language\'s own file', () {
     expect(nativeLanguageName('ar'), 'العربية');
     expect(nativeLanguageName('en'), 'English');
-    expect(appLanguageBadge('ar'), 'ع');
-    expect(appLanguageBadge('en'), 'EN');
   });
 
   test('maps the device language to no locale', () {

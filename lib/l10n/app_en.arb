@@ -719,5 +719,42 @@
   "updateStoreOpenFailed": "Couldn't open the store. Please try again.",
   "@updateStoreOpenFailed": {
     "description": "Toast shown when the store listing can't be opened."
+  },
+  "languagePickerTitle": "Choose language",
+  "@languagePickerTitle": {
+    "description": "Title of the translation-language picker sheet."
+  },
+  "languagePickerSearchHint": "Search for a language…",
+  "@languagePickerSearchHint": {
+    "description": "Placeholder of the search field in the translation-language picker."
+  },
+  "languagePickerRecent": "Recent",
+  "@languagePickerRecent": {
+    "description": "Caption above the recently picked languages in the translation-language picker."
+  },
+  "languagePickerAllLanguages": "All languages · {count}",
+  "@languagePickerAllLanguages": {
+    "description": "Caption above the full language list in the translation-language picker. {count} is the number of languages, already written in the UI language's digits.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "languagePickerSourceTag": "Source language",
+  "@languagePickerSourceTag": {
+    "description": "Tag on the row of the current source language while the target language is being picked."
+  },
+  "languagePickerTargetTag": "Target language",
+  "@languagePickerTargetTag": {
+    "description": "Tag on the row of the current target language while the source language is being picked."
+  },
+  "languagePickerSwap": "Swap",
+  "@languagePickerSwap": {
+    "description": "Pill on the row of the other side's language: picking it swaps the source and target languages."
+  },
+  "languagePickerNoResults": "No language matches your search.",
+  "@languagePickerNoResults": {
+    "description": "Shown in the translation-language picker when the search matches no language."
   }
 }

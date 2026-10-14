@@ -1,0 +1,1 @@
+enum LanguageSide { source, target }
