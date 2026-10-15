@@ -625,4 +625,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languagePickerRemoveOfflineConfirm => 'Remove';
+
+  @override
+  String get profileTranslationSection => 'Translation';
+
+  @override
+  String get profileOfflinePacks => 'Offline packs';
+
+  @override
+  String profileOfflinePacksInstalled(int installed, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      installed,
+      locale: localeName,
+      other: '$count installed',
+      zero: 'None installed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get offlinePacksTitle => 'Offline packs';
+
+  @override
+  String get offlinePacksInstalledSection => 'Installed';
+
+  @override
+  String get offlinePacksAvailableSection => 'Available to download';
+
+  @override
+  String get offlinePacksBuiltIn => 'Built in';
+
+  @override
+  String get offlinePacksAutoSection => 'Auto-download';
+
+  @override
+  String get offlinePacksAutoDownload => 'Download languages automatically';
+
+  @override
+  String get offlinePacksAutoDownloadBody =>
+      'When you translate into a new language, its pack downloads in the background so it works offline next time.';
+
+  @override
+  String get offlinePacksWifiOnly => 'Wi‑Fi only';
+
+  @override
+  String get offlinePacksAutoDownloaded => 'Downloaded automatically';
+
+  @override
+  String get offlinePacksAutoTag => 'Auto';
+
+  @override
+  String get offlinePacksDownloading => 'Downloading…';
+
+  @override
+  String get offlinePacksSettingsSaveFailed =>
+      'Couldn\'t save the setting. Please try again.';
+
+  @override
+  String autoDownloadNoticeTitle(String language) {
+    return 'Downloading $language for offline use';
+  }
+
+  @override
+  String get autoDownloadNoticeWifi => 'Over Wi‑Fi';
+
+  @override
+  String get autoDownloadNoticeHide => 'Hide';
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_icon_source.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Eye icon at the end of a password field.
@@ -23,8 +25,11 @@ class PasswordVisibilityToggle extends StatelessWidget {
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onTap,
-        child: Icon(
-          isVisible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+        // The design only draws the open eye; the struck one stays Material.
+        child: AppIconView(
+          isVisible
+              ? const MaterialIconSource(Icons.visibility_off_outlined)
+              : const SvgIconSource(AppIcons.eye),
           size: 19,
           color: context.palette.textMuted,
         ),

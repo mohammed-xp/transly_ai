@@ -8,10 +8,12 @@ import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/l10n/failure_message.dart';
+import '../../../../core/l10n/localized_digits.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
+import '../../../../core/widgets/section_card.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -22,6 +24,8 @@ import '../../../app_language/presentation/widgets/app_language_sheet.dart';
 import '../../../app_theme/domain/entities/app_theme_mode.dart';
 import '../../../app_theme/presentation/cubit/app_theme_cubit.dart';
 import '../../../app_theme/presentation/widgets/app_theme_segmented_control.dart';
+import '../../../language_picker/presentation/cubit/offline_packs_cubit.dart';
+import '../../../language_picker/presentation/cubit/offline_packs_state.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
@@ -31,7 +35,6 @@ import '../widgets/profile_header.dart';
 import '../widgets/profile_identity.dart';
 import '../widgets/profile_plan_usage.dart';
 import '../widgets/profile_row.dart';
-import '../widgets/profile_section.dart';
 import '../widgets/profile_sign_out_button.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -117,12 +120,17 @@ class _ProfileContent extends StatelessWidget {
           ProfileIdentity(user: user, onChangePhoto: comingSoon),
           const ProfilePlanUsage(),
           const SizedBox(height: AppDimens.spaceXL),
-          ProfileSection(
+          SectionCard(
             title: l10n.profilePreferencesSection,
             rows: const [_AppLanguageRow(), _AppThemeRow()],
           ),
           const SizedBox(height: AppDimens.spaceXL),
-          ProfileSection(
+          SectionCard(
+            title: l10n.profileTranslationSection,
+            rows: const [_OfflinePacksRow()],
+          ),
+          const SizedBox(height: AppDimens.spaceXL),
+          SectionCard(
             title: l10n.profileAccountSection,
             rows: [
               ProfileRow(label: l10n.profileName, value: user.username),
@@ -138,7 +146,7 @@ class _ProfileContent extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppDimens.spaceXL),
-          ProfileSection(
+          SectionCard(
             title: l10n.profilePrivacySection,
             rows: [
               // ProfileRow(
@@ -212,6 +220,35 @@ class _AppThemeRow extends StatelessWidget {
         trailing: AppThemeSegmentedControl(
           selected: mode,
           onChanged: (picked) => _change(context, picked),
+        ),
+      ),
+    );
+  }
+}
+
+/// Shows how many packs are downloaded once the device has answered.
+class _OfflinePacksRow extends StatelessWidget {
+  const _OfflinePacksRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocProvider(
+      create: (_) => serviceLocator<OfflinePacksCubit>()..load(),
+      child: BlocSelector<OfflinePacksCubit, OfflinePacksState, int?>(
+        selector: (state) =>
+            state.status is OfflinePacksLoaded ? state.downloadedCount : null,
+        builder: (context, count) => ProfileRow(
+          label: l10n.profileOfflinePacks,
+          value: count == null
+              ? null
+              : l10n.profileOfflinePacksInstalled(
+                  count,
+                  localizedDigits(context, count),
+                ),
+          trailing: const ProfileRowChevron(),
+          onTap: () => context.pushNamed(AppRoutes.offlinePacksName),
         ),
       ),
     );

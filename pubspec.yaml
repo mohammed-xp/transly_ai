@@ -55,6 +55,7 @@ dependencies:
 
   # Auth
   google_sign_in: ^7.2.0
+  flutter_svg: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/icons/
 
 # Launcher icons — regenerate with `dart run flutter_launcher_icons`.
 #

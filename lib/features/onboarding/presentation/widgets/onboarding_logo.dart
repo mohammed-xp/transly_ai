@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
-import '../../../../core/widgets/transly_glyph_painter.dart';
+import '../../../../core/widgets/transly_mark.dart';
 
 /// The 76px logo tile on the onboarding welcome screen (design `01 · Welcome`).
 ///
@@ -40,18 +40,9 @@ class OnboardingLogo extends StatelessWidget {
         ],
       ),
       child: Center(
-        child: SizedBox(
-          width: _glyphSize,
-          height: _glyphSize,
-          child: CustomPaint(
-            painter: isDark
-                ? const TranslyGlyphPainter()
-                : TranslyGlyphPainter(
-                    color: AppColors.primary,
-                    secondaryColor: AppColors.primary.withValues(alpha: 0.42),
-                  ),
-          ),
-        ),
+        child: isDark
+            ? const TranslyMark.white(size: _glyphSize)
+            : const TranslyMark.coral(size: _glyphSize),
       ),
     );
   }

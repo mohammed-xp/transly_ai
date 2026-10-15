@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../theme/app_dimens.dart';
+import '../constants/app_icons.dart';
 import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 /// Back-navigation chip (designs `01b · Sign In` and `12 · Profile`): 40×40,
 /// radius 12, filled with [fillColor] — [AppPalette.inputFill] by default.
-/// The chevron icon has `matchTextDirection`, so it mirrors on its own and
-/// points right in Arabic, as the RTL profile design shows.
+/// The chevron mirrors itself, so it points right in Arabic, as the RTL
+/// profile design shows.
 class AppBackButton extends StatelessWidget {
   const AppBackButton({super.key, required this.onTap, this.fillColor});
 
@@ -16,6 +17,7 @@ class AppBackButton extends StatelessWidget {
 
   static const double _size = 40;
   static const double _radius = 12;
+  static const double _iconSize = 18;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,13 @@ class AppBackButton extends StatelessWidget {
           child: SizedBox(
             width: _size,
             height: _size,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: AppDimens.iconS,
-              color: c.ink,
+            child: Center(
+              child: AppSvgIcon(
+                AppIcons.back,
+                size: _iconSize,
+                color: c.ink,
+                matchTextDirection: true,
+              ),
             ),
           ),
         ),

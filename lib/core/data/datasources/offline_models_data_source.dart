@@ -7,7 +7,8 @@ abstract class OfflineModelsDataSource {
 
   Future<bool> isDownloaded(String code);
 
-  Future<void> download(String code);
+  /// [wifiRequired] holds the download back while the device is off Wi-Fi.
+  Future<void> download(String code, {bool wifiRequired = false});
 
   Future<void> delete(String code);
 }

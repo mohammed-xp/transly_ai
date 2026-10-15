@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_dimens.dart';
 import '../../theme/app_palette.dart';
+import '../app_icon_source.dart';
 import 'app_toast.dart';
 
 /// The toast's visual (design `07 · Toast`): icon chip, message with optional
@@ -97,7 +98,7 @@ class _IconChip extends StatelessWidget {
   const _IconChip({required this.type, required this.icon});
 
   final AppToastType type;
-  final IconData icon;
+  final AppIconSource icon;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,13 @@ class _IconChip extends StatelessWidget {
         gradient: gradient,
         borderRadius: BorderRadius.circular(AppDimens.radiusChip),
       ),
-      child: Icon(icon, size: type == AppToastType.ai ? 15 : 17, color: glyph),
+      child: Center(
+        child: AppIconView(
+          icon,
+          size: type == AppToastType.ai ? 15 : 17,
+          color: glyph,
+        ),
+      ),
     );
   }
 }

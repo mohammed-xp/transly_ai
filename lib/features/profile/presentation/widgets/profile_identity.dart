@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/user_avatar.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -101,10 +103,12 @@ class _ChangePhotoBadge extends StatelessWidget {
             customBorder: const CircleBorder(),
             child: SizedBox.square(
               dimension: _size,
-              child: Icon(
-                Icons.photo_camera_outlined,
-                size: 15,
-                color: c.textSecondary,
+              child: Center(
+                child: AppSvgIcon(
+                  AppIcons.cameraBadge,
+                  size: 15,
+                  color: c.textSecondary,
+                ),
               ),
             ),
           ),

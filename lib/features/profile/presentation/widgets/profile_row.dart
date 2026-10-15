@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 
 class ProfileRow extends StatelessWidget {
   const ProfileRow({
@@ -89,12 +91,15 @@ class ProfileRow extends StatelessWidget {
 class ProfileRowChevron extends StatelessWidget {
   const ProfileRowChevron({super.key});
 
+  static const double _size = 16;
+
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      Icons.chevron_right_rounded,
-      size: AppDimens.iconM,
+    return AppSvgIcon(
+      AppIcons.chevron,
+      size: _size,
       color: context.palette.iconLine,
+      matchTextDirection: true,
     );
   }
 }

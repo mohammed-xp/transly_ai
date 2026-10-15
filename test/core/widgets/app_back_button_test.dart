@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transly_ai/core/constants/app_icons.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
 import 'package:transly_ai/core/widgets/app_back_button.dart';
+import 'package:transly_ai/core/widgets/app_svg_icon.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
+
+import '../../helpers/svg_icon_finder.dart';
 
 void main() {
   Future<void> pumpButton(WidgetTester tester, Locale locale) {
@@ -22,14 +26,13 @@ void main() {
   testWidgets('uses the self-mirroring back chevron in RTL', (tester) async {
     await pumpButton(tester, const Locale('ar'));
 
-    final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.icon, Icons.arrow_back_ios_new_rounded);
-    expect(icon.icon!.matchTextDirection, isTrue);
+    final icon = tester.widget<AppSvgIcon>(findSvgIcon(AppIcons.back));
+    expect(icon.matchTextDirection, isTrue);
   });
 
   testWidgets('uses the same back chevron in LTR', (tester) async {
     await pumpButton(tester, const Locale('en'));
 
-    expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
+    expect(findSvgIcon(AppIcons.back), findsOneWidget);
   });
 }

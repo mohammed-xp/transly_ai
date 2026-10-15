@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class LanguageSearchField extends StatelessWidget {
@@ -38,7 +40,10 @@ class LanguageSearchField extends StatelessWidget {
         isDense: true,
         filled: true,
         fillColor: c.screenBackground,
-        prefixIcon: Icon(Icons.search_rounded, size: 18, color: c.textMuted),
+        prefixIcon: Center(
+          widthFactor: 1,
+          child: AppSvgIcon(AppIcons.search, size: 18, color: c.textMuted),
+        ),
         prefixIconConstraints: const BoxConstraints(
           minWidth: 42,
           minHeight: 48,

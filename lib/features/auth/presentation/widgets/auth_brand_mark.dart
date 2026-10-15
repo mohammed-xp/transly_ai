@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/transly_glyph_painter.dart';
+import '../../../../core/widgets/transly_mark.dart';
 
 /// The 60px gradient glyph tile above the sign-in headline (design `01b ·
-/// Sign In`). Built on the shared [TranslyGlyphPainter] — no new glyph art.
+/// Sign In`). Built on the shared [TranslyMark] — no new glyph art.
 class AuthBrandMark extends StatelessWidget {
   const AuthBrandMark({super.key});
 
@@ -30,13 +30,7 @@ class AuthBrandMark extends StatelessWidget {
           ),
         ],
       ),
-      child: const Center(
-        child: SizedBox(
-          width: _glyphSize,
-          height: _glyphSize,
-          child: CustomPaint(painter: TranslyGlyphPainter()),
-        ),
-      ),
+      child: const Center(child: TranslyMark.white(size: _glyphSize)),
     );
   }
 }

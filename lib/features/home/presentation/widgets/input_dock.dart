@@ -1,3 +1,5 @@
+import '../../../../core/constants/app_icons.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -62,7 +64,7 @@ class InputDock extends StatelessWidget {
         children: [
           Expanded(
             child: _DockTab(
-              icon: Icons.keyboard_alt_outlined,
+              icon: AppIcons.keyboard,
               label: l10n.translateDockKeyboard,
               active: currentMode == TranslateInputMode.keyboard,
               onTap: currentMode == TranslateInputMode.keyboard
@@ -72,7 +74,7 @@ class InputDock extends StatelessWidget {
           ),
           Expanded(
             child: _DockTab(
-              icon: Icons.mic_none_rounded,
+              icon: AppIcons.mic,
               label: l10n.translateDockVoice,
               active: currentMode == TranslateInputMode.voice,
               onTap: currentMode == TranslateInputMode.voice
@@ -82,7 +84,7 @@ class InputDock extends StatelessWidget {
           ),
           Expanded(
             child: _DockTab(
-              icon: Icons.photo_camera_outlined,
+              icon: AppIcons.camera,
               label: l10n.translateDockCamera,
               active: currentMode == TranslateInputMode.camera,
               onTap: currentMode == TranslateInputMode.camera
@@ -104,7 +106,8 @@ class _DockTab extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  /// One of the [AppIcons].
+  final String icon;
   final String label;
   final bool active;
   final VoidCallback? onTap;
@@ -129,7 +132,7 @@ class _DockTab extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: AppDimens.spaceS),
             child: Column(
               children: [
-                Icon(icon, size: 22, color: color),
+                AppSvgIcon(icon, size: 22, color: color),
                 const SizedBox(height: 3),
                 Text(
                   label,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Tappable speaker icon shared by the source and translation output cards.
@@ -17,7 +18,8 @@ class SpeakerButton extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  /// One of the [AppIcons].
+  final String icon;
   final Color color;
   final VoidCallback? onTap;
 
@@ -42,7 +44,9 @@ class SpeakerButton extends StatelessWidget {
             child: SizedBox(
               width: _tapTargetSize,
               height: _tapTargetSize,
-              child: Icon(icon, size: AppDimens.iconM, color: color),
+              child: Center(
+                child: AppSvgIcon(icon, size: AppDimens.iconM, color: color),
+              ),
             ),
           ),
         ),

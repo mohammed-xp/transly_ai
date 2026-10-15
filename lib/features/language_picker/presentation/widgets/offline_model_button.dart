@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/spinning_ring.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/offline_model_status.dart';
@@ -31,8 +33,7 @@ class OfflineModelButton extends StatelessWidget {
     return switch (status) {
       null || OfflineModelUnsupported() => const SizedBox.shrink(),
       OfflineModelNotDownloaded() => _button(
-        icon: Icons.download_rounded,
-        color: c.textMuted,
+        icon: AppSvgIcon(AppIcons.downloadPicker, size: 18, color: c.textMuted),
         tooltip: l10n.languagePickerDownloadOffline,
         onPressed: onDownload,
       ),
@@ -52,8 +53,8 @@ class OfflineModelButton extends StatelessWidget {
         ),
       ),
       OfflineModelDownloaded() => _button(
-        icon: Icons.offline_pin_rounded,
-        color: c.coral,
+        // The design has no "downloaded" icon, so this one stays Material.
+        icon: Icon(Icons.offline_pin_rounded, size: _iconSize, color: c.coral),
         tooltip: l10n.languagePickerAvailableOffline,
         onPressed: onRemove,
       ),
@@ -72,15 +73,14 @@ class OfflineModelButton extends StatelessWidget {
   }
 
   Widget _button({
-    required IconData icon,
-    required Color color,
+    required Widget icon,
     required String tooltip,
     required VoidCallback onPressed,
   }) {
     return IconButton(
       onPressed: onPressed,
       tooltip: tooltip,
-      icon: Icon(icon, size: _iconSize, color: color),
+      icon: icon,
       constraints: const BoxConstraints.tightFor(width: _size, height: _size),
       padding: EdgeInsets.zero,
     );

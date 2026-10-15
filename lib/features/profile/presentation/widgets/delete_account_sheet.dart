@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/sign_in_method.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/auth_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/delete_account_cubit.dart';
@@ -144,10 +146,12 @@ class _WarningIcon extends StatelessWidget {
         color: c.coral.withValues(alpha: 0.12),
         shape: BoxShape.circle,
       ),
-      child: Icon(
-        Icons.delete_outline_rounded,
-        size: AppDimens.iconL,
-        color: c.coral,
+      child: Center(
+        child: AppSvgIcon(
+          AppIcons.delete,
+          size: AppDimens.iconL,
+          color: c.coral,
+        ),
       ),
     );
   }
@@ -233,7 +237,7 @@ class _PasswordField extends StatelessWidget {
         hint: l10n.profileDeleteAccountPasswordHint,
         controller: controller,
         focusNode: focusNode,
-        prefixIcon: Icons.lock_outline_rounded,
+        prefixIcon: AppIcons.lock,
         obscureText: true,
         textInputAction: TextInputAction.done,
         autofillHints: const [AutofillHints.password],

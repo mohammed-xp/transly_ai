@@ -58,9 +58,7 @@ void main() {
       expect(find.text('Copied'), findsOneWidget);
     });
 
-    testWidgets('auto-dismisses a plain toast after 3 seconds', (
-      tester,
-    ) async {
+    testWidgets('auto-dismisses a plain toast after 3 seconds', (tester) async {
       await pumpHost(tester);
       AppToast.show(scopeContext, message: 'Copied');
       await tester.pump();

@@ -1189,6 +1189,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove'**
   String get languagePickerRemoveOfflineConfirm;
+
+  /// Heading of the translation section on the profile screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get profileTranslationSection;
+
+  /// Profile row that opens the offline packs screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline packs'**
+  String get profileOfflinePacks;
+
+  /// Value of the offline packs row: how many languages the user downloaded. {count} is {installed} written in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{installed, plural, =0{None installed} other{{count} installed}}'**
+  String profileOfflinePacksInstalled(int installed, String count);
+
+  /// Title of the offline packs screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline packs'**
+  String get offlinePacksTitle;
+
+  /// Heading of the languages already on the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed'**
+  String get offlinePacksInstalledSection;
+
+  /// Heading of the languages that can be downloaded for offline use.
+  ///
+  /// In en, this message translates to:
+  /// **'Available to download'**
+  String get offlinePacksAvailableSection;
+
+  /// Marks a language that ships with the device and can't be removed.
+  ///
+  /// In en, this message translates to:
+  /// **'Built in'**
+  String get offlinePacksBuiltIn;
+
+  /// Heading of the auto-download settings on the offline packs screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-download'**
+  String get offlinePacksAutoSection;
+
+  /// Switch that downloads the languages of online translations in the background.
+  ///
+  /// In en, this message translates to:
+  /// **'Download languages automatically'**
+  String get offlinePacksAutoDownload;
+
+  /// Explanation under the auto-download switch.
+  ///
+  /// In en, this message translates to:
+  /// **'When you translate into a new language, its pack downloads in the background so it works offline next time.'**
+  String get offlinePacksAutoDownloadBody;
+
+  /// Switch that limits auto-downloads to Wi-Fi.
+  ///
+  /// In en, this message translates to:
+  /// **'Wi‑Fi only'**
+  String get offlinePacksWifiOnly;
+
+  /// Marks an installed pack that auto-download put on the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded automatically'**
+  String get offlinePacksAutoDownloaded;
+
+  /// Chip next to a language that auto-download is downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get offlinePacksAutoTag;
+
+  /// Under a language whose pack is downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading…'**
+  String get offlinePacksDownloading;
+
+  /// Error toast when an auto-download switch couldn't be saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the setting. Please try again.'**
+  String get offlinePacksSettingsSaveFailed;
+
+  /// Notice on the translate screen while a language downloads in the background.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading {language} for offline use'**
+  String autoDownloadNoticeTitle(String language);
+
+  /// Under the auto-download notice when downloads are limited to Wi-Fi.
+  ///
+  /// In en, this message translates to:
+  /// **'Over Wi‑Fi'**
+  String get autoDownloadNoticeWifi;
+
+  /// Hides the auto-download notice; the download goes on.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get autoDownloadNoticeHide;
 }
 
 class _AppLocalizationsDelegate

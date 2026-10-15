@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'translate_progress_bar.dart';
 
@@ -163,10 +165,12 @@ class _SwapButton extends StatelessWidget {
           child: const SizedBox(
             width: LanguageBar._swapButtonSize,
             height: LanguageBar._swapButtonSize,
-            child: Icon(
-              Icons.swap_horiz_rounded,
-              size: AppDimens.iconM,
-              color: Colors.white,
+            child: Center(
+              child: AppSvgIcon(
+                AppIcons.swap,
+                size: AppDimens.iconM,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

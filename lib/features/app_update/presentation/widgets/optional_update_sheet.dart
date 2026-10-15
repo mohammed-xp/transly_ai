@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
 import '../../../../core/widgets/transly_logo.dart';
@@ -211,10 +213,12 @@ class _ReleaseNoteRow extends StatelessWidget {
                   : AppColors.outputBgLight,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              Icons.check_rounded,
-              size: AppDimens.iconS,
-              color: c.coral,
+            child: Center(
+              child: AppSvgIcon(
+                AppIcons.checkSuccess,
+                size: AppDimens.iconS,
+                color: c.coral,
+              ),
             ),
           ),
           const SizedBox(width: AppDimens.spaceM),

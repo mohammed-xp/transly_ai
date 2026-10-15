@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/app_icons.dart';
+import '../app_icon_source.dart';
 import 'app_toast_scope.dart';
 
 /// Visual family of a toast — picks the icon-chip style (design `07 · Toast`).
@@ -37,7 +39,7 @@ class AppToastData {
   final AppToastType type;
 
   /// Falls back to a per-[type] default when null.
-  final IconData? icon;
+  final AppIconSource? icon;
 
   /// A substring of [message] drawn in the accent color. Passed as a
   /// substring (not split spans) so each locale can place it anywhere.
@@ -55,13 +57,16 @@ class AppToastData {
     _ => const Duration(seconds: 3),
   };
 
-  IconData get resolvedIcon =>
+  /// The design draws no info icon, so the neutral one stays Material.
+  AppIconSource get resolvedIcon =>
       icon ??
       switch (type) {
-        AppToastType.success => Icons.check_rounded,
-        AppToastType.neutral => Icons.info_outline_rounded,
-        AppToastType.error => Icons.error_outline_rounded,
-        AppToastType.ai => Icons.auto_awesome_rounded,
+        AppToastType.success => const SvgIconSource(AppIcons.checkSuccess),
+        AppToastType.neutral => const MaterialIconSource(
+          Icons.info_outline_rounded,
+        ),
+        AppToastType.error => const SvgIconSource(AppIcons.error),
+        AppToastType.ai => const SvgIconSource(AppIcons.sparkle),
       };
 }
 
@@ -74,7 +79,7 @@ abstract final class AppToast {
     required String message,
     String? subtitle,
     AppToastType type = AppToastType.success,
-    IconData? icon,
+    AppIconSource? icon,
     String? highlight,
     String? actionLabel,
     VoidCallback? onAction,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_icons.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_dimens.dart';
 import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 class SheetCloseButton extends StatelessWidget {
   const SheetCloseButton({super.key});
 
   static const double _size = 34;
+  static const double _iconSize = 14;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +26,12 @@ class SheetCloseButton extends StatelessWidget {
           onTap: () => Navigator.of(context).pop(),
           child: SizedBox.square(
             dimension: _size,
-            child: Icon(
-              Icons.close_rounded,
-              size: AppDimens.iconS,
-              color: context.palette.textSecondary,
+            child: Center(
+              child: AppSvgIcon(
+                AppIcons.closeSheet,
+                size: _iconSize,
+                color: context.palette.textSecondary,
+              ),
             ),
           ),
         ),

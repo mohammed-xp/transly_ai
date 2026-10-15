@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../widgets/onboarding_logo.dart';
@@ -361,7 +363,6 @@ class _SignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
     final foreground = isDark ? Colors.white : AppColors.deep;
     final radius = BorderRadius.circular(AppDimens.radiusButton);
 
@@ -396,12 +397,11 @@ class _SignInButton extends StatelessWidget {
                   style: textTheme.titleLarge?.copyWith(color: foreground),
                 ),
                 const SizedBox(width: AppDimens.spaceS),
-                Icon(
-                  isRtl
-                      ? Icons.arrow_back_rounded
-                      : Icons.arrow_forward_rounded,
+                AppSvgIcon(
+                  AppIcons.arrow,
                   size: AppDimens.iconS + 2,
                   color: foreground,
+                  matchTextDirection: true,
                 ),
               ],
             ),

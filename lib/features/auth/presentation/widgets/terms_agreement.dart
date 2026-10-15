@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/constants/app_links.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// "I agree to the Terms of Service and Privacy Policy" checkbox (design
@@ -95,10 +97,12 @@ class _TermsAgreementState extends State<TermsAgreement> {
                           : Border.all(color: uncheckedBorder, width: 1.5),
                     ),
                     child: widget.accepted
-                        ? const Icon(
-                            Icons.check_rounded,
-                            size: 14,
-                            color: Colors.white,
+                        ? const Center(
+                            child: AppSvgIcon(
+                              AppIcons.check,
+                              size: 12,
+                              color: Colors.white,
+                            ),
                           )
                         : null,
                   ),

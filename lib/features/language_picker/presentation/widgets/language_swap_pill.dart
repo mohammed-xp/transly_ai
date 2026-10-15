@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class LanguageSwapPill extends StatelessWidget {
@@ -22,7 +24,7 @@ class LanguageSwapPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.swap_horiz_rounded, size: 14, color: c.textSecondary),
+          AppSvgIcon(AppIcons.swapPicker, size: 12, color: c.textSecondary),
           const SizedBox(width: 5),
           Text(
             AppLocalizations.of(context)!.languagePickerSwap,

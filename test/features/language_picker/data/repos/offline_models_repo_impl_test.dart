@@ -6,8 +6,10 @@ import 'package:transly_ai/core/errors/app_exceptions.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/connectivity_service.dart';
+import 'package:transly_ai/features/language_picker/data/datasources/offline_packs_settings_local_data_source.dart';
 import 'package:transly_ai/features/language_picker/data/repos/offline_models_repo_impl.dart';
 import 'package:transly_ai/features/language_picker/domain/entities/offline_model_status.dart';
+import 'package:transly_ai/features/language_picker/domain/entities/offline_packs_settings.dart';
 
 class _FakeModels implements OfflineModelsDataSource {
   final Set<String> supported = {'en', 'ar', 'fr', 'de'};
@@ -18,6 +20,7 @@ class _FakeModels implements OfflineModelsDataSource {
   Object? downloadError;
   Object? deleteError;
   Completer<void>? downloadGate;
+  bool? lastWifiRequired;
 
   @override
   bool isSupported(String code) => supported.contains(code);
@@ -34,8 +37,9 @@ class _FakeModels implements OfflineModelsDataSource {
   }
 
   @override
-  Future<void> download(String code) async {
+  Future<void> download(String code, {bool wifiRequired = false}) async {
     downloadCalls++;
+    lastWifiRequired = wifiRequired;
     await downloadGate?.future;
     final error = downloadError;
     if (error != null) throw error;
@@ -52,23 +56,79 @@ class _FakeModels implements OfflineModelsDataSource {
 
 class _FakeConnectivity implements ConnectivityService {
   bool connected = true;
+  bool onWifi = true;
 
   @override
   Future<bool> get isConnected async => connected;
 
   @override
   Stream<bool> get onConnectedChanged => const Stream.empty();
+
+  @override
+  Future<bool> get isOnWifi async => onWifi;
+}
+
+class _FakeSettings implements OfflinePacksSettingsLocalDataSource {
+  bool? autoDownload;
+  bool? wifiOnly;
+  Set<String> autoDownloaded = {};
+  Object? readError;
+  Object? saveError;
+
+  @override
+  bool? getAutoDownload() => _read(autoDownload);
+
+  @override
+  Future<void> saveAutoDownload(bool value) async {
+    _checkSave();
+    autoDownload = value;
+  }
+
+  @override
+  bool? getWifiOnly() => _read(wifiOnly);
+
+  @override
+  Future<void> saveWifiOnly(bool value) async {
+    _checkSave();
+    wifiOnly = value;
+  }
+
+  @override
+  Set<String> getAutoDownloadedCodes() => {..._read(autoDownloaded)};
+
+  @override
+  Future<void> saveAutoDownloadedCodes(Set<String> codes) async {
+    _checkSave();
+    autoDownloaded = {...codes};
+  }
+
+  T _read<T>(T value) {
+    final error = readError;
+    if (error != null) throw error;
+    return value;
+  }
+
+  void _checkSave() {
+    final error = saveError;
+    if (error != null) throw error;
+  }
 }
 
 void main() {
   late _FakeModels models;
   late _FakeConnectivity connectivity;
+  late _FakeSettings settings;
   late OfflineModelsRepoImpl repo;
 
   setUp(() {
     models = _FakeModels();
     connectivity = _FakeConnectivity();
-    repo = OfflineModelsRepoImpl(models: models, connectivity: connectivity);
+    settings = _FakeSettings();
+    repo = OfflineModelsRepoImpl(
+      models: models,
+      connectivity: connectivity,
+      settings: settings,
+    );
   });
 
   Future<Map<String, OfflineModelStatus>> statusesOf(List<String> codes) async {
@@ -231,6 +291,7 @@ void main() {
       final timingOut = OfflineModelsRepoImpl(
         models: models..downloadGate = Completer<void>(),
         connectivity: connectivity,
+        settings: settings,
         downloadTimeout: Duration.zero,
       );
 
@@ -243,6 +304,7 @@ void main() {
       final timingOut = OfflineModelsRepoImpl(
         models: models..downloadGate = Completer<void>(),
         connectivity: connectivity,
+        settings: settings,
         downloadTimeout: Duration.zero,
       );
       await timingOut.download('fr');
@@ -303,6 +365,198 @@ void main() {
 
       expect(reported, isEmpty);
       expect(statuses['fr'], isA<OfflineModelDownloaded>());
+    });
+  });
+
+  group('manual download', () {
+    test('is not held back for Wi-Fi', () async {
+      await repo.download('fr');
+
+      expect(models.lastWifiRequired, isFalse);
+    });
+
+    test('is not marked as automatic', () async {
+      final reported = await statusesReportedDuring(() => repo.download('fr'));
+
+      expect(
+        reported.last,
+        isA<OfflineModelDownloaded>().having((s) => s.isAuto, 'isAuto', false),
+      );
+    });
+  });
+
+  group('autoDownload', () {
+    test('downloads a language that is not on the device', () async {
+      final result = await repo.autoDownload('fr');
+
+      expect(result, isA<ApiSuccess<void>>());
+      expect(models.downloaded, contains('fr'));
+    });
+
+    test('reports the download as automatic', () async {
+      final reported = await statusesReportedDuring(
+        () => repo.autoDownload('fr'),
+      );
+
+      expect(reported, [
+        isA<OfflineModelDownloading>().having((s) => s.isAuto, 'isAuto', true),
+        isA<OfflineModelDownloaded>().having((s) => s.isAuto, 'isAuto', true),
+      ]);
+    });
+
+    test('remembers the language as auto-downloaded', () async {
+      await repo.autoDownload('fr');
+
+      expect(settings.autoDownloaded, {'fr'});
+    });
+
+    test('marks a saved auto-download in a later session', () async {
+      models.downloaded.add('fr');
+      settings.autoDownloaded = {'fr'};
+
+      final statuses = await statusesOf(['fr']);
+
+      expect(
+        statuses['fr'],
+        isA<OfflineModelDownloaded>().having((s) => s.isAuto, 'isAuto', true),
+      );
+    });
+
+    test('does nothing when auto-download is turned off', () async {
+      settings.autoDownload = false;
+
+      final result = await repo.autoDownload('fr');
+
+      expect(result, isA<ApiSuccess<void>>());
+      expect(models.downloadCalls, 0);
+    });
+
+    test('skips a language already on the device', () async {
+      models.downloaded.add('fr');
+
+      await repo.autoDownload('fr');
+
+      expect(models.downloadCalls, 0);
+    });
+
+    test('skips the built-in and unsupported languages', () async {
+      await repo.autoDownload('en');
+      await repo.autoDownload('xx');
+
+      expect(models.downloadCalls, 0);
+    });
+
+    test('waits for Wi-Fi when only Wi-Fi is allowed', () async {
+      connectivity.onWifi = false;
+
+      final reported = await statusesReportedDuring(
+        () => repo.autoDownload('fr'),
+      );
+
+      expect(models.downloadCalls, 0);
+      expect(reported, isEmpty);
+    });
+
+    test('asks the engine to stay on Wi-Fi when only Wi-Fi is allowed', () async {
+      await repo.autoDownload('fr');
+
+      expect(models.lastWifiRequired, isTrue);
+    });
+
+    test('uses mobile data when Wi-Fi only is turned off', () async {
+      settings.wifiOnly = false;
+      connectivity.onWifi = false;
+
+      await repo.autoDownload('fr');
+
+      expect(models.downloadCalls, 1);
+      expect(models.lastWifiRequired, isFalse);
+    });
+
+    test('joins a download that is already running', () async {
+      final gate = Completer<void>();
+      models.downloadGate = gate;
+
+      final manual = repo.download('fr');
+      final auto = repo.autoDownload('fr');
+      gate.complete();
+      await Future.wait([manual, auto]);
+
+      expect(models.downloadCalls, 1);
+    });
+
+    test(
+      'still succeeds when the auto-download mark cannot be saved',
+      () async {
+        settings.saveError = Exception('box');
+
+        final result = await repo.autoDownload('fr');
+
+        expect(result, isA<ApiSuccess<void>>());
+      },
+    );
+
+    test('fails quietly when the device cannot be asked', () async {
+      models.checkError = Exception('channel');
+
+      final result = await repo.autoDownload('fr');
+
+      expect(result, isA<ApiFailure<void>>());
+      expect(models.downloadCalls, 0);
+    });
+  });
+
+  group('delete of an auto-downloaded language', () {
+    test('forgets that it was auto-downloaded', () async {
+      models.downloaded.add('fr');
+      settings.autoDownloaded = {'fr'};
+
+      await repo.delete('fr');
+
+      expect(settings.autoDownloaded, isEmpty);
+    });
+  });
+
+  group('settings', () {
+    test('default to auto-download over Wi-Fi only', () {
+      expect(repo.getSettings(), defaultOfflinePacksSettings);
+      expect(defaultOfflinePacksSettings, (autoDownload: true, wifiOnly: true));
+    });
+
+    test('reads the saved choices', () {
+      settings
+        ..autoDownload = false
+        ..wifiOnly = false;
+
+      expect(repo.getSettings(), (autoDownload: false, wifiOnly: false));
+    });
+
+    test('fall back to the defaults when they cannot be read', () {
+      settings.readError = Exception('box');
+
+      expect(repo.getSettings(), defaultOfflinePacksSettings);
+    });
+
+    test('saves both choices', () async {
+      final result = await repo.saveSettings((
+        autoDownload: false,
+        wifiOnly: false,
+      ));
+
+      expect(result, isA<ApiSuccess<void>>());
+      expect(settings.autoDownload, isFalse);
+      expect(settings.wifiOnly, isFalse);
+    });
+
+    test('fail to save when the box cannot be written', () async {
+      settings.saveError = Exception('box');
+
+      final result = await repo.saveSettings((
+        autoDownload: false,
+        wifiOnly: true,
+      ));
+
+      expect(result, isA<ApiFailure<void>>());
     });
   });
 }

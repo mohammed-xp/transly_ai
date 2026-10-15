@@ -31,6 +31,7 @@ import '../../../../helpers/fake_app_theme_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
+import '../../../../helpers/offline_packs_cubit_factory.dart';
 
 void main() {
   late FakeAccountRepo accountRepo;
@@ -56,6 +57,7 @@ void main() {
           ),
         ),
       )
+      ..registerFactory(buildOfflinePacksCubit)
       ..registerFactory(() {
         final session = SessionManager(FakeLogoutRepo());
         return DeleteAccountCubit(

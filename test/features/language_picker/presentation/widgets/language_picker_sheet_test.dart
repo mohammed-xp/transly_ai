@@ -6,6 +6,7 @@ import 'package:transly_ai/core/domain/entities/language_side.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
+import 'package:transly_ai/core/widgets/sheet_close_button.dart';
 import 'package:transly_ai/core/widgets/spinning_ring.dart';
 import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
 import 'package:transly_ai/features/language_picker/domain/entities/language_pair.dart';
@@ -97,7 +98,7 @@ void main() {
   }
 
   Future<void> closeSheet(WidgetTester tester) async {
-    await tester.tap(find.byIcon(Icons.close_rounded));
+    await tester.tap(find.byType(SheetCloseButton));
     await tester.pumpAndSettle();
   }
 
@@ -244,7 +245,7 @@ void main() {
     ) async {
       await openSheet(tester);
 
-      expect(find.byIcon(Icons.download_rounded), findsNothing);
+      expect(find.byTooltip('Download for offline use'), findsNothing);
       expect(find.byIcon(Icons.offline_pin_rounded), findsNothing);
     });
 
@@ -252,7 +253,7 @@ void main() {
       modelsRepo.statuses = {'fr': const OfflineModelNotDownloaded()};
       await openSheet(tester);
 
-      await tester.tap(find.byIcon(Icons.download_rounded));
+      await tester.tap(find.byTooltip('Download for offline use'));
       await tester.pumpAndSettle();
       await closeSheet(tester);
 
@@ -272,7 +273,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(SpinningRing), findsOneWidget);
-      expect(find.byIcon(Icons.download_rounded), findsNothing);
+      expect(find.byTooltip('Download for offline use'), findsNothing);
     });
 
     testWidgets('shows a failed download as an error toast', (tester) async {
@@ -281,7 +282,7 @@ void main() {
         ..downloadResult = const ApiResult.failure(NetworkFailure());
       await openSheet(tester);
 
-      await tester.tap(find.byIcon(Icons.download_rounded));
+      await tester.tap(find.byTooltip('Download for offline use'));
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
 

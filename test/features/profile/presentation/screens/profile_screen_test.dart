@@ -8,6 +8,7 @@ import 'package:transly_ai/core/domain/usecases/get_sign_in_method_use_case.dart
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
+import 'package:transly_ai/core/widgets/sheet_close_button.dart';
 import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
 import 'package:transly_ai/features/app_language/domain/entities/app_language.dart';
 import 'package:transly_ai/features/app_language/domain/usecases/get_app_language_usecase.dart';
@@ -17,6 +18,7 @@ import 'package:transly_ai/features/app_theme/domain/entities/app_theme_mode.dar
 import 'package:transly_ai/features/app_theme/domain/usecases/get_app_theme_mode_usecase.dart';
 import 'package:transly_ai/features/app_theme/domain/usecases/set_app_theme_mode_usecase.dart';
 import 'package:transly_ai/features/app_theme/presentation/cubit/app_theme_cubit.dart';
+import 'package:transly_ai/features/language_picker/domain/entities/offline_model_status.dart';
 import 'package:transly_ai/features/profile/domain/entities/plan_usage_entity.dart';
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import 'package:transly_ai/features/profile/presentation/cubit/plan_usage_cubit.dart';
@@ -26,20 +28,31 @@ import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_app_language_repo.dart';
 import '../../../../helpers/fake_app_theme_repo.dart';
+import '../../../../helpers/fake_languages_repo.dart';
+import '../../../../helpers/fake_offline_models_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
+import '../../../../helpers/offline_packs_cubit_factory.dart';
 
 void main() {
   late FakePlanUsageRepo usageRepo;
   late FakeAppLanguageRepo languageRepo;
   late FakeAppThemeRepo themeRepo;
   late SignInMethod signInMethod;
+  late FakeOfflineModelsRepo modelsRepo;
 
   setUp(() {
     usageRepo = FakePlanUsageRepo(ApiResult.success(testFreeUsage));
     languageRepo = FakeAppLanguageRepo();
     themeRepo = FakeAppThemeRepo();
     signInMethod = SignInMethod.email;
+    modelsRepo = FakeOfflineModelsRepo(
+      statuses: {
+        'en': const OfflineModelBuiltIn(),
+        'de': const OfflineModelDownloaded(),
+        'fr': const OfflineModelNotDownloaded(),
+      },
+    );
     serviceLocator
       ..registerFactory(() {
         final userRepo = FakeUserRepo(testUser, signInMethod);
@@ -50,6 +63,12 @@ void main() {
       })
       ..registerFactory(
         () => PlanUsageCubit(getPlanUsage: GetPlanUsageUseCase(usageRepo)),
+      )
+      ..registerFactory(
+        () => buildOfflinePacksCubit(
+          languages: FakeLanguagesRepo(cached: testLanguages),
+          models: modelsRepo,
+        ),
       );
   });
 
@@ -275,7 +294,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('English'));
     await tester.pump();
-    await tester.tap(find.byIcon(Icons.close_rounded));
+    await tester.tap(find.byType(SheetCloseButton));
     await tester.pumpAndSettle();
 
     expect(languageRepo.saveCalls, 0);
@@ -363,5 +382,44 @@ void main() {
     expect(themeRepo.saved, AppThemeMode.system);
 
     await dismissToast(tester);
+  });
+
+  testWidgets('the offline packs row counts the downloaded packs', (
+    tester,
+  ) async {
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Translation'), findsOneWidget);
+    expect(find.text('Offline packs'), findsOneWidget);
+    expect(find.text('1 installed'), findsOneWidget);
+  });
+
+  testWidgets('the offline packs row says none are installed', (tester) async {
+    modelsRepo.statuses = {'en': const OfflineModelBuiltIn()};
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('None installed'), findsOneWidget);
+  });
+
+  testWidgets('the offline packs row hides the count when it is unknown', (
+    tester,
+  ) async {
+    modelsRepo.statusesResult = const ApiResult.failure(UnknownFailure());
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Offline packs'), findsOneWidget);
+    expect(find.textContaining('installed'), findsNothing);
+  });
+
+  testWidgets('writes the offline packs count in Arabic-Indic digits', (
+    tester,
+  ) async {
+    await pumpScreen(tester, const Locale('ar'));
+
+    expect(find.text('حزم بدون إنترنت'), findsOneWidget);
+    expect(find.text('١ مثبتة'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

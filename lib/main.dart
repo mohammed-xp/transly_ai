@@ -5,11 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'core/constants/app_icons.dart';
 import 'core/di/service_locator.dart';
 import 'core/init/hive_initializer.dart';
 import 'core/router/app_router.dart';
 import 'core/router/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/app_icon_source.dart';
 import 'core/widgets/toast/app_toast.dart';
 import 'core/widgets/toast/app_toast_scope.dart';
 import 'features/app_language/domain/entities/app_language.dart';
@@ -54,12 +56,12 @@ class TranslyApp extends StatelessWidget {
             case SessionExpired():
               _goToSignInWithToast(
                 (l10n) => l10n.authErrorSessionExpired,
-                Icons.lock_outline_rounded,
+                AppIcons.lock,
               );
             case SessionAccountDeleted():
               _goToSignInWithToast(
                 (l10n) => l10n.profileDeleteAccountDone,
-                Icons.check_rounded,
+                AppIcons.checkSuccess,
               );
             case SessionSignedOut():
               appRouter.goNamed(AppRoutes.signInName);
@@ -102,7 +104,7 @@ class TranslyApp extends StatelessWidget {
 
   void _goToSignInWithToast(
     String Function(AppLocalizations l10n) message,
-    IconData icon,
+    String icon,
   ) {
     appRouter.goNamed(AppRoutes.signInName);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -114,7 +116,7 @@ class TranslyApp extends StatelessWidget {
         navContext,
         message: message(l10n),
         type: AppToastType.neutral,
-        icon: icon,
+        icon: SvgIconSource(icon),
       );
     });
   }

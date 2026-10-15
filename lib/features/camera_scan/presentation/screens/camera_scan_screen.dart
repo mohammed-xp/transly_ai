@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/coming_soon_panel.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -14,7 +15,7 @@ class CameraScanScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppDimens.spaceL),
         child: ComingSoonPanel(
-          icon: Icons.photo_camera_outlined,
+          icon: AppIcons.camera,
           title: l10n.cameraScanComingSoonTitle,
           message: l10n.cameraScanComingSoonBody,
         ),

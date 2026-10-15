@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/app_icons.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/l10n/failure_message.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/app_icon_source.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../language_picker/presentation/cubit/auto_download_notice_cubit.dart';
+import '../../../language_picker/presentation/widgets/auto_download_notice.dart';
 import '../../domain/entities/translation_tone.dart';
 import '../cubit/translate_cubit.dart';
 import '../cubit/translate_state.dart';
@@ -21,27 +26,31 @@ class TranslateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TranslateCubit, TranslateState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          (previous.status is TranslationError ||
-              current.status is TranslationError),
-      listener: _onErrorChanged,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          AppDimens.spaceL,
-          AppDimens.spaceL - 2,
-          AppDimens.spaceL,
-          0,
+    return BlocProvider(
+      create: (_) => serviceLocator<AutoDownloadNoticeCubit>(),
+      child: BlocListener<TranslateCubit, TranslateState>(
+        listenWhen: (previous, current) =>
+            previous.status != current.status &&
+            (previous.status is TranslationError ||
+                current.status is TranslationError),
+        listener: _onErrorChanged,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            AppDimens.spaceL,
+            AppDimens.spaceL - 2,
+            AppDimens.spaceL,
+            0,
+          ),
+          children: const [
+            AutoDownloadNotice(),
+            _SourceSection(),
+            SizedBox(height: AppDimens.spaceM),
+            _OutputSection(),
+            _BusyNoteSection(),
+            SizedBox(height: AppDimens.spaceM),
+            _ToneSection(),
+          ],
         ),
-        children: const [
-          _SourceSection(),
-          SizedBox(height: AppDimens.spaceM),
-          _OutputSection(),
-          _BusyNoteSection(),
-          SizedBox(height: AppDimens.spaceM),
-          _ToneSection(),
-        ],
       ),
     );
   }
@@ -137,7 +146,7 @@ class _OutputSection extends StatelessWidget {
                   AppToast.show(
                     context,
                     message: l10n.translateCopied,
-                    icon: Icons.copy_rounded,
+                    icon: const SvgIconSource(AppIcons.copyToast),
                   );
                 },
           // Matches TranslateCubit.speakOutput's own guard — a whitespace-only

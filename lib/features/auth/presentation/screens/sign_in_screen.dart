@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -218,7 +219,7 @@ class _EmailField extends StatelessWidget {
           hint: l10n.signInEmailHint,
           controller: controller,
           focusNode: focusNode,
-          prefixIcon: Icons.mail_outline_rounded,
+          prefixIcon: AppIcons.mail,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.username, AutofillHints.email],
@@ -256,7 +257,7 @@ class _PasswordField extends StatelessWidget {
           hint: l10n.signInPasswordHint,
           controller: controller,
           focusNode: focusNode,
-          prefixIcon: Icons.lock_outline_rounded,
+          prefixIcon: AppIcons.lock,
           obscureText: !isVisible,
           textInputAction: TextInputAction.done,
           autofillHints: const [AutofillHints.password],

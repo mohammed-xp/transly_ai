@@ -17,12 +17,19 @@ class OfflineModelNotDownloaded extends OfflineModelStatus {
   const OfflineModelNotDownloaded();
 }
 
+/// [isAuto]: started by auto-download after an online translation rather
+/// than by the user.
 class OfflineModelDownloading extends OfflineModelStatus {
-  const OfflineModelDownloading();
+  const OfflineModelDownloading({this.isAuto = false});
+
+  final bool isAuto;
 }
 
+/// [isAuto]: downloaded by auto-download rather than by the user.
 class OfflineModelDownloaded extends OfflineModelStatus {
-  const OfflineModelDownloaded();
+  const OfflineModelDownloaded({this.isAuto = false});
+
+  final bool isAuto;
 }
 
 typedef OfflineModelUpdate = ({String code, OfflineModelStatus status});

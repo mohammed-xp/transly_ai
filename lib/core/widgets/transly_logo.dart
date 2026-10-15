@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_dimens.dart';
-import 'transly_glyph_painter.dart';
+import 'transly_mark.dart';
 
 /// The gradient logo tile with the white Transly mark.
 ///
@@ -51,13 +51,7 @@ class TranslyLogo extends StatelessWidget {
                 ),
         ],
       ),
-      child: Center(
-        child: SizedBox(
-          width: _glyphSize,
-          height: _glyphSize,
-          child: const CustomPaint(painter: TranslyGlyphPainter()),
-        ),
-      ),
+      child: Center(child: TranslyMark.white(size: _glyphSize)),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/coming_soon_panel.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -21,7 +22,7 @@ class ConversationScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppDimens.spaceL),
         child: ComingSoonPanel(
-          icon: Icons.mic_none_rounded,
+          icon: AppIcons.mic,
           title: l10n.conversationComingSoonTitle,
           message: l10n.conversationComingSoonBody,
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import 'speaker_button.dart';
@@ -86,7 +87,7 @@ class _SourceCardState extends State<SourceCard> {
                 style: textTheme.titleSmall?.copyWith(color: c.textMuted),
               ),
               SpeakerButton(
-                icon: Icons.volume_up_outlined,
+                icon: AppIcons.speaker,
                 color: c.iconLine,
                 onTap: widget.onSpeak,
               ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/screens/sign_in_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/home/presentation/screens/home_shell.dart';
+import '../../features/language_picker/presentation/screens/offline_packs_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
@@ -41,6 +42,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.profile,
       name: AppRoutes.profileName,
       builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.offlinePacks,
+      name: AppRoutes.offlinePacksName,
+      builder: (context, state) => const OfflinePacksScreen(),
     ),
     GoRoute(
       path: AppRoutes.history,

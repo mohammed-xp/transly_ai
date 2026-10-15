@@ -17,6 +17,7 @@ import 'package:transly_ai/features/language_picker/domain/usecases/sync_languag
 import 'package:transly_ai/features/language_picker/domain/usecases/watch_offline_model_updates_usecase.dart';
 import 'package:transly_ai/features/language_picker/presentation/cubit/language_picker_cubit.dart';
 import 'package:transly_ai/features/language_picker/presentation/cubit/language_picker_state.dart';
+import 'package:transly_ai/features/language_picker/presentation/cubit/offline_model_error.dart';
 
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_offline_models_repo.dart';

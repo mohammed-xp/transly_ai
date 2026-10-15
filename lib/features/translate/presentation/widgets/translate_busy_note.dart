@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 
 /// Centered sparkle + caption shown under the output card while a model
 /// downloads or a translation runs (design `02b · Translating`).
@@ -17,7 +19,7 @@ class TranslateBusyNote extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.auto_awesome, size: 14, color: c.iconLine),
+        AppSvgIcon(AppIcons.spark, size: 14, color: c.iconLine),
         const SizedBox(width: 7),
         Flexible(
           child: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -243,7 +244,7 @@ class _NameField extends StatelessWidget {
           hint: l10n.signUpNameHint,
           controller: controller,
           focusNode: focusNode,
-          prefixIcon: Icons.person_outline_rounded,
+          prefixIcon: AppIcons.user,
           keyboardType: TextInputType.name,
           textInputAction: TextInputAction.next,
           textCapitalization: TextCapitalization.words,
@@ -274,7 +275,7 @@ class _EmailField extends StatelessWidget {
           hint: l10n.signInEmailHint,
           controller: controller,
           focusNode: focusNode,
-          prefixIcon: Icons.mail_outline_rounded,
+          prefixIcon: AppIcons.mail,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.email],
@@ -312,7 +313,7 @@ class _PasswordField extends StatelessWidget {
           hint: l10n.signUpPasswordHint,
           controller: controller,
           focusNode: focusNode,
-          prefixIcon: Icons.lock_outline_rounded,
+          prefixIcon: AppIcons.lock,
           obscureText: !isVisible,
           textInputAction: TextInputAction.done,
           maxLength: ValidateSignUpFormUseCase.maxPasswordLength,

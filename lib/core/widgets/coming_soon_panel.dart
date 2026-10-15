@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_dimens.dart';
 import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 /// Centered "not built yet" panel: icon, title, message — themed like the
 /// translate feature's cards. Used by 2+ features (conversation, camera scan)
@@ -15,7 +16,8 @@ class ComingSoonPanel extends StatelessWidget {
     required this.message,
   });
 
-  final IconData icon;
+  /// One of the [AppIcons].
+  final String icon;
   final String title;
   final String message;
 
@@ -43,7 +45,7 @@ class ComingSoonPanel extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: AppDimens.iconL * 1.5, color: c.coral),
+          AppSvgIcon(icon, size: AppDimens.iconL * 1.5, color: c.coral),
           const SizedBox(height: AppDimens.spaceM),
           Text(
             title,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_dimens.dart';
-import '../../../../core/theme/app_palette.dart';
+import '../theme/app_dimens.dart';
+import '../theme/app_palette.dart';
 
 /// Section caption above a rounded card whose [rows] are separated by
-/// hairline dividers (design `12 · Profile`).
-class ProfileSection extends StatelessWidget {
-  const ProfileSection({super.key, required this.title, required this.rows});
+/// hairline dividers (designs `12 · Profile` and the offline packs screen).
+class SectionCard extends StatelessWidget {
+  const SectionCard({super.key, required this.title, required this.rows});
 
   final String title;
   final List<Widget> rows;

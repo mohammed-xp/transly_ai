@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transly_ai/core/constants/app_icons.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
 import 'package:transly_ai/features/home/presentation/widgets/language_bar.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
+
+import '../../../../helpers/svg_icon_finder.dart';
 
 void main() {
   late List<String> taps;
@@ -52,7 +55,7 @@ void main() {
   testWidgets('the swap button swaps', (tester) async {
     await pumpBar(tester);
 
-    await tester.tap(find.byIcon(Icons.swap_horiz_rounded));
+    await tester.tap(findSvgIcon(AppIcons.swap));
 
     expect(taps, ['swap']);
   });

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/l10n/failure_message.dart';
 import '../../../../core/l10n/localized_digits.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
-import '../../../../core/widgets/sparkle_icon.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/plan_usage_entity.dart';
 import '../utils/plan_usage_l10n.dart';
@@ -225,7 +226,11 @@ class _PlanIconChip extends StatelessWidget {
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(AppDimens.radiusChipL),
       ),
-      child: SparkleIcon(size: 17, color: context.palette.textSecondary),
+      child: AppSvgIcon(
+        AppIcons.sparkle,
+        size: 17,
+        color: context.palette.textSecondary,
+      ),
     );
   }
 }
@@ -290,7 +295,11 @@ class _UpgradeButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SparkleIcon(size: 17, color: Colors.white),
+                const AppSvgIcon(
+                  AppIcons.sparkle,
+                  size: 17,
+                  color: Colors.white,
+                ),
                 const SizedBox(width: AppDimens.spaceS),
                 Text(
                   AppLocalizations.of(context)!.profileUpgradeToPro,

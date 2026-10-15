@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/language_picker/domain/entities/offline_model_status.dart';
+import 'package:transly_ai/features/language_picker/domain/entities/offline_packs_settings.dart';
 import 'package:transly_ai/features/language_picker/domain/repos/offline_models_repo.dart';
 
 class FakeOfflineModelsRepo implements OfflineModelsRepo {
@@ -10,6 +11,8 @@ class FakeOfflineModelsRepo implements OfflineModelsRepo {
     this.statusesResult,
     this.downloadResult = const ApiResult.success(null),
     this.deleteResult = const ApiResult.success(null),
+    this.settings = defaultOfflinePacksSettings,
+    this.saveSettingsResult = const ApiResult.success(null),
   });
 
   /// Answered for every code asked about; unknown codes are unsupported.
@@ -22,6 +25,11 @@ class FakeOfflineModelsRepo implements OfflineModelsRepo {
   ApiResult<void> deleteResult;
   final List<String> downloads = [];
   final List<String> deletes = [];
+  final List<String> autoDownloads = [];
+
+  OfflinePacksSettings settings;
+  ApiResult<void> saveSettingsResult;
+  final List<OfflinePacksSettings> savedSettings = [];
   final StreamController<OfflineModelUpdate> updates =
       StreamController.broadcast();
 
@@ -55,5 +63,21 @@ class FakeOfflineModelsRepo implements OfflineModelsRepo {
   Future<ApiResult<void>> delete(String code) async {
     deletes.add(code);
     return deleteResult;
+  }
+
+  @override
+  Future<ApiResult<void>> autoDownload(String code) async {
+    autoDownloads.add(code);
+    return const ApiResult.success(null);
+  }
+
+  @override
+  OfflinePacksSettings getSettings() => settings;
+
+  @override
+  Future<ApiResult<void>> saveSettings(OfflinePacksSettings settings) async {
+    savedSettings.add(settings);
+    if (saveSettingsResult is ApiSuccess<void>) this.settings = settings;
+    return saveSettingsResult;
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/spinning_ring.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'speaker_button.dart';
@@ -98,7 +100,7 @@ class TranslationOutputCard extends StatelessWidget {
                 )
               else
                 SpeakerButton(
-                  icon: Icons.volume_up_rounded,
+                  icon: AppIcons.speakerFilled,
                   color: c.coral,
                   onTap: onSpeak,
                 ),
@@ -133,7 +135,7 @@ class TranslationOutputCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _ActionButton(
-                  icon: Icons.copy_rounded,
+                  icon: AppIcons.copy,
                   label: AppLocalizations.of(context)!.translateCopy,
                   onTap: onCopy,
                 ),
@@ -141,7 +143,7 @@ class TranslationOutputCard extends StatelessWidget {
               const SizedBox(width: AppDimens.spaceS),
               Expanded(
                 child: _ActionButton(
-                  icon: Icons.check_circle_outline_rounded,
+                  icon: AppIcons.save,
                   label: AppLocalizations.of(context)!.translateSave,
                   onTap: null, // save/history is future scope
                 ),
@@ -181,7 +183,7 @@ class _AiBadge extends StatelessWidget {
               duration: const Duration(milliseconds: 700),
             )
           else
-            const Icon(Icons.auto_awesome, size: 10, color: Colors.white),
+            const AppSvgIcon(AppIcons.spark, size: 10, color: Colors.white),
           const SizedBox(width: 4),
           Text(
             l10n.translateAiBadge,
@@ -205,7 +207,8 @@ class _ActionButton extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  /// One of the [AppIcons].
+  final String icon;
   final String label;
 
   /// Null renders the button disabled (dimmed, no ink response).
@@ -240,7 +243,7 @@ class _ActionButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, size: 15, color: c.coral),
+                  AppSvgIcon(icon, size: 15, color: c.coral),
                   const SizedBox(width: 6),
                   Text(
                     label,

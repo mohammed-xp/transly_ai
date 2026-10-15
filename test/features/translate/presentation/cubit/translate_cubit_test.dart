@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/services/tts_service.dart';
+import 'package:transly_ai/features/language_picker/domain/usecases/auto_download_offline_models_usecase.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_tone.dart';
 import 'package:transly_ai/features/translate/domain/usecases/get_saved_tone_usecase.dart';
 import 'package:transly_ai/features/translate/domain/usecases/save_tone_usecase.dart';
@@ -8,6 +9,7 @@ import 'package:transly_ai/features/translate/domain/usecases/translate_text_use
 import 'package:transly_ai/features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import 'package:transly_ai/features/translate/presentation/cubit/translate_cubit.dart';
 
+import '../../../../helpers/fake_offline_models_repo.dart';
 import '../../../../helpers/fake_translation_repo.dart';
 
 class _SilentTts implements TtsService {
@@ -22,7 +24,10 @@ class _SilentTts implements TtsService {
 void main() {
   TranslateCubit buildCubit(FakeTranslationRepo repo) {
     return TranslateCubit(
-      translateText: TranslateTextUseCase(repo),
+      translateText: TranslateTextUseCase(
+        repo,
+        AutoDownloadOfflineModelsUseCase(FakeOfflineModelsRepo()),
+      ),
       speakText: SpeakTextUseCase(_SilentTts()),
       watchOnlineAvailability: WatchOnlineAvailabilityUseCase(repo),
       getSavedTone: GetSavedToneUseCase(repo),

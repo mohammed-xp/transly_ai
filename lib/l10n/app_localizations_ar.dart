@@ -616,4 +616,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get languagePickerRemoveOfflineConfirm => 'إزالة';
+
+  @override
+  String get profileTranslationSection => 'الترجمة';
+
+  @override
+  String get profileOfflinePacks => 'حزم بدون إنترنت';
+
+  @override
+  String profileOfflinePacksInstalled(int installed, String count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      installed,
+      locale: localeName,
+      other: '$count مثبتة',
+      zero: 'لا توجد حزم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get offlinePacksTitle => 'حزم بدون إنترنت';
+
+  @override
+  String get offlinePacksInstalledSection => 'المثبتة';
+
+  @override
+  String get offlinePacksAvailableSection => 'متاحة للتحميل';
+
+  @override
+  String get offlinePacksBuiltIn => 'مدمجة';
+
+  @override
+  String get offlinePacksAutoSection => 'التحميل التلقائي';
+
+  @override
+  String get offlinePacksAutoDownload => 'تحميل اللغات تلقائياً';
+
+  @override
+  String get offlinePacksAutoDownloadBody =>
+      'عند الترجمة إلى لغة جديدة، تُحمَّل حزمتها في الخلفية لتعمل بدون إنترنت في المرة القادمة.';
+
+  @override
+  String get offlinePacksWifiOnly => 'عبر Wi‑Fi فقط';
+
+  @override
+  String get offlinePacksAutoDownloaded => 'حُمّلت تلقائياً';
+
+  @override
+  String get offlinePacksAutoTag => 'تلقائي';
+
+  @override
+  String get offlinePacksDownloading => 'جارٍ التحميل…';
+
+  @override
+  String get offlinePacksSettingsSaveFailed =>
+      'تعذّر حفظ الإعداد. حاول مرة أخرى.';
+
+  @override
+  String autoDownloadNoticeTitle(String language) {
+    return 'جارٍ تحميل $language للاستخدام بدون إنترنت';
+  }
+
+  @override
+  String get autoDownloadNoticeWifi => 'عبر Wi‑Fi';
+
+  @override
+  String get autoDownloadNoticeHide => 'إخفاء';
 }

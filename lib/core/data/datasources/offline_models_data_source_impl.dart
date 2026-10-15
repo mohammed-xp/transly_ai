@@ -21,13 +21,13 @@ class MlKitOfflineModelsDataSource implements OfflineModelsDataSource {
   Future<bool> isDownloaded(String code) async =>
       _modelManager.isModelDownloaded(mlKitLanguage(code).bcpCode);
 
-  /// Mobile data is allowed: the user asked for this download. Waiting for
-  /// Wi-Fi would leave it pending with no way to tell why.
+  /// Mobile data is allowed unless [wifiRequired]: a download the user asked
+  /// for shouldn't sit pending waiting for Wi-Fi with no way to tell why.
   @override
-  Future<void> download(String code) async {
+  Future<void> download(String code, {bool wifiRequired = false}) async {
     final downloaded = await _modelManager.downloadModel(
       mlKitLanguage(code).bcpCode,
-      isWifiRequired: false,
+      isWifiRequired: wifiRequired,
     );
     if (!downloaded) throw const UnknownException();
   }

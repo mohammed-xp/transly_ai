@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_icons.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 class SelectionMark extends StatelessWidget {
   const SelectionMark({super.key, required this.isSelected});
@@ -31,7 +33,13 @@ class SelectionMark extends StatelessWidget {
               ),
       ),
       child: isSelected
-          ? const Icon(Icons.check_rounded, size: 15, color: Colors.white)
+          ? const Center(
+              child: AppSvgIcon(
+                AppIcons.checkSelect,
+                size: 13,
+                color: Colors.white,
+              ),
+            )
           : null,
     );
   }

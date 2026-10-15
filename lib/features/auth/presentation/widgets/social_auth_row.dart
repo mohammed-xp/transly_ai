@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../cubit/google_sign_in_cubit.dart';
@@ -44,7 +46,7 @@ class SocialAuthRow extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _SocialButton(
-                icon: Icons.apple_rounded,
+                icon: AppIcons.apple,
                 label: 'Apple',
                 onTap: () => showComingSoonToast(context),
               ),
@@ -52,7 +54,7 @@ class SocialAuthRow extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _SocialButton(
-                icon: Icons.facebook_rounded,
+                icon: AppIcons.facebook,
                 label: 'Facebook',
                 onTap: () => showComingSoonToast(context),
               ),
@@ -73,7 +75,7 @@ class _GoogleButton extends StatelessWidget {
       selector: (state) => state is GoogleSignInLoading,
       builder: (context, isLoading) {
         return _SocialButton(
-          icon: Icons.g_mobiledata_rounded,
+          icon: AppIcons.google,
           label: 'Google',
           isLoading: isLoading,
           onTap: () => context.read<GoogleSignInCubit>().signIn(),
@@ -91,7 +93,8 @@ class _SocialButton extends StatelessWidget {
     this.isLoading = false,
   });
 
-  final IconData icon;
+  /// One of the [AppIcons].
+  final String icon;
   final String label;
   final VoidCallback onTap;
   final bool isLoading;
@@ -124,7 +127,7 @@ class _SocialButton extends StatelessWidget {
                       color: palette.ink,
                     ),
                   )
-                : Icon(icon, size: AppDimens.iconL, color: palette.ink),
+                : AppSvgIcon(icon, size: 21, color: palette.ink),
           ),
         ),
       ),

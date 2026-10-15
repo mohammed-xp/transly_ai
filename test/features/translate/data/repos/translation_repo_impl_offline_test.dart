@@ -58,6 +58,9 @@ class _FakeConnectivity implements ConnectivityService {
 
   @override
   Stream<bool> get onConnectedChanged => const Stream.empty();
+
+  @override
+  Future<bool> get isOnWifi async => connected;
 }
 
 class _FakeRemote implements TranslationRemoteDataSource {

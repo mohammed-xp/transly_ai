@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/transly_logo.dart';
@@ -85,7 +87,7 @@ class ForceUpdateScreen extends StatelessWidget {
                   ),
                   GradientButton(
                     label: storeLabel,
-                    icon: Icons.download_rounded,
+                    icon: AppIcons.download,
                     onPressed: () => openAppStore(context),
                   ),
                 ],
@@ -134,7 +136,12 @@ class _VersionPill extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 14),
-            Icon(Icons.arrow_forward_rounded, size: 22, color: c.coral),
+            AppSvgIcon(
+              AppIcons.arrow,
+              size: 22,
+              color: c.coral,
+              matchTextDirection: true,
+            ),
             const SizedBox(width: 14),
             _VersionColumn(
               label: l10n.updateLatestVersion,

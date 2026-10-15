@@ -2,6 +2,7 @@ import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/errors/failure.dart';
 import '../../domain/entities/language_pair.dart';
 import '../../domain/entities/offline_model_status.dart';
+import 'offline_model_error.dart';
 
 class LanguagePickerState {
   const LanguagePickerState({
@@ -73,14 +74,5 @@ class LanguagesLoaded extends LanguagesStatus {
 class LanguagesFailed extends LanguagesStatus {
   const LanguagesFailed(this.failure);
 
-  final Failure failure;
-}
-
-/// Compared by identity on purpose, so the same failure happening twice in a
-/// row is still reported twice.
-class OfflineModelError {
-  OfflineModelError(this.language, this.failure);
-
-  final LanguageEntity language;
   final Failure failure;
 }

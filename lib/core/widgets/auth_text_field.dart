@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../theme/app_dimens.dart';
 import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 class AuthTextField extends StatefulWidget {
   const AuthTextField({
@@ -28,7 +29,9 @@ class AuthTextField extends StatefulWidget {
   final String hint;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final IconData prefixIcon;
+
+  /// One of the [AppIcons].
+  final String prefixIcon;
   final ValueChanged<String> onChanged;
   final bool obscureText;
   final Widget? suffixIcon;
@@ -116,7 +119,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
           child: Row(
             children: [
               const SizedBox(width: 15),
-              Icon(
+              AppSvgIcon(
                 widget.prefixIcon,
                 size: 19,
                 color: hasError ? borderColor : c.textMuted,

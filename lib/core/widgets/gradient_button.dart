@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_dimens.dart';
+import 'app_svg_icon.dart';
 
 /// Full-width primary action on the brand gradient, with an optional leading
 /// [icon]. While [isLoading] it shows a spinner and ignores taps.
@@ -16,13 +17,16 @@ class GradientButton extends StatelessWidget {
 
   final String label;
   final VoidCallback? onPressed;
-  final IconData? icon;
+
+  /// One of the [AppIcons].
+  final String? icon;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final radius = BorderRadius.circular(AppDimens.radiusButton);
+    final icon = this.icon;
     final labelStyle = Theme.of(
       context,
     ).textTheme.titleLarge?.copyWith(color: Colors.white);
@@ -65,7 +69,11 @@ class GradientButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (icon != null) ...[
-                        Icon(icon, color: Colors.white, size: AppDimens.iconM),
+                        AppSvgIcon(
+                          icon,
+                          color: Colors.white,
+                          size: AppDimens.iconM,
+                        ),
                         const SizedBox(width: 10),
                       ],
                       Flexible(

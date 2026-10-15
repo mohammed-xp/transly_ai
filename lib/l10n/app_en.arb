@@ -789,5 +789,92 @@
   "languagePickerRemoveOfflineConfirm": "Remove",
   "@languagePickerRemoveOfflineConfirm": {
     "description": "Confirms removing a downloaded language from the device."
+  },
+  "profileTranslationSection": "Translation",
+  "@profileTranslationSection": {
+    "description": "Heading of the translation section on the profile screen."
+  },
+  "profileOfflinePacks": "Offline packs",
+  "@profileOfflinePacks": {
+    "description": "Profile row that opens the offline packs screen."
+  },
+  "profileOfflinePacksInstalled": "{installed, plural, =0{None installed} other{{count} installed}}",
+  "@profileOfflinePacksInstalled": {
+    "description": "Value of the offline packs row: how many languages the user downloaded. {count} is {installed} written in the locale's digits.",
+    "placeholders": {
+      "installed": {
+        "type": "int"
+      },
+      "count": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "offlinePacksTitle": "Offline packs",
+  "@offlinePacksTitle": {
+    "description": "Title of the offline packs screen."
+  },
+  "offlinePacksInstalledSection": "Installed",
+  "@offlinePacksInstalledSection": {
+    "description": "Heading of the languages already on the device."
+  },
+  "offlinePacksAvailableSection": "Available to download",
+  "@offlinePacksAvailableSection": {
+    "description": "Heading of the languages that can be downloaded for offline use."
+  },
+  "offlinePacksBuiltIn": "Built in",
+  "@offlinePacksBuiltIn": {
+    "description": "Marks a language that ships with the device and can't be removed."
+  },
+  "offlinePacksAutoSection": "Auto-download",
+  "@offlinePacksAutoSection": {
+    "description": "Heading of the auto-download settings on the offline packs screen."
+  },
+  "offlinePacksAutoDownload": "Download languages automatically",
+  "@offlinePacksAutoDownload": {
+    "description": "Switch that downloads the languages of online translations in the background."
+  },
+  "offlinePacksAutoDownloadBody": "When you translate into a new language, its pack downloads in the background so it works offline next time.",
+  "@offlinePacksAutoDownloadBody": {
+    "description": "Explanation under the auto-download switch."
+  },
+  "offlinePacksWifiOnly": "Wi‑Fi only",
+  "@offlinePacksWifiOnly": {
+    "description": "Switch that limits auto-downloads to Wi-Fi."
+  },
+  "offlinePacksAutoDownloaded": "Downloaded automatically",
+  "@offlinePacksAutoDownloaded": {
+    "description": "Marks an installed pack that auto-download put on the device."
+  },
+  "offlinePacksAutoTag": "Auto",
+  "@offlinePacksAutoTag": {
+    "description": "Chip next to a language that auto-download is downloading."
+  },
+  "offlinePacksDownloading": "Downloading…",
+  "@offlinePacksDownloading": {
+    "description": "Under a language whose pack is downloading."
+  },
+  "offlinePacksSettingsSaveFailed": "Couldn't save the setting. Please try again.",
+  "@offlinePacksSettingsSaveFailed": {
+    "description": "Error toast when an auto-download switch couldn't be saved."
+  },
+  "autoDownloadNoticeTitle": "Downloading {language} for offline use",
+  "@autoDownloadNoticeTitle": {
+    "description": "Notice on the translate screen while a language downloads in the background.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "Spanish"
+      }
+    }
+  },
+  "autoDownloadNoticeWifi": "Over Wi‑Fi",
+  "@autoDownloadNoticeWifi": {
+    "description": "Under the auto-download notice when downloads are limited to Wi-Fi."
+  },
+  "autoDownloadNoticeHide": "Hide",
+  "@autoDownloadNoticeHide": {
+    "description": "Hides the auto-download notice; the download goes on."
   }
 }
