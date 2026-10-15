@@ -11,16 +11,6 @@ abstract class TranslationRepo {
     required String tone,
   });
 
-  Future<ApiResult<bool>> areModelsDownloaded({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  });
-
-  Future<ApiResult<void>> downloadModels({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  });
-
   Stream<bool> watchOnlineAvailability();
 
   /// Synchronous so the translate screen opens on the saved tone.

@@ -113,7 +113,6 @@ class _OutputSection extends StatelessWidget {
         final cubit = context.read<TranslateCubit>();
         final status = data.$3;
         final (busyLabel, errorMessage) = switch (status) {
-          TranslationDownloadingModel() ||
           TranslationInProgress() => (l10n.translateInProgress, null),
           TranslationError(:final failure) => (
             null,
@@ -160,7 +159,6 @@ class _BusyNoteSection extends StatelessWidget {
       selector: (state) => state.status,
       builder: (context, status) {
         final message = switch (status) {
-          TranslationDownloadingModel() => l10n.translateDownloadingModel,
           TranslationInProgress() => l10n.translateAiAnalyzing,
           TranslationIdle() || TranslationDone() || TranslationError() => null,
         };

@@ -28,7 +28,6 @@
   "localeDigits": "٠١٢٣٤٥٦٧٨٩",
   "languageName": "{code, select, ar{العربية} en{الإنجليزية} other{}}",
   "translateSourceHint": "اكتب النص المراد ترجمته…",
-  "translateDownloadingModel": "جارٍ تنزيل نموذج الترجمة…",
   "translateInProgress": "جاري الترجمة",
   "translateAiAnalyzing": "الذكاء الاصطناعي يحلّل السياق والنبرة…",
   "translateListen": "استماع",
@@ -55,6 +54,7 @@
   "signInHidePassword": "إخفاء كلمة المرور",
   "commonBack": "رجوع",
   "commonRetry": "إعادة المحاولة",
+  "commonCancel": "إلغاء",
   "authErrorEmailRequired": "أدخل بريدك الإلكتروني.",
   "authErrorEmailInvalid": "أدخل بريدًا إلكترونيًا صحيحًا.",
   "authErrorPasswordRequired": "أدخل كلمة المرور.",
@@ -148,6 +148,7 @@
   "errorNotFound": "لم نعثر على ما تبحث عنه.",
   "errorFormat": "وصلنا رد غير متوقع. حاول مرة أخرى.",
   "errorUnsupportedLanguage": "هذه اللغة غير متاحة بدون إنترنت حاليًا.",
+  "errorOfflineModelMissing": "للترجمة بدون إنترنت، نزّل أولًا اللغات التي تستخدمها من قائمة اللغات.",
   "errorUnknown": "حدث خطأ ما. حاول مرة أخرى.",
   "errorEmailAlreadyRegistered": "يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.",
   "errorQuotaExceeded": "وصلت إلى الحد المسموح به للترجمة في خطتك.",
@@ -174,5 +175,11 @@
   "languagePickerSourceTag": "لغة المصدر",
   "languagePickerTargetTag": "لغة الهدف",
   "languagePickerSwap": "تبديل",
-  "languagePickerNoResults": "لا توجد لغة تطابق بحثك."
+  "languagePickerNoResults": "لا توجد لغة تطابق بحثك.",
+  "languagePickerDownloadOffline": "تنزيل للاستخدام بدون إنترنت",
+  "languagePickerDownloading": "جارٍ التنزيل…",
+  "languagePickerAvailableOffline": "متاحة بدون إنترنت",
+  "languagePickerRemoveOfflineTitle": "إزالة {language} من اللغات المتاحة بدون إنترنت؟",
+  "languagePickerRemoveOfflineBody": "ستحتاج إلى اتصال بالإنترنت لتنزيلها مرة أخرى.",
+  "languagePickerRemoveOfflineConfirm": "إزالة"
 }

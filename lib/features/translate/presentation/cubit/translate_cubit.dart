@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_tone.dart';
-import '../../domain/usecases/check_translation_models_usecase.dart';
-import '../../domain/usecases/download_translation_models_usecase.dart';
 import '../../domain/usecases/get_saved_tone_usecase.dart';
 import '../../domain/usecases/save_tone_usecase.dart';
 import '../../domain/usecases/speak_text_usecase.dart';
@@ -17,15 +15,11 @@ import 'translate_state.dart';
 class TranslateCubit extends Cubit<TranslateState> {
   TranslateCubit({
     required TranslateTextUseCase translateText,
-    required CheckTranslationModelsUseCase checkModels,
-    required DownloadTranslationModelsUseCase downloadModels,
     required SpeakTextUseCase speakText,
     required WatchOnlineAvailabilityUseCase watchOnlineAvailability,
     required GetSavedToneUseCase getSavedTone,
     required SaveToneUseCase saveTone,
   }) : _translateText = translateText,
-       _checkModels = checkModels,
-       _downloadModels = downloadModels,
        _speakText = speakText,
        _saveTone = saveTone,
        super(TranslateState.initial(tone: getSavedTone())) {
@@ -46,8 +40,6 @@ class TranslateCubit extends Cubit<TranslateState> {
   }
 
   final TranslateTextUseCase _translateText;
-  final CheckTranslationModelsUseCase _checkModels;
-  final DownloadTranslationModelsUseCase _downloadModels;
   final SpeakTextUseCase _speakText;
   final SaveToneUseCase _saveTone;
 
@@ -125,29 +117,6 @@ class TranslateCubit extends Cubit<TranslateState> {
     final from = state.from;
     final to = state.to;
     final tone = state.tone;
-
-    final modelsResult = await _checkModels(from: from, to: to);
-    if (_isStale(id)) return;
-
-    final needsDownload = modelsResult.when(
-      success: (downloaded) => !downloaded,
-      failure: (_) =>
-          false, // treat as ready; the translate call will surface it
-    );
-
-    if (needsDownload) {
-      emit(state.copyWith(status: const TranslationDownloadingModel()));
-      final downloadResult = await _downloadModels(from: from, to: to);
-      if (_isStale(id)) return;
-      final downloadFailure = downloadResult.when(
-        success: (_) => null,
-        failure: (f) => f,
-      );
-      if (downloadFailure != null) {
-        emit(state.copyWith(status: TranslationError(downloadFailure)));
-        return;
-      }
-    }
 
     emit(state.copyWith(status: const TranslationInProgress()));
     final result = await _translateText(

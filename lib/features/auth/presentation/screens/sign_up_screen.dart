@@ -250,7 +250,6 @@ class _NameField extends StatelessWidget {
           maxLength: ValidateSignUpFormUseCase.maxNameLength,
           autofillHints: const [AutofillHints.name],
           onChanged: context.read<SignUpCubit>().nameChanged,
-          onFieldSubmitted: (_) => focusNode.nextFocus(),
           errorText: nameFieldErrorMessage(context, error),
         );
       },
@@ -280,7 +279,6 @@ class _EmailField extends StatelessWidget {
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.email],
           onChanged: context.read<SignUpCubit>().emailChanged,
-          onFieldSubmitted: (_) => focusNode.nextFocus(),
           errorText: emailFieldErrorMessage(context, error),
         );
       },

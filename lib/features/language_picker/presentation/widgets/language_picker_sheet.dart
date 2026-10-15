@@ -17,15 +17,19 @@ import '../../../../core/widgets/selection_mark.dart';
 import '../../../../core/widgets/sheet_close_button.dart';
 import '../../../../core/widgets/sheet_drag_handle.dart';
 import '../../../../core/widgets/spinning_ring.dart';
+import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/language_pair.dart';
+import '../../domain/entities/offline_model_status.dart';
 import '../cubit/language_picker_cubit.dart';
 import '../cubit/language_picker_state.dart';
 import '../utils/language_picker_l10n.dart';
 import 'language_search_field.dart';
 import 'language_side_toggle.dart';
 import 'language_swap_pill.dart';
+import 'offline_model_button.dart';
 import 'recent_language_chips.dart';
+import 'remove_offline_model_dialog.dart';
 
 /// Shows [LanguagePickerSheet] (design `02c · Language Picker`) opened on
 /// [initialSide], and returns the pair picked in it once it closes, however
@@ -101,51 +105,68 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
   void _pick(LanguageEntity language) =>
       context.read<LanguagePickerCubit>().pick(_side, language);
 
+  void _showModelError(BuildContext context, LanguagePickerState state) {
+    final error = state.modelError;
+    if (error == null) return;
+    AppToast.show(
+      context,
+      message: failureMessage(context, error.failure),
+      type: AppToastType.error,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: LanguagePickerSheet._heightFactor,
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.viewInsetsOf(context).bottom,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Center(child: SheetDragHandle()),
-                  const SizedBox(height: AppDimens.spaceL),
-                  const _Header(),
-                  const SizedBox(height: 14),
-                  BlocSelector<
-                    LanguagePickerCubit,
-                    LanguagePickerState,
-                    LanguagePair
-                  >(
-                    selector: (state) => state.pair,
-                    builder: (context, pair) => LanguageSideToggle(
-                      side: _side,
-                      from: pair.from,
-                      to: pair.to,
-                      onChanged: _selectSide,
+    return BlocListener<LanguagePickerCubit, LanguagePickerState>(
+      listenWhen: (previous, current) =>
+          previous.modelError != current.modelError,
+      listener: _showModelError,
+      child: FractionallySizedBox(
+        heightFactor: LanguagePickerSheet._heightFactor,
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Center(child: SheetDragHandle()),
+                    const SizedBox(height: AppDimens.spaceL),
+                    const _Header(),
+                    const SizedBox(height: 14),
+                    BlocSelector<
+                      LanguagePickerCubit,
+                      LanguagePickerState,
+                      LanguagePair
+                    >(
+                      selector: (state) => state.pair,
+                      builder: (context, pair) => LanguageSideToggle(
+                        side: _side,
+                        from: pair.from,
+                        to: pair.to,
+                        onChanged: _selectSide,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: AppDimens.spaceM),
-                  LanguageSearchField(
-                    controller: _searchController,
-                    onChanged: context.read<LanguagePickerCubit>().queryChanged,
-                  ),
-                ],
+                    const SizedBox(height: AppDimens.spaceM),
+                    LanguageSearchField(
+                      controller: _searchController,
+                      onChanged: context
+                          .read<LanguagePickerCubit>()
+                          .queryChanged,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: _Body(side: _side, onPick: _pick),
-            ),
-          ],
+              Expanded(
+                child: _Body(side: _side, onPick: _pick),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -188,6 +209,11 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LanguagePickerCubit, LanguagePickerState>(
+      // Each row's offline control selects its own status.
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.pair != current.pair ||
+          previous.recents != current.recents,
       builder: (context, state) => switch (state.status) {
         LanguagesLoading() => const _Loading(),
         LanguagesFailed(:final failure) => _LoadFailed(failure: failure),
@@ -338,11 +364,16 @@ class _LanguageList extends StatelessWidget {
                     : '$secondary · $otherTag',
                 isSelected: isSelected,
                 minHeight: 58,
-                trailing: isSelected
-                    ? const SelectionMark(isSelected: true)
-                    : isOther
-                    ? const LanguageSwapPill()
-                    : null,
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _OfflineModelSection(language: language),
+                    if (isSelected)
+                      const SelectionMark(isSelected: true)
+                    else if (isOther)
+                      const LanguageSwapPill(),
+                  ],
+                ),
                 onTap: () => onPick(language),
               ),
             );
@@ -366,6 +397,36 @@ class _LanguageList extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _OfflineModelSection extends StatelessWidget {
+  const _OfflineModelSection({required this.language});
+
+  final LanguageEntity language;
+
+  Future<void> _remove(BuildContext context) async {
+    final cubit = context.read<LanguagePickerCubit>();
+    if (await confirmRemoveOfflineModel(context, language)) {
+      await cubit.deleteModel(language);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<
+      LanguagePickerCubit,
+      LanguagePickerState,
+      OfflineModelStatus?
+    >(
+      selector: (state) => state.modelStatuses[language.code],
+      builder: (context, status) => OfflineModelButton(
+        status: status,
+        onDownload: () =>
+            context.read<LanguagePickerCubit>().downloadModel(language),
+        onRemove: () => _remove(context),
+      ),
     );
   }
 }

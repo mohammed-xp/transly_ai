@@ -1,14 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/entities/language_side.dart';
+import '../../../../core/result/api_result.dart';
 import '../../domain/entities/language_pair.dart';
 import '../../domain/entities/language_selection.dart';
+import '../../domain/entities/offline_model_status.dart';
 import '../../domain/usecases/add_recent_language_usecase.dart';
+import '../../domain/usecases/delete_offline_model_usecase.dart';
+import '../../domain/usecases/download_offline_model_usecase.dart';
 import '../../domain/usecases/get_cached_languages_usecase.dart';
+import '../../domain/usecases/get_offline_model_statuses_usecase.dart';
 import '../../domain/usecases/get_recent_languages_usecase.dart';
 import '../../domain/usecases/select_language_usecase.dart';
 import '../../domain/usecases/sync_languages_usecase.dart';
+import '../../domain/usecases/watch_offline_model_updates_usecase.dart';
 import 'language_picker_state.dart';
 
 class LanguagePickerCubit extends Cubit<LanguagePickerState> {
@@ -19,18 +27,38 @@ class LanguagePickerCubit extends Cubit<LanguagePickerState> {
     required GetRecentLanguagesUseCase getRecentLanguages,
     required AddRecentLanguageUseCase addRecentLanguage,
     required SelectLanguageUseCase selectLanguage,
+    required GetOfflineModelStatusesUseCase getOfflineModelStatuses,
+    required WatchOfflineModelUpdatesUseCase watchOfflineModelUpdates,
+    required DownloadOfflineModelUseCase downloadOfflineModel,
+    required DeleteOfflineModelUseCase deleteOfflineModel,
   }) : _getCachedLanguages = getCachedLanguages,
        _syncLanguages = syncLanguages,
        _addRecentLanguage = addRecentLanguage,
        _selectLanguage = selectLanguage,
+       _getOfflineModelStatuses = getOfflineModelStatuses,
+       _downloadOfflineModel = downloadOfflineModel,
+       _deleteOfflineModel = deleteOfflineModel,
        super(
          LanguagePickerState(pair: initialPair, recents: getRecentLanguages()),
-       );
+       ) {
+    _modelUpdatesSubscription = watchOfflineModelUpdates().listen(
+      _applyModelUpdate,
+    );
+  }
 
   final GetCachedLanguagesUseCase _getCachedLanguages;
   final SyncLanguagesUseCase _syncLanguages;
   final AddRecentLanguageUseCase _addRecentLanguage;
   final SelectLanguageUseCase _selectLanguage;
+  final GetOfflineModelStatusesUseCase _getOfflineModelStatuses;
+  final DownloadOfflineModelUseCase _downloadOfflineModel;
+  final DeleteOfflineModelUseCase _deleteOfflineModel;
+
+  late final StreamSubscription<OfflineModelUpdate> _modelUpdatesSubscription;
+
+  /// Codes with a download or removal asked for and not yet answered, so a
+  /// quick second tap neither repeats it nor reports its failure twice.
+  final Set<String> _pendingModelActions = {};
 
   /// Shows the cached list straight away. The server is only asked when
   /// there is no cache yet; otherwise the sync at app start keeps it fresh.
@@ -39,6 +67,7 @@ class LanguagePickerCubit extends Cubit<LanguagePickerState> {
     final cached = _getCachedLanguages();
     if (cached.isNotEmpty) {
       emit(state.copyWith(status: _loaded(cached)));
+      await _loadModelStatuses(cached);
       return;
     }
     emit(state.copyWith(status: const LanguagesLoading()));
@@ -52,6 +81,7 @@ class LanguagePickerCubit extends Cubit<LanguagePickerState> {
         ),
       ),
     );
+    if (result case ApiSuccess(:final data)) await _loadModelStatuses(data);
   }
 
   void queryChanged(String query) {
@@ -91,6 +121,64 @@ class LanguagePickerCubit extends Cubit<LanguagePickerState> {
     }
   }
 
+  /// The statuses themselves arrive through the updates stream.
+  Future<void> downloadModel(LanguageEntity language) async {
+    if (isClosed ||
+        state.modelStatuses[language.code] is! OfflineModelNotDownloaded) {
+      return;
+    }
+    await _runModelAction(language, _downloadOfflineModel.call);
+  }
+
+  Future<void> deleteModel(LanguageEntity language) async {
+    if (isClosed ||
+        state.modelStatuses[language.code] is! OfflineModelDownloaded) {
+      return;
+    }
+    await _runModelAction(language, _deleteOfflineModel.call);
+  }
+
+  Future<void> _runModelAction(
+    LanguageEntity language,
+    Future<ApiResult<void>> Function(LanguageEntity) action,
+  ) async {
+    if (!_pendingModelActions.add(language.code)) return;
+    try {
+      _reportModelFailure(language, await action(language));
+    } finally {
+      _pendingModelActions.remove(language.code);
+    }
+  }
+
+  /// A failure leaves the statuses empty, which hides the offline controls;
+  /// the list itself still works.
+  Future<void> _loadModelStatuses(List<LanguageEntity> languages) async {
+    final result = await _getOfflineModelStatuses(languages);
+    if (isClosed) return;
+    result.when(
+      success: (statuses) => emit(
+        state.copyWith(modelStatuses: {...statuses, ...state.modelStatuses}),
+      ),
+      failure: (_) {},
+    );
+  }
+
+  void _applyModelUpdate(OfflineModelUpdate update) {
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        modelStatuses: {...state.modelStatuses, update.code: update.status},
+      ),
+    );
+  }
+
+  void _reportModelFailure(LanguageEntity language, ApiResult<void> result) {
+    if (isClosed) return;
+    if (result case ApiFailure(:final failure)) {
+      emit(state.copyWith(modelError: OfflineModelError(language, failure)));
+    }
+  }
+
   LanguagesLoaded _loaded(List<LanguageEntity> languages) => LanguagesLoaded(
     languages: languages,
     visibleLanguages: _matching(languages, state.query),
@@ -106,5 +194,11 @@ class LanguagePickerCubit extends Cubit<LanguagePickerState> {
             language.code.toLowerCase() == needle)
           language,
     ];
+  }
+
+  @override
+  Future<void> close() {
+    unawaited(_modelUpdatesSubscription.cancel());
+    return super.close();
   }
 }

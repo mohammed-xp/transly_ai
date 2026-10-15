@@ -101,9 +101,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateSourceHint => 'Type text to translate…';
 
   @override
-  String get translateDownloadingModel => 'Downloading translation model…';
-
-  @override
   String get translateInProgress => 'Translating';
 
   @override
@@ -183,6 +180,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonRetry => 'Retry';
+
+  @override
+  String get commonCancel => 'Cancel';
 
   @override
   String get authErrorEmailRequired => 'Enter your email address.';
@@ -510,6 +510,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This language isn\'t available offline yet.';
 
   @override
+  String get errorOfflineModelMissing =>
+      'To translate offline, first download the languages you\'re using from the language list.';
+
+  @override
   String get errorUnknown => 'Something went wrong. Please try again.';
 
   @override
@@ -600,4 +604,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languagePickerNoResults => 'No language matches your search.';
+
+  @override
+  String get languagePickerDownloadOffline => 'Download for offline use';
+
+  @override
+  String get languagePickerDownloading => 'Downloading…';
+
+  @override
+  String get languagePickerAvailableOffline => 'Available offline';
+
+  @override
+  String languagePickerRemoveOfflineTitle(String language) {
+    return 'Remove $language from offline languages?';
+  }
+
+  @override
+  String get languagePickerRemoveOfflineBody =>
+      'You\'ll need an internet connection to download it again.';
+
+  @override
+  String get languagePickerRemoveOfflineConfirm => 'Remove';
 }

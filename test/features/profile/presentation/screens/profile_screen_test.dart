@@ -306,7 +306,8 @@ void main() {
     await tester.tap(find.text('English'));
     await tester.pump();
     await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
 
     expect(
       find.text("Couldn't change the language. Please try again."),

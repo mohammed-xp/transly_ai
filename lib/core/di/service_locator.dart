@@ -54,15 +54,21 @@ import '../../features/language_picker/data/datasources/languages_local_data_sou
 import '../../features/language_picker/data/datasources/languages_remote_data_source.dart';
 import '../../features/language_picker/data/datasources/languages_remote_data_source_impl.dart';
 import '../../features/language_picker/data/repos/languages_repo_impl.dart';
+import '../../features/language_picker/data/repos/offline_models_repo_impl.dart';
 import '../../features/language_picker/domain/repos/languages_repo.dart';
+import '../../features/language_picker/domain/repos/offline_models_repo.dart';
 import '../../features/language_picker/domain/usecases/add_recent_language_usecase.dart';
+import '../../features/language_picker/domain/usecases/delete_offline_model_usecase.dart';
+import '../../features/language_picker/domain/usecases/download_offline_model_usecase.dart';
 import '../../features/language_picker/domain/entities/language_pair.dart';
 import '../../features/language_picker/domain/usecases/get_cached_languages_usecase.dart';
+import '../../features/language_picker/domain/usecases/get_offline_model_statuses_usecase.dart';
 import '../../features/language_picker/domain/usecases/get_recent_languages_usecase.dart';
 import '../../features/language_picker/domain/usecases/get_saved_language_pair_usecase.dart';
 import '../../features/language_picker/domain/usecases/save_language_pair_usecase.dart';
 import '../../features/language_picker/domain/usecases/select_language_usecase.dart';
 import '../../features/language_picker/domain/usecases/sync_languages_usecase.dart';
+import '../../features/language_picker/domain/usecases/watch_offline_model_updates_usecase.dart';
 import '../../features/language_picker/presentation/cubit/language_picker_cubit.dart';
 import '../../features/profile/data/datasources/account_remote_data_source.dart';
 import '../../features/profile/data/datasources/account_remote_data_source_impl.dart';
@@ -87,8 +93,6 @@ import '../../features/translate/data/datasources/translation_settings_local_dat
 import '../../features/translate/data/datasources/translation_settings_local_data_source_impl.dart';
 import '../../features/translate/data/repos/translation_repo_impl.dart';
 import '../../features/translate/domain/repos/translation_repo.dart';
-import '../../features/translate/domain/usecases/check_translation_models_usecase.dart';
-import '../../features/translate/domain/usecases/download_translation_models_usecase.dart';
 import '../../features/translate/domain/usecases/get_saved_tone_usecase.dart';
 import '../../features/translate/domain/usecases/save_tone_usecase.dart';
 import '../../features/translate/domain/usecases/speak_text_usecase.dart';
@@ -99,6 +103,8 @@ import '../../l10n/app_localizations.dart';
 import '../constants/google_auth_config.dart';
 import '../data/datasources/google_auth_data_source.dart';
 import '../data/datasources/google_auth_data_source_impl.dart';
+import '../data/datasources/offline_models_data_source.dart';
+import '../data/datasources/offline_models_data_source_impl.dart';
 import '../data/datasources/user_local_data_source.dart';
 import '../data/datasources/user_local_data_source_impl.dart';
 import '../data/models/user_model.dart';
@@ -187,7 +193,10 @@ Future<void> configureDependencies() async {
 
   // ── Data sources ──
   serviceLocator.registerLazySingleton<TranslationLocalDataSource>(
-    () => MlKitTranslationLocalDataSource(serviceLocator()),
+    MlKitTranslationLocalDataSource.new,
+  );
+  serviceLocator.registerLazySingleton<OfflineModelsDataSource>(
+    () => MlKitOfflineModelsDataSource(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<TranslationRemoteDataSource>(
     () => ApiTranslationRemoteDataSource(serviceLocator()),
@@ -228,6 +237,7 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<TranslationRepo>(
     () => TranslationRepoImpl(
       local: serviceLocator(),
+      models: serviceLocator(),
       connectivity: serviceLocator(),
       remote: serviceLocator(),
       settings: serviceLocator(),
@@ -267,16 +277,17 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<LanguagesRepo>(
     () => LanguagesRepoImpl(remote: serviceLocator(), local: serviceLocator()),
   );
+  // A singleton: it holds the download statuses for the whole session.
+  serviceLocator.registerLazySingleton<OfflineModelsRepo>(
+    () => OfflineModelsRepoImpl(
+      models: serviceLocator(),
+      connectivity: serviceLocator(),
+    ),
+  );
 
   // ── Use cases ──
   serviceLocator.registerLazySingleton(
     () => TranslateTextUseCase(serviceLocator()),
-  );
-  serviceLocator.registerLazySingleton(
-    () => CheckTranslationModelsUseCase(serviceLocator()),
-  );
-  serviceLocator.registerLazySingleton(
-    () => DownloadTranslationModelsUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
     () => SpeakTextUseCase(serviceLocator()),
@@ -362,6 +373,18 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => AddRecentLanguageUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetOfflineModelStatusesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => WatchOfflineModelUpdatesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => DownloadOfflineModelUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => DeleteOfflineModelUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -404,6 +427,10 @@ Future<void> configureDependencies() async {
       getRecentLanguages: serviceLocator(),
       addRecentLanguage: serviceLocator(),
       selectLanguage: serviceLocator(),
+      getOfflineModelStatuses: serviceLocator(),
+      watchOfflineModelUpdates: serviceLocator(),
+      downloadOfflineModel: serviceLocator(),
+      deleteOfflineModel: serviceLocator(),
     ),
   );
   serviceLocator.registerFactory(
@@ -443,8 +470,6 @@ Future<void> configureDependencies() async {
   serviceLocator.registerFactory(
     () => TranslateCubit(
       translateText: serviceLocator(),
-      checkModels: serviceLocator(),
-      downloadModels: serviceLocator(),
       speakText: serviceLocator(),
       watchOnlineAvailability: serviceLocator(),
       getSavedTone: serviceLocator(),

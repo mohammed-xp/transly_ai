@@ -34,18 +34,6 @@ class FakeTranslationRepo implements TranslationRepo {
   }
 
   @override
-  Future<ApiResult<bool>> areModelsDownloaded({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  }) async => const ApiResult.success(true);
-
-  @override
-  Future<ApiResult<void>> downloadModels({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  }) async => const ApiResult.success(null);
-
-  @override
   Stream<bool> watchOnlineAvailability() => onlineAvailability.stream;
 
   @override

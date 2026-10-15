@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:transly_ai/core/data/datasources/offline_models_data_source.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/connectivity_service.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_local_data_source.dart';
@@ -33,6 +34,11 @@ class _UnusedLocal implements TranslationLocalDataSource {
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
 }
 
+class _UnusedModels implements OfflineModelsDataSource {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
+}
+
 class _UnusedRemote implements TranslationRemoteDataSource {
   @override
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
@@ -45,6 +51,7 @@ class _UnusedConnectivity implements ConnectivityService {
 
 TranslationRepoImpl _buildRepo(_FakeSettings settings) => TranslationRepoImpl(
   local: _UnusedLocal(),
+  models: _UnusedModels(),
   connectivity: _UnusedConnectivity(),
   remote: _UnusedRemote(),
   settings: settings,

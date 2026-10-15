@@ -23,10 +23,10 @@ void main() {
       expect(data.autoDismissAfter, const Duration(seconds: 5));
     });
 
-    test('is null for an error toast so it stays until dismissed', () {
+    test('is 6 seconds for an error toast', () {
       const data = AppToastData(message: 'Failed', type: AppToastType.error);
 
-      expect(data.autoDismissAfter, isNull);
+      expect(data.autoDismissAfter, const Duration(seconds: 6));
     });
   });
 
@@ -91,22 +91,26 @@ void main() {
       expect(find.text('Deleted'), findsNothing);
     });
 
-    testWidgets('keeps an error toast visible until dismissed', (
+    testWidgets('auto-dismisses an error toast after 6 seconds', (
       tester,
     ) async {
       await pumpHost(tester);
       AppToast.show(scopeContext, message: 'Failed', type: AppToastType.error);
       await tester.pump();
 
-      await tester.pump(const Duration(seconds: 10));
-
+      await tester.pump(const Duration(milliseconds: 5900));
       expect(find.text('Failed'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+      expect(find.text('Failed'), findsNothing);
     });
 
     testWidgets('dismisses on swipe down', (tester) async {
       await pumpHost(tester);
       AppToast.show(scopeContext, message: 'Failed', type: AppToastType.error);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       await tester.drag(find.text('Failed'), const Offset(0, 300));
       await tester.pumpAndSettle();
@@ -124,7 +128,8 @@ void main() {
         actionLabel: 'Retry',
         onAction: () => retried = true,
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       await tester.tap(find.text('Retry'));
 
@@ -140,10 +145,12 @@ void main() {
         actionLabel: 'Retry',
         onAction: () {},
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       await tester.tap(find.text('Retry'));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       expect(find.text('Failed'), findsNothing);
     });

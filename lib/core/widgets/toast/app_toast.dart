@@ -10,7 +10,7 @@ enum AppToastType {
   /// Muted chip — informational or reversible actions (deleted, coming soon).
   neutral,
 
-  /// Solid coral chip — failures. Stays until dismissed.
+  /// Solid coral chip — failures. Shown a little longer than the rest.
   error,
 
   /// Brand-gradient chip — AI suggestions.
@@ -48,9 +48,9 @@ class AppToastData {
 
   bool get hasAction => actionLabel != null;
 
-  /// Null means the toast stays until the user dismisses it.
-  Duration? get autoDismissAfter => switch (type) {
-    AppToastType.error => null,
+  /// An error stays longer than the rest, so it can be read before it goes.
+  Duration get autoDismissAfter => switch (type) {
+    AppToastType.error => const Duration(seconds: 6),
     _ when hasAction => const Duration(seconds: 5),
     _ => const Duration(seconds: 3),
   };

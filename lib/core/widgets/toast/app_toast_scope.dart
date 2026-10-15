@@ -152,7 +152,7 @@ class _ToastLifecycleState extends State<_ToastLifecycle>
     // Like SnackBar: screen-reader users need time to reach the action.
     final holdForAction =
         widget.data.hasAction && MediaQuery.accessibleNavigationOf(context);
-    if (duration == null || holdForAction) return;
+    if (holdForAction) return;
 
     final countdown = AnimationController(vsync: this, duration: duration)
       ..addStatusListener((status) {

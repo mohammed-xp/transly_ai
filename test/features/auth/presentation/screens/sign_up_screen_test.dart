@@ -181,4 +181,33 @@ void main() {
     );
     expect(find.text('sign-in-page'), findsNothing);
   });
+
+  group('keyboard next', () {
+    bool hasFocus(WidgetTester tester, int fieldIndex) => tester
+        .widget<TextField>(find.byType(TextField).at(fieldIndex))
+        .focusNode!
+        .hasFocus;
+
+    testWidgets('moves from the name to the email field', (tester) async {
+      await pumpScreen(tester);
+      await tester.tap(find.byType(TextField).at(0));
+      await tester.pump();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pump();
+
+      expect(hasFocus(tester, 1), isTrue);
+    });
+
+    testWidgets('moves from the email to the password field', (tester) async {
+      await pumpScreen(tester);
+      await tester.tap(find.byType(TextField).at(1));
+      await tester.pump();
+
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pump();
+
+      expect(hasFocus(tester, 2), isTrue);
+    });
+  });
 }

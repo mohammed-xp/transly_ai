@@ -1,3 +1,4 @@
+import '../../../../core/data/datasources/offline_models_data_source.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/errors/error_mapper.dart';
 import '../../../../core/errors/failure.dart';
@@ -17,15 +18,18 @@ import '../../../../core/data/models/language_model.dart';
 class TranslationRepoImpl implements TranslationRepo {
   TranslationRepoImpl({
     required TranslationLocalDataSource local,
+    required OfflineModelsDataSource models,
     required ConnectivityService connectivity,
     required TranslationRemoteDataSource remote,
     required TranslationSettingsLocalDataSource settings,
   }) : _local = local,
+       _models = models,
        _connectivity = connectivity,
        _remote = remote,
        _settings = settings;
 
   final TranslationLocalDataSource _local;
+  final OfflineModelsDataSource _models;
   final ConnectivityService _connectivity;
   final TranslationRemoteDataSource _remote;
   final TranslationSettingsLocalDataSource _settings;
@@ -48,6 +52,9 @@ class TranslationRepoImpl implements TranslationRepo {
         return ApiResult.success(response.toEntity(TranslationEngine.online));
       }
 
+      final missingModel = await _offlineModelFailure(from.code, to.code);
+      if (missingModel != null) return ApiResult.failure(missingModel);
+
       final translated = await _local.translate(
         text,
         LanguageModel.fromEntity(from),
@@ -68,42 +75,17 @@ class TranslationRepoImpl implements TranslationRepo {
     }
   }
 
-  @override
-  Future<ApiResult<bool>> areModelsDownloaded({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  }) async {
-    try {
-      return ApiResult.success(
-        await _local.areModelsDownloaded(
-          LanguageModel.fromEntity(from),
-          LanguageModel.fromEntity(to),
-        ),
-      );
-    } catch (e) {
-      return ApiResult.failure(ErrorMapper.map(e));
+  /// Checked up front: ML Kit would otherwise try to download a missing model
+  /// itself, which can't work offline.
+  Future<Failure?> _offlineModelFailure(String from, String to) async {
+    for (final code in {from, to}) {
+      if (!_models.isSupported(code)) return const UnsupportedLanguageFailure();
+      if (_models.isBuiltIn(code)) continue;
+      if (!await _models.isDownloaded(code)) {
+        return const OfflineModelMissingFailure();
+      }
     }
-  }
-
-  @override
-  Future<ApiResult<void>> downloadModels({
-    required LanguageEntity from,
-    required LanguageEntity to,
-  }) async {
-    try {
-      await _local.downloadModels(
-        LanguageModel.fromEntity(from),
-        LanguageModel.fromEntity(to),
-      );
-      return const ApiResult.success(null);
-    } catch (e) {
-      final failure = ErrorMapper.map(e);
-      return ApiResult.failure(
-        failure is UnsupportedLanguageFailure
-            ? failure
-            : const ModelDownloadFailure(),
-      );
-    }
+    return null;
   }
 
   @override

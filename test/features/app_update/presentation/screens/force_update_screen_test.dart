@@ -113,7 +113,8 @@ void main() {
     await pumpScreen(tester);
 
     await tester.tap(find.text('Update from Google Play'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
 
     expect(
       find.text("Couldn't open the store. Please try again."),

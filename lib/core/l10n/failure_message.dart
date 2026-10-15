@@ -25,6 +25,7 @@ String failureMessage(BuildContext context, Failure failure) {
     FormatFailure() => l10n.errorFormat,
     UnsupportedLanguageFailure() => l10n.errorUnsupportedLanguage,
     ModelDownloadFailure() => l10n.translateErrorModelDownload,
+    OfflineModelMissingFailure() => l10n.errorOfflineModelMissing,
     UnknownFailure() => l10n.errorUnknown,
   };
 }

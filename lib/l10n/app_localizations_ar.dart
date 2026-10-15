@@ -101,9 +101,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateSourceHint => 'اكتب النص المراد ترجمته…';
 
   @override
-  String get translateDownloadingModel => 'جارٍ تنزيل نموذج الترجمة…';
-
-  @override
   String get translateInProgress => 'جاري الترجمة';
 
   @override
@@ -181,6 +178,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get commonRetry => 'إعادة المحاولة';
+
+  @override
+  String get commonCancel => 'إلغاء';
 
   @override
   String get authErrorEmailRequired => 'أدخل بريدك الإلكتروني.';
@@ -503,6 +503,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'هذه اللغة غير متاحة بدون إنترنت حاليًا.';
 
   @override
+  String get errorOfflineModelMissing =>
+      'للترجمة بدون إنترنت، نزّل أولًا اللغات التي تستخدمها من قائمة اللغات.';
+
+  @override
   String get errorUnknown => 'حدث خطأ ما. حاول مرة أخرى.';
 
   @override
@@ -591,4 +595,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get languagePickerNoResults => 'لا توجد لغة تطابق بحثك.';
+
+  @override
+  String get languagePickerDownloadOffline => 'تنزيل للاستخدام بدون إنترنت';
+
+  @override
+  String get languagePickerDownloading => 'جارٍ التنزيل…';
+
+  @override
+  String get languagePickerAvailableOffline => 'متاحة بدون إنترنت';
+
+  @override
+  String languagePickerRemoveOfflineTitle(String language) {
+    return 'إزالة $language من اللغات المتاحة بدون إنترنت؟';
+  }
+
+  @override
+  String get languagePickerRemoveOfflineBody =>
+      'ستحتاج إلى اتصال بالإنترنت لتنزيلها مرة أخرى.';
+
+  @override
+  String get languagePickerRemoveOfflineConfirm => 'إزالة';
 }

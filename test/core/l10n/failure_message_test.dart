@@ -61,6 +61,19 @@ void main() {
     );
   });
 
+  testWidgets('points to the language list when an offline model is missing', (
+    tester,
+  ) async {
+    expect(
+      await messageIn(
+        tester,
+        const Locale('en'),
+        const OfflineModelMissingFailure(),
+      ),
+      "To translate offline, first download the languages you're using from the language list.",
+    );
+  });
+
   testWidgets('falls back to the failure type when there is no key', (
     tester,
   ) async {

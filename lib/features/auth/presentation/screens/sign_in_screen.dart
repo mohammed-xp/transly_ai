@@ -223,7 +223,6 @@ class _EmailField extends StatelessWidget {
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.username, AutofillHints.email],
           onChanged: context.read<SignInCubit>().emailChanged,
-          onFieldSubmitted: (_) => focusNode.nextFocus(),
           errorText: emailFieldErrorMessage(context, error),
         );
       },
@@ -262,7 +261,7 @@ class _PasswordField extends StatelessWidget {
           textInputAction: TextInputAction.done,
           autofillHints: const [AutofillHints.password],
           onChanged: context.read<SignInCubit>().passwordChanged,
-          onFieldSubmitted: (_) => onSubmitted(),
+          // onFieldSubmitted: (_) => onSubmitted(),
           errorText: passwordFieldErrorMessage(context, error),
           suffixIcon: PasswordVisibilityToggle(
             isVisible: isVisible,

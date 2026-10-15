@@ -117,13 +117,9 @@
   "@translateSourceHint": {
     "description": "Placeholder in the source text field before the user types."
   },
-  "translateDownloadingModel": "Downloading translation model…",
-  "@translateDownloadingModel": {
-    "description": "Status shown while the on-device language model is downloading."
-  },
   "translateInProgress": "Translating",
   "@translateInProgress": {
-    "description": "Short header label shown in the output card while a translation (or model download) is in flight."
+    "description": "Short header label shown in the output card while a translation is in flight."
   },
   "translateAiAnalyzing": "AI is analyzing context and tone…",
   "@translateAiAnalyzing": {
@@ -224,6 +220,10 @@
   "commonRetry": "Retry",
   "@commonRetry": {
     "description": "Action that repeats a request that failed to load (e.g. the plan usage on the profile screen)."
+  },
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Dismisses a confirmation dialog without doing anything."
   },
   "authErrorEmailRequired": "Enter your email address.",
   "@authErrorEmailRequired": {
@@ -638,6 +638,10 @@
   "@errorUnsupportedLanguage": {
     "description": "The on-device translation engine doesn't support the selected language."
   },
+  "errorOfflineModelMissing": "To translate offline, first download the languages you're using from the language list.",
+  "@errorOfflineModelMissing": {
+    "description": "Offline translation was attempted while the on-device model of one of the languages isn't downloaded."
+  },
   "errorUnknown": "Something went wrong. Please try again.",
   "@errorUnknown": {
     "description": "Fallback for any unexpected error."
@@ -756,5 +760,34 @@
   "languagePickerNoResults": "No language matches your search.",
   "@languagePickerNoResults": {
     "description": "Shown in the translation-language picker when the search matches no language."
+  },
+  "languagePickerDownloadOffline": "Download for offline use",
+  "@languagePickerDownloadOffline": {
+    "description": "Tooltip of the button that downloads a language's on-device translation model in the language picker."
+  },
+  "languagePickerDownloading": "Downloading…",
+  "@languagePickerDownloading": {
+    "description": "Accessibility label while a language's on-device translation model is downloading."
+  },
+  "languagePickerAvailableOffline": "Available offline",
+  "@languagePickerAvailableOffline": {
+    "description": "Tooltip of the mark on a language whose on-device translation model is on the device."
+  },
+  "languagePickerRemoveOfflineTitle": "Remove {language} from offline languages?",
+  "@languagePickerRemoveOfflineTitle": {
+    "description": "Title of the dialog confirming the removal of a downloaded language. {language} is the language's native name.",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "languagePickerRemoveOfflineBody": "You'll need an internet connection to download it again.",
+  "@languagePickerRemoveOfflineBody": {
+    "description": "Body of the dialog confirming the removal of a downloaded language."
+  },
+  "languagePickerRemoveOfflineConfirm": "Remove",
+  "@languagePickerRemoveOfflineConfirm": {
+    "description": "Confirms removing a downloaded language from the device."
   }
 }

@@ -6,17 +6,25 @@ import 'package:transly_ai/core/domain/entities/language_side.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
+import 'package:transly_ai/core/widgets/spinning_ring.dart';
+import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
 import 'package:transly_ai/features/language_picker/domain/entities/language_pair.dart';
+import 'package:transly_ai/features/language_picker/domain/entities/offline_model_status.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/add_recent_language_usecase.dart';
+import 'package:transly_ai/features/language_picker/domain/usecases/delete_offline_model_usecase.dart';
+import 'package:transly_ai/features/language_picker/domain/usecases/download_offline_model_usecase.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/get_cached_languages_usecase.dart';
+import 'package:transly_ai/features/language_picker/domain/usecases/get_offline_model_statuses_usecase.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/get_recent_languages_usecase.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/select_language_usecase.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/sync_languages_usecase.dart';
+import 'package:transly_ai/features/language_picker/domain/usecases/watch_offline_model_updates_usecase.dart';
 import 'package:transly_ai/features/language_picker/presentation/cubit/language_picker_cubit.dart';
 import 'package:transly_ai/features/language_picker/presentation/widgets/language_picker_sheet.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/fake_languages_repo.dart';
+import '../../../../helpers/fake_offline_models_repo.dart';
 
 void main() {
   const initialPair = (
@@ -25,11 +33,13 @@ void main() {
   );
 
   late FakeLanguagesRepo languagesRepo;
+  late FakeOfflineModelsRepo modelsRepo;
   late bool sheetClosed;
   LanguagePair? result;
 
   setUp(() {
     languagesRepo = FakeLanguagesRepo(cached: testLanguages);
+    modelsRepo = FakeOfflineModelsRepo();
     sheetClosed = false;
     result = null;
     serviceLocator
@@ -41,6 +51,12 @@ void main() {
             getRecentLanguages: GetRecentLanguagesUseCase(languagesRepo),
             addRecentLanguage: AddRecentLanguageUseCase(languagesRepo),
             selectLanguage: const SelectLanguageUseCase(),
+            getOfflineModelStatuses: GetOfflineModelStatusesUseCase(modelsRepo),
+            watchOfflineModelUpdates: WatchOfflineModelUpdatesUseCase(
+              modelsRepo,
+            ),
+            downloadOfflineModel: DownloadOfflineModelUseCase(modelsRepo),
+            deleteOfflineModel: DeleteOfflineModelUseCase(modelsRepo),
           ),
         );
   });
@@ -58,6 +74,7 @@ void main() {
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => AppToastScope(child: child!),
         home: Scaffold(
           body: Builder(
             builder: (context) => TextButton(
@@ -219,5 +236,95 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Deutsch'), findsOneWidget);
+  });
+
+  group('offline languages', () {
+    testWidgets('shows no offline control for an unsupported language', (
+      tester,
+    ) async {
+      await openSheet(tester);
+
+      expect(find.byIcon(Icons.download_rounded), findsNothing);
+      expect(find.byIcon(Icons.offline_pin_rounded), findsNothing);
+    });
+
+    testWidgets('downloads a language without picking it', (tester) async {
+      modelsRepo.statuses = {'fr': const OfflineModelNotDownloaded()};
+      await openSheet(tester);
+
+      await tester.tap(find.byIcon(Icons.download_rounded));
+      await tester.pumpAndSettle();
+      await closeSheet(tester);
+
+      expect(modelsRepo.downloads, ['fr']);
+      expect(result, initialPair);
+    });
+
+    testWidgets('shows the download running', (tester) async {
+      modelsRepo.statuses = {'fr': const OfflineModelNotDownloaded()};
+      await openSheet(tester);
+
+      modelsRepo.updates.add((
+        code: 'fr',
+        status: const OfflineModelDownloading(),
+      ));
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(SpinningRing), findsOneWidget);
+      expect(find.byIcon(Icons.download_rounded), findsNothing);
+    });
+
+    testWidgets('shows a failed download as an error toast', (tester) async {
+      modelsRepo
+        ..statuses = {'fr': const OfflineModelNotDownloaded()}
+        ..downloadResult = const ApiResult.failure(NetworkFailure());
+      await openSheet(tester);
+
+      await tester.tap(find.byIcon(Icons.download_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(
+        find.text('No internet connection. Check your network and try again.'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('removes a downloaded language once confirmed', (tester) async {
+      modelsRepo.statuses = {'de': const OfflineModelDownloaded()};
+      await openSheet(tester);
+
+      await tester.tap(find.byIcon(Icons.offline_pin_rounded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Remove'));
+      await tester.pumpAndSettle();
+
+      expect(modelsRepo.deletes, ['de']);
+    });
+
+    testWidgets('keeps a downloaded language when the removal is cancelled', (
+      tester,
+    ) async {
+      modelsRepo.statuses = {'de': const OfflineModelDownloaded()};
+      await openSheet(tester);
+
+      await tester.tap(find.byIcon(Icons.offline_pin_rounded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(modelsRepo.deletes, isEmpty);
+    });
+
+    testWidgets('a built-in language offers no removal', (tester) async {
+      modelsRepo.statuses = {'en': const OfflineModelBuiltIn()};
+      await openSheet(tester);
+
+      await tester.tap(find.byIcon(Icons.offline_pin_rounded));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Remove'), findsNothing);
+    });
   });
 }

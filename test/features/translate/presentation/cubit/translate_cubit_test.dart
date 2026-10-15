@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/services/tts_service.dart';
 import 'package:transly_ai/features/translate/domain/entities/translation_tone.dart';
-import 'package:transly_ai/features/translate/domain/usecases/check_translation_models_usecase.dart';
-import 'package:transly_ai/features/translate/domain/usecases/download_translation_models_usecase.dart';
 import 'package:transly_ai/features/translate/domain/usecases/get_saved_tone_usecase.dart';
 import 'package:transly_ai/features/translate/domain/usecases/save_tone_usecase.dart';
 import 'package:transly_ai/features/translate/domain/usecases/speak_text_usecase.dart';
@@ -25,8 +23,6 @@ void main() {
   TranslateCubit buildCubit(FakeTranslationRepo repo) {
     return TranslateCubit(
       translateText: TranslateTextUseCase(repo),
-      checkModels: CheckTranslationModelsUseCase(repo),
-      downloadModels: DownloadTranslationModelsUseCase(repo),
       speakText: SpeakTextUseCase(_SilentTts()),
       watchOnlineAvailability: WatchOnlineAvailabilityUseCase(repo),
       getSavedTone: GetSavedToneUseCase(repo),

@@ -266,13 +266,7 @@ abstract class AppLocalizations {
   /// **'Type text to translate…'**
   String get translateSourceHint;
 
-  /// Status shown while the on-device language model is downloading.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading translation model…'**
-  String get translateDownloadingModel;
-
-  /// Short header label shown in the output card while a translation (or model download) is in flight.
+  /// Short header label shown in the output card while a translation is in flight.
   ///
   /// In en, this message translates to:
   /// **'Translating'**
@@ -427,6 +421,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get commonRetry;
+
+  /// Dismisses a confirmation dialog without doing anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
 
   /// Shown under the email field when it is left empty.
   ///
@@ -986,6 +986,12 @@ abstract class AppLocalizations {
   /// **'This language isn\'t available offline yet.'**
   String get errorUnsupportedLanguage;
 
+  /// Offline translation was attempted while the on-device model of one of the languages isn't downloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'To translate offline, first download the languages you\'re using from the language list.'**
+  String get errorOfflineModelMissing;
+
   /// Fallback for any unexpected error.
   ///
   /// In en, this message translates to:
@@ -1147,6 +1153,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No language matches your search.'**
   String get languagePickerNoResults;
+
+  /// Tooltip of the button that downloads a language's on-device translation model in the language picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Download for offline use'**
+  String get languagePickerDownloadOffline;
+
+  /// Accessibility label while a language's on-device translation model is downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading…'**
+  String get languagePickerDownloading;
+
+  /// Tooltip of the mark on a language whose on-device translation model is on the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Available offline'**
+  String get languagePickerAvailableOffline;
+
+  /// Title of the dialog confirming the removal of a downloaded language. {language} is the language's native name.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {language} from offline languages?'**
+  String languagePickerRemoveOfflineTitle(String language);
+
+  /// Body of the dialog confirming the removal of a downloaded language.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need an internet connection to download it again.'**
+  String get languagePickerRemoveOfflineBody;
+
+  /// Confirms removing a downloaded language from the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get languagePickerRemoveOfflineConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -50,6 +50,11 @@ class ModelDownloadFailure extends Failure {
   const ModelDownloadFailure();
 }
 
+/// Offline, and the on-device model of one of the languages isn't downloaded.
+class OfflineModelMissingFailure extends Failure {
+  const OfflineModelMissingFailure();
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure();
 }
