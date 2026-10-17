@@ -1,5 +1,11 @@
-abstract class TranslationSettingsLocalDataSource {
-  String? getToneName();
+import '../models/tone_catalog_model.dart';
 
-  Future<void> saveToneName(String name);
+abstract class TranslationSettingsLocalDataSource {
+  String? getToneCode();
+
+  Future<void> saveToneCode(String code);
+
+  ToneCatalogModel? getCachedTones();
+
+  Future<void> cacheTones(ToneCatalogModel tones);
 }

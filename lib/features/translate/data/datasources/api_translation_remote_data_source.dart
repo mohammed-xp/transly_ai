@@ -13,7 +13,7 @@ class ApiTranslationRemoteDataSource implements TranslationRemoteDataSource {
     required String text,
     required String from,
     required String to,
-    required String tone,
+    required String? tone,
   }) async {
     final data = await _apiConsumer.post(
       Endpoints.translations,
@@ -21,7 +21,7 @@ class ApiTranslationRemoteDataSource implements TranslationRemoteDataSource {
         'text': text,
         'sourceLanguage': from,
         'targetLanguage': to,
-        'tone': tone,
+        'tone': ?tone,
       },
     );
 

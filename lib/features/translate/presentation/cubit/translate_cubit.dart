@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/domain/entities/language_entity.dart';
+import '../../../../core/result/api_result.dart';
+import '../../domain/entities/tone_catalog.dart';
 import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_tone.dart';
+import '../../domain/usecases/get_cached_tones_usecase.dart';
 import '../../domain/usecases/get_saved_tone_usecase.dart';
 import '../../domain/usecases/save_tone_usecase.dart';
 import '../../domain/usecases/speak_text_usecase.dart';
+import '../../domain/usecases/sync_tones_usecase.dart';
 import '../../domain/usecases/translate_text_usecase.dart';
 import '../../domain/usecases/watch_online_availability_usecase.dart';
 import 'translate_state.dart';
@@ -17,12 +21,17 @@ class TranslateCubit extends Cubit<TranslateState> {
     required TranslateTextUseCase translateText,
     required SpeakTextUseCase speakText,
     required WatchOnlineAvailabilityUseCase watchOnlineAvailability,
+    required GetCachedTonesUseCase getCachedTones,
+    required SyncTonesUseCase syncTones,
     required GetSavedToneUseCase getSavedTone,
     required SaveToneUseCase saveTone,
   }) : _translateText = translateText,
        _speakText = speakText,
+       _syncTones = syncTones,
+       _getSavedTone = getSavedTone,
        _saveTone = saveTone,
-       super(TranslateState.initial(tone: getSavedTone())) {
+       super(_initialState(getCachedTones(), getSavedTone())) {
+    unawaited(_loadTones());
     _onlineAvailabilitySubscription = watchOnlineAvailability().listen(
       (available) {
         if (isClosed) return;
@@ -32,6 +41,7 @@ class TranslateCubit extends Cubit<TranslateState> {
             lastEngineWasOnline: available ? true : null,
           ),
         );
+        if (available && state.tones.isEmpty) unawaited(_loadTones());
       },
       onError: (_) {
         if (!isClosed) emit(state.copyWith(isOnlineAvailable: false));
@@ -41,6 +51,8 @@ class TranslateCubit extends Cubit<TranslateState> {
 
   final TranslateTextUseCase _translateText;
   final SpeakTextUseCase _speakText;
+  final SyncTonesUseCase _syncTones;
+  final GetSavedToneUseCase _getSavedTone;
   final SaveToneUseCase _saveTone;
 
   late final StreamSubscription<bool> _onlineAvailabilitySubscription;
@@ -50,6 +62,28 @@ class TranslateCubit extends Cubit<TranslateState> {
   Timer? _debounce;
 
   int _requestId = 0;
+
+  bool _loadingTones = false;
+
+  static TranslateState _initialState(ToneCatalog? cached, String? savedCode) =>
+      TranslateState.initial(
+        tones: cached?.tones ?? const [],
+        tone: cached?.resolve(savedCode),
+      );
+
+  /// Refreshes the tones from the server, keeping the current pick when it is
+  /// still offered. A failure keeps whatever is already shown.
+  Future<void> _loadTones() async {
+    if (_loadingTones) return;
+    _loadingTones = true;
+    final result = await _syncTones();
+    _loadingTones = false;
+    if (isClosed) return;
+    if (result case ApiSuccess(:final data)) {
+      final tone = data.resolve(state.tone?.code ?? _getSavedTone());
+      emit(state.copyWith(tones: data.tones, tone: tone));
+    }
+  }
 
   void sourceTextChanged(String text) {
     _debounce?.cancel();
@@ -97,7 +131,7 @@ class TranslateCubit extends Cubit<TranslateState> {
   void toneChanged(TranslationTone tone) {
     if (!state.isToneEnabled || tone == state.tone) return;
     emit(state.copyWith(tone: tone));
-    unawaited(_saveTone(tone));
+    unawaited(_saveTone(tone.code));
     if (state.sourceText.trim().isNotEmpty) _translate();
   }
 
@@ -123,7 +157,7 @@ class TranslateCubit extends Cubit<TranslateState> {
       text: text,
       from: from,
       to: to,
-      tone: tone.name,
+      tone: tone?.code,
     );
     if (_isStale(id)) return;
 

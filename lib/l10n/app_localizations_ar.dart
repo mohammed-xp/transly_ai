@@ -61,15 +61,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateToneCaption => 'اقتراح الذكاء الاصطناعي · النبرة';
 
   @override
-  String get translateToneFormal => 'رسمية';
-
-  @override
-  String get translateToneCasual => 'عامية';
-
-  @override
-  String get translateToneConcise => 'مختصرة';
-
-  @override
   String get translateDockKeyboard => 'لوحة المفاتيح';
 
   @override

@@ -94,15 +94,19 @@ import '../../features/profile/presentation/cubit/plan_usage_cubit.dart';
 import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translate/data/datasources/api_translation_remote_data_source.dart';
+import '../../features/translate/data/datasources/tones_remote_data_source.dart';
+import '../../features/translate/data/datasources/tones_remote_data_source_impl.dart';
 import '../../features/translate/data/datasources/translation_local_data_source.dart';
 import '../../features/translate/data/datasources/translation_remote_data_source.dart';
 import '../../features/translate/data/datasources/translation_settings_local_data_source.dart';
 import '../../features/translate/data/datasources/translation_settings_local_data_source_impl.dart';
 import '../../features/translate/data/repos/translation_repo_impl.dart';
 import '../../features/translate/domain/repos/translation_repo.dart';
+import '../../features/translate/domain/usecases/get_cached_tones_usecase.dart';
 import '../../features/translate/domain/usecases/get_saved_tone_usecase.dart';
 import '../../features/translate/domain/usecases/save_tone_usecase.dart';
 import '../../features/translate/domain/usecases/speak_text_usecase.dart';
+import '../../features/translate/domain/usecases/sync_tones_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
@@ -208,6 +212,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<TranslationRemoteDataSource>(
     () => ApiTranslationRemoteDataSource(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<TonesRemoteDataSource>(
+    () => TonesRemoteDataSourceImpl(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<TranslationSettingsLocalDataSource>(
     () => TranslationSettingsLocalDataSourceImpl(serviceLocator()),
   );
@@ -250,6 +257,7 @@ Future<void> configureDependencies() async {
       models: serviceLocator(),
       connectivity: serviceLocator(),
       remote: serviceLocator(),
+      remoteTones: serviceLocator(),
       settings: serviceLocator(),
     ),
   );
@@ -310,6 +318,12 @@ Future<void> configureDependencies() async {
     () => GetSavedToneUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(() => SaveToneUseCase(serviceLocator()));
+  serviceLocator.registerLazySingleton(
+    () => GetCachedTonesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SyncTonesUseCase(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton(
     () => SignInWithEmailUseCase(serviceLocator(), serviceLocator()),
   );
@@ -511,6 +525,8 @@ Future<void> configureDependencies() async {
       translateText: serviceLocator(),
       speakText: serviceLocator(),
       watchOnlineAvailability: serviceLocator(),
+      getCachedTones: serviceLocator(),
+      syncTones: serviceLocator(),
       getSavedTone: serviceLocator(),
       saveTone: serviceLocator(),
     ),

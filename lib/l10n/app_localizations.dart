@@ -200,24 +200,6 @@ abstract class AppLocalizations {
   /// **'AI suggested · Tone'**
   String get translateToneCaption;
 
-  /// Formal tone option.
-  ///
-  /// In en, this message translates to:
-  /// **'Formal'**
-  String get translateToneFormal;
-
-  /// Casual tone option.
-  ///
-  /// In en, this message translates to:
-  /// **'Casual'**
-  String get translateToneCasual;
-
-  /// Concise tone option.
-  ///
-  /// In en, this message translates to:
-  /// **'Concise'**
-  String get translateToneConcise;
-
   /// Keyboard input mode in the bottom input dock.
   ///
   /// In en, this message translates to:

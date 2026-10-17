@@ -1,4 +1,3 @@
-import '../entities/translation_tone.dart';
 import '../repos/translation_repo.dart';
 
 class GetSavedToneUseCase {
@@ -6,5 +5,5 @@ class GetSavedToneUseCase {
 
   final TranslationRepo _repository;
 
-  TranslationTone call() => _repository.getSavedTone();
+  String? call() => _repository.getSavedToneCode();
 }

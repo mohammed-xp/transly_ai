@@ -12,11 +12,13 @@ import '../../domain/entities/translation_tone.dart';
 class ToneSelector extends StatelessWidget {
   const ToneSelector({
     super.key,
+    required this.tones,
     required this.selected,
     required this.enabled,
     required this.onSelected,
   });
 
+  final List<TranslationTone> tones;
   final TranslationTone selected;
   final bool enabled;
   final ValueChanged<TranslationTone> onSelected;
@@ -26,7 +28,7 @@ class ToneSelector extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final c = context.palette;
-    const tones = TranslationTone.values;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return Opacity(
       opacity: enabled ? 1 : 0.55,
@@ -40,29 +42,23 @@ class ToneSelector extends StatelessWidget {
               style: textTheme.titleSmall?.copyWith(color: c.textMuted),
             ),
           ),
-          Row(
+          Wrap(
+            spacing: AppDimens.spaceS,
+            runSpacing: AppDimens.spaceS,
             children: [
-              for (var i = 0; i < tones.length; i++) ...[
-                if (i > 0) const SizedBox(width: AppDimens.spaceS),
+              for (final tone in tones)
                 _ToneChip(
-                  label: _toneLabel(l10n, tones[i]),
-                  selected: tones[i] == selected,
-                  onTap: enabled ? () => onSelected(tones[i]) : null,
+                  label: isArabic && tone.nameAr.isNotEmpty
+                      ? tone.nameAr
+                      : tone.name,
+                  selected: tone == selected,
+                  onTap: enabled ? () => onSelected(tone) : null,
                 ),
-              ],
             ],
           ),
         ],
       ),
     );
-  }
-
-  String _toneLabel(AppLocalizations l10n, TranslationTone tone) {
-    return switch (tone) {
-      TranslationTone.formal => l10n.translateToneFormal,
-      TranslationTone.casual => l10n.translateToneCasual,
-      TranslationTone.concise => l10n.translateToneConcise,
-    };
   }
 }
 
