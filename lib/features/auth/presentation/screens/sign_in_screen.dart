@@ -13,7 +13,7 @@ import '../../../../core/widgets/decorative_blob.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
-import '../../../../core/widgets/toast/coming_soon_toast.dart';
+// import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/sign_in_form_errors.dart';
 import '../cubit/sign_in_cubit.dart';
@@ -163,8 +163,9 @@ class _SignInViewState extends State<_SignInView> {
                                   onSubmitted: () =>
                                       context.read<SignInCubit>().submit(),
                                 ),
-                                const SizedBox(height: 14),
-                                const _ForgotPasswordLink(),
+                                // TODO(coming-soon): restore forgot-password link (and the class and import).
+                                // const SizedBox(height: 14),
+                                // const _ForgotPasswordLink(),
                                 const SizedBox(height: 24),
                                 const _SubmitButton(),
                                 const SizedBox(height: 22),
@@ -274,34 +275,34 @@ class _PasswordField extends StatelessWidget {
   }
 }
 
-class _ForgotPasswordLink extends StatelessWidget {
-  const _ForgotPasswordLink();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Align(
-      alignment: AlignmentDirectional.centerEnd,
-      child: Semantics(
-        button: true,
-        child: GestureDetector(
-          onTap: () => showComingSoonToast(context),
-          behavior: HitTestBehavior.opaque,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              l10n.signInForgotPassword,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: context.palette.coral,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class _ForgotPasswordLink extends StatelessWidget {
+//   const _ForgotPasswordLink();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final l10n = AppLocalizations.of(context)!;
+//     return Align(
+//       alignment: AlignmentDirectional.centerEnd,
+//       child: Semantics(
+//         button: true,
+//         child: GestureDetector(
+//           onTap: () => showComingSoonToast(context),
+//           behavior: HitTestBehavior.opaque,
+//           child: Padding(
+//             padding: const EdgeInsets.symmetric(vertical: 10),
+//             child: Text(
+//               l10n.signInForgotPassword,
+//               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+//                 color: context.palette.coral,
+//                 fontWeight: FontWeight.w600,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton();

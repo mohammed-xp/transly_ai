@@ -13,11 +13,11 @@ class ProfileIdentity extends StatelessWidget {
   const ProfileIdentity({
     super.key,
     required this.user,
-    required this.onChangePhoto,
+    this.onChangePhoto,
   });
 
   final UserEntity user;
-  final VoidCallback onChangePhoto;
+  final VoidCallback? onChangePhoto;
 
   static const double _avatarSize = 84;
 
@@ -34,11 +34,12 @@ class ProfileIdentity extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               UserAvatar(name: user.username, size: _avatarSize, ringWidth: 4),
-              PositionedDirectional(
-                end: 0,
-                bottom: 0,
-                child: _ChangePhotoBadge(onTap: onChangePhoto),
-              ),
+              if (onChangePhoto != null)
+                PositionedDirectional(
+                  end: 0,
+                  bottom: 0,
+                  child: _ChangePhotoBadge(onTap: onChangePhoto!),
+                ),
             ],
           ),
           const SizedBox(height: 14),

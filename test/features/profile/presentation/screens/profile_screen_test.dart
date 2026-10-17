@@ -153,17 +153,11 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('announces "coming soon" for actions without a backend', (
-    tester,
-  ) async {
+  testWidgets('hides actions that have no backend yet', (tester) async {
     await pumpScreen(tester, const Locale('en'));
 
-    await tester.tap(find.text('Edit'));
-    await tester.pump();
-
-    expect(find.text('Coming soon'), findsOneWidget);
-
-    await dismissToast(tester);
+    expect(find.text('Edit'), findsNothing);
+    expect(find.text('Upgrade to Pro'), findsNothing);
   });
 
   testWidgets('shows today\'s usage on the free-plan card', (tester) async {
@@ -173,7 +167,6 @@ void main() {
     expect(find.text('70%'), findsOneWidget);
     expect(find.text("Today's usage"), findsOneWidget);
     expect(find.text('30% left'), findsOneWidget);
-    expect(find.text('Upgrade to Pro'), findsOneWidget);
   });
 
   testWidgets('writes the usage in Arabic-Indic digits in Arabic', (
@@ -184,19 +177,6 @@ void main() {
     expect(find.text('الخطة المجانية'), findsOneWidget);
     expect(find.text('٧٠٪'), findsOneWidget);
     expect(find.text('متبقٍ ٣٠٪'), findsOneWidget);
-  });
-
-  testWidgets('upgrade announces "coming soon" until the paywall exists', (
-    tester,
-  ) async {
-    await pumpScreen(tester, const Locale('en'));
-
-    await tester.tap(find.text('Upgrade to Pro'));
-    await tester.pump();
-
-    expect(find.text('Coming soon'), findsOneWidget);
-
-    await dismissToast(tester);
   });
 
   testWidgets('hides the plan card for a paid plan', (tester) async {

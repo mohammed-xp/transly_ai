@@ -7,10 +7,10 @@ import '../../../../l10n/app_localizations.dart';
 
 /// Back chip · centered title · "Edit" action (design `12 · Profile`).
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({super.key, required this.onBack, required this.onEdit});
+  const ProfileHeader({super.key, required this.onBack, this.onEdit});
 
   final VoidCallback onBack;
-  final VoidCallback onEdit;
+  final VoidCallback? onEdit;
 
   static const double _height = 40;
 
@@ -35,7 +35,9 @@ class ProfileHeader extends StatelessWidget {
             l10n.profileTitle,
             style: textTheme.titleLarge?.copyWith(color: c.ink),
           ),
-          trailing: _EditAction(label: l10n.profileEdit, onTap: onEdit),
+          trailing: onEdit == null
+              ? null
+              : _EditAction(label: l10n.profileEdit, onTap: onEdit!),
         ),
       ),
     );

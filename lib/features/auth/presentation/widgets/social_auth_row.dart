@@ -9,7 +9,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
-import '../../../../core/widgets/toast/coming_soon_toast.dart';
+// import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../cubit/google_sign_in_cubit.dart';
 import '../cubit/google_sign_in_state.dart';
 import '../utils/auth_l10n.dart';
@@ -43,22 +43,23 @@ class SocialAuthRow extends StatelessWidget {
         child: Row(
           children: [
             const Expanded(child: _GoogleButton()),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _SocialButton(
-                icon: AppIcons.apple,
-                label: 'Apple',
-                onTap: () => showComingSoonToast(context),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _SocialButton(
-                icon: AppIcons.facebook,
-                label: 'Facebook',
-                onTap: () => showComingSoonToast(context),
-              ),
-            ),
+            // TODO(coming-soon): restore Apple and Facebook buttons (and the import above).
+            // const SizedBox(width: 10),
+            // Expanded(
+            //   child: _SocialButton(
+            //     icon: AppIcons.apple,
+            //     label: 'Apple',
+            //     onTap: () => showComingSoonToast(context),
+            //   ),
+            // ),
+            // const SizedBox(width: 10),
+            // Expanded(
+            //   child: _SocialButton(
+            //     icon: AppIcons.facebook,
+            //     label: 'Facebook',
+            //     onTap: () => showComingSoonToast(context),
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -10,8 +10,8 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
-import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
-import '../../../conversation/presentation/screens/conversation_screen.dart';
+// import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
+// import '../../../conversation/presentation/screens/conversation_screen.dart';
 import '../../../language_picker/presentation/widgets/language_picker_sheet.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
 import '../../../translate/presentation/cubit/translate_state.dart';
@@ -94,15 +94,17 @@ class _HomeViewState extends State<_HomeView> {
                       index: _mode.index,
                       children: const [
                         TranslateScreen(),
-                        ConversationScreen(),
-                        CameraScanScreen(),
+                        // TODO(coming-soon): restore voice and camera tabs (and the imports above).
+                        // ConversationScreen(),
+                        // CameraScanScreen(),
                       ],
                     ),
                   ),
                 ),
               ),
-              if (!keyboardOpen)
-                InputDock(currentMode: _mode, onModeSelected: _selectMode),
+              // TODO(coming-soon): restore the input dock together with the tabs.
+              // if (!keyboardOpen)
+              //   InputDock(currentMode: _mode, onModeSelected: _selectMode),
             ],
           ),
         ),

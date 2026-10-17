@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_dimens.dart';
-import '../../../../core/widgets/toast/coming_soon_toast.dart';
+// import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../cubit/plan_usage_cubit.dart';
 import '../cubit/plan_usage_state.dart';
 import 'free_plan_card.dart';
@@ -19,7 +19,8 @@ class ProfilePlanUsage extends StatelessWidget {
           PlanUsageLoading() => const FreePlanCardSkeleton(),
           PlanUsageLoaded(:final usage) when usage.isFree => FreePlanCard(
             usage: usage,
-            onUpgrade: () => showComingSoonToast(context),
+            // TODO(coming-soon): restore the upgrade button (and the import above).
+            // onUpgrade: () => showComingSoonToast(context),
           ),
           PlanUsageLoaded() => null,
           PlanUsageFailed(:final failure) => PlanUsageErrorCard(

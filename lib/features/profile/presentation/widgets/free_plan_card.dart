@@ -13,10 +13,10 @@ import '../../domain/entities/plan_usage_entity.dart';
 import '../utils/plan_usage_l10n.dart';
 
 class FreePlanCard extends StatelessWidget {
-  const FreePlanCard({super.key, required this.usage, required this.onUpgrade});
+  const FreePlanCard({super.key, required this.usage, this.onUpgrade});
 
   final PlanUsageEntity usage;
-  final VoidCallback onUpgrade;
+  final VoidCallback? onUpgrade;
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +90,10 @@ class FreePlanCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppDimens.spaceM),
-          _UpgradeButton(onTap: onUpgrade),
+          if (onUpgrade != null) ...[
+            const SizedBox(height: AppDimens.spaceM),
+            _UpgradeButton(onTap: onUpgrade!),
+          ],
         ],
       ),
     );

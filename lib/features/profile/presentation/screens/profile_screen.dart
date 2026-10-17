@@ -15,7 +15,7 @@ import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
-import '../../../../core/widgets/toast/coming_soon_toast.dart';
+// import '../../../../core/widgets/toast/coming_soon_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../app_language/domain/entities/app_language.dart';
 import '../../../app_language/presentation/cubit/app_language_cubit.dart';
@@ -75,7 +75,8 @@ class _ProfileView extends StatelessWidget {
           children: [
             ProfileHeader(
               onBack: () => _handleBack(context),
-              onEdit: () => showComingSoonToast(context),
+              // TODO(coming-soon): restore the edit action (and the import above).
+              // onEdit: () => showComingSoonToast(context),
             ),
             Expanded(
               child: BlocBuilder<ProfileCubit, ProfileState>(
@@ -105,7 +106,8 @@ class _ProfileContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    void comingSoon() => showComingSoonToast(context);
+    // TODO(coming-soon): restore change-photo handler below.
+    // void comingSoon() => showComingSoonToast(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
@@ -117,7 +119,10 @@ class _ProfileContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ProfileIdentity(user: user, onChangePhoto: comingSoon),
+          ProfileIdentity(
+            user: user,
+            // onChangePhoto: comingSoon,
+          ),
           const ProfilePlanUsage(),
           const SizedBox(height: AppDimens.spaceXL),
           SectionCard(
