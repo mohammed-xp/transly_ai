@@ -27,7 +27,11 @@ class SessionCubit extends Cubit<SessionState> {
   final SignOutUseCase _signOut;
   late final StreamSubscription<SessionStatus> _subscription;
 
-  Future<void> signOut() => _signOut();
+  Future<void> signOut() async {
+    if (state is! SessionActive) return;
+    emit(const SessionSigningOut());
+    await _signOut();
+  }
 
   @override
   Future<void> close() {

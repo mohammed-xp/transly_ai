@@ -4,11 +4,12 @@ abstract final class Endpoints {
   static const String baseUrlTest = 'http://192.168.1.147:5260';
   static const String baseUrlProduction = 'https://translyai-api.jollypond-1171c5b6.uaenorth.azurecontainerapps.io';
 
-  static const String baseUrl = baseUrlProduction; // kReleaseMode? baseUrlProduction : baseUrlTest;
+  static const String baseUrl = kReleaseMode? baseUrlProduction : baseUrlTest;
 
 
   static const String translations = '$baseUrl/api/v1/translations';
   static const String languages = '$baseUrl/api/v1/languages';
+  static const String tones = '$baseUrl/api/v1/tones';
   static const String login = '$baseUrl/api/v1/auth/login';
   static const String register = '$baseUrl/api/v1/auth/register';
   static const String googleLogin = '$baseUrl/api/v1/auth/google';

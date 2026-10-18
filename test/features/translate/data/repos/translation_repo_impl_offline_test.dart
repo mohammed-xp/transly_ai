@@ -5,6 +5,7 @@ import 'package:transly_ai/core/domain/entities/language_entity.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/connectivity_service.dart';
+import 'package:transly_ai/features/translate/data/datasources/tones_remote_data_source.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_local_data_source.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_remote_data_source.dart';
 import 'package:transly_ai/features/translate/data/datasources/translation_settings_local_data_source.dart';
@@ -69,7 +70,7 @@ class _FakeRemote implements TranslationRemoteDataSource {
     required String text,
     required String from,
     required String to,
-    required String tone,
+    required String? tone,
   }) async => TranslationResponseModel(
     sourceText: text,
     translatedText: 'online:$text',
@@ -78,6 +79,11 @@ class _FakeRemote implements TranslationRemoteDataSource {
     model: 'test',
     createdAt: DateTime(2026),
   );
+}
+
+class _UnusedRemoteTones implements TonesRemoteDataSource {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
 }
 
 class _UnusedSettings implements TranslationSettingsLocalDataSource {
@@ -114,7 +120,9 @@ void main() {
         models: models,
         connectivity: _FakeConnectivity(connected: connected),
         remote: _FakeRemote(),
+        remoteTones: _UnusedRemoteTones(),
         settings: _UnusedSettings(),
+        uiLanguageCode: () => 'en',
       );
 
   Future<ApiResult<TranslationEntity>> translate(

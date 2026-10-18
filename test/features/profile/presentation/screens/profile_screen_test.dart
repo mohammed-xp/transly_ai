@@ -33,6 +33,7 @@ import '../../../../helpers/fake_offline_models_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
 import '../../../../helpers/offline_packs_cubit_factory.dart';
+import '../../../../helpers/session_cubit_factory.dart';
 
 void main() {
   late FakePlanUsageRepo usageRepo;
@@ -82,6 +83,7 @@ void main() {
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
+          BlocProvider(create: (_) => buildSessionCubit()),
           BlocProvider(
             create: (_) => AppLanguageCubit(
               getLanguage: GetAppLanguageUseCase(languageRepo),

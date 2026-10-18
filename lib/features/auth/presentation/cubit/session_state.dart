@@ -13,6 +13,11 @@ class SessionExpired extends SessionState {
   const SessionExpired();
 }
 
+/// The user asked to sign out and the session is being torn down.
+class SessionSigningOut extends SessionState {
+  const SessionSigningOut();
+}
+
 /// The user signed out deliberately — route back to sign-in silently.
 class SessionSignedOut extends SessionState {
   const SessionSignedOut();

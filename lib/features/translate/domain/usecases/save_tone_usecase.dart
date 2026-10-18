@@ -1,5 +1,4 @@
 import '../../../../core/result/api_result.dart';
-import '../entities/translation_tone.dart';
 import '../repos/translation_repo.dart';
 
 class SaveToneUseCase {
@@ -7,6 +6,5 @@ class SaveToneUseCase {
 
   final TranslationRepo _repository;
 
-  Future<ApiResult<void>> call(TranslationTone tone) =>
-      _repository.saveTone(tone);
+  Future<ApiResult<void>> call(String code) => _repository.saveToneCode(code);
 }

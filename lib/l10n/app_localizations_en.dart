@@ -61,15 +61,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateToneCaption => 'AI suggested · Tone';
 
   @override
-  String get translateToneFormal => 'Formal';
-
-  @override
-  String get translateToneCasual => 'Casual';
-
-  @override
-  String get translateToneConcise => 'Concise';
-
-  @override
   String get translateDockKeyboard => 'Keyboard';
 
   @override

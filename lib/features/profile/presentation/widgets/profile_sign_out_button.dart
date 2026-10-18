@@ -5,6 +5,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/cubit/session_cubit.dart';
+import '../../../auth/presentation/cubit/session_state.dart';
 
 /// Full-width sign-out card. Ending the session is owned by the app-level
 /// [SessionCubit], whose listener routes back to sign-in.
@@ -25,17 +26,30 @@ class ProfileSignOutButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimens.radiusCard),
         side: BorderSide(color: c.border),
       ),
-      child: InkWell(
-        onTap: () => context.read<SessionCubit>().signOut(),
-        child: SizedBox(
-          height: _height,
-          child: Center(
-            child: Text(
-              AppLocalizations.of(context)!.authSignOut,
-              style: textTheme.titleMedium?.copyWith(
-                fontSize: 15,
-                color: c.ink,
-              ),
+      child: BlocSelector<SessionCubit, SessionState, bool>(
+        selector: (state) => state is! SessionActive,
+        builder: (context, isSigningOut) => InkWell(
+          onTap: isSigningOut
+              ? null
+              : () => context.read<SessionCubit>().signOut(),
+          child: SizedBox(
+            height: _height,
+            child: Center(
+              child: isSigningOut
+                  ? SizedBox.square(
+                      dimension: AppDimens.iconM,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: c.ink,
+                      ),
+                    )
+                  : Text(
+                      AppLocalizations.of(context)!.authSignOut,
+                      style: textTheme.titleMedium?.copyWith(
+                        fontSize: 15,
+                        color: c.ink,
+                      ),
+                    ),
             ),
           ),
         ),

@@ -65,7 +65,7 @@ class TranslyApp extends StatelessWidget {
               );
             case SessionSignedOut():
               appRouter.goNamed(AppRoutes.signInName);
-            case SessionActive():
+            case SessionActive() || SessionSigningOut():
               break;
           }
         },

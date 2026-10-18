@@ -6,8 +6,9 @@ import '../../../../core/result/api_result.dart';
 import '../../../../core/services/connectivity_service.dart';
 import '../../domain/entities/translation_engine.dart';
 import '../../domain/entities/translation_entity.dart';
-import '../../domain/entities/translation_tone.dart';
+import '../../domain/entities/tone_catalog.dart';
 import '../../domain/repos/translation_repo.dart';
+import '../datasources/tones_remote_data_source.dart';
 import '../datasources/translation_local_data_source.dart';
 import '../datasources/translation_remote_data_source.dart';
 import '../datasources/translation_settings_local_data_source.dart';
@@ -21,25 +22,33 @@ class TranslationRepoImpl implements TranslationRepo {
     required OfflineModelsDataSource models,
     required ConnectivityService connectivity,
     required TranslationRemoteDataSource remote,
+    required TonesRemoteDataSource remoteTones,
     required TranslationSettingsLocalDataSource settings,
+    required String Function() uiLanguageCode,
   }) : _local = local,
        _models = models,
        _connectivity = connectivity,
        _remote = remote,
-       _settings = settings;
+       _remoteTones = remoteTones,
+       _settings = settings,
+       _uiLanguageCode = uiLanguageCode;
 
   final TranslationLocalDataSource _local;
   final OfflineModelsDataSource _models;
   final ConnectivityService _connectivity;
   final TranslationRemoteDataSource _remote;
+  final TonesRemoteDataSource _remoteTones;
   final TranslationSettingsLocalDataSource _settings;
+
+  /// The language the server names tones in (sent as `Accept-Language`).
+  final String Function() _uiLanguageCode;
 
   @override
   Future<ApiResult<TranslationEntity>> translate({
     required String text,
     required LanguageEntity from,
     required LanguageEntity to,
-    required String tone,
+    required String? tone,
   }) async {
     try {
       if (await _connectivity.isConnected) {
@@ -98,22 +107,49 @@ class TranslationRepoImpl implements TranslationRepo {
     yield* _connectivity.onConnectedChanged.handleError((_) {});
   }
 
-  /// Nothing saved, a tone the app no longer knows, or a box that can't be
-  /// read all fall back to formal.
+  /// A cache that can't be read counts as none.
   @override
-  TranslationTone getSavedTone() {
+  ToneCatalog? getCachedTones() {
     try {
-      final name = _settings.getToneName();
-      return TranslationTone.values.asNameMap()[name] ?? TranslationTone.formal;
+      return _settings.getCachedTones()?.toEntity();
     } catch (_) {
-      return TranslationTone.formal;
+      return null;
     }
   }
 
   @override
-  Future<ApiResult<void>> saveTone(TranslationTone tone) async {
+  Future<ApiResult<ToneCatalog>> syncTones() async {
     try {
-      await _settings.saveToneName(tone.name);
+      final language = _uiLanguageCode();
+      final tones = await _remoteTones.getTones();
+      // A reply named in a language the UI has since left must not replace
+      // the cache: the newer request's reply belongs there.
+      if (language == _uiLanguageCode()) {
+        // A list that can't be cached is still the right answer for this call.
+        try {
+          await _settings.cacheTones(tones);
+        } catch (_) {}
+      }
+      return ApiResult.success(tones.toEntity());
+    } catch (e) {
+      return ApiResult.failure(ErrorMapper.map(e));
+    }
+  }
+
+  /// A box that can't be read counts as nothing saved.
+  @override
+  String? getSavedToneCode() {
+    try {
+      return _settings.getToneCode();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> saveToneCode(String code) async {
+    try {
+      await _settings.saveToneCode(code);
       return const ApiResult.success(null);
     } catch (e) {
       return ApiResult.failure(ErrorMapper.map(e));

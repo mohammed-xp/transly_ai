@@ -5,6 +5,6 @@ abstract class TranslationRemoteDataSource {
     required String text,
     required String from,
     required String to,
-    required String tone,
+    required String? tone,
   });
 }

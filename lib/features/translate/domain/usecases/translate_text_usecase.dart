@@ -19,7 +19,7 @@ class TranslateTextUseCase {
     required String text,
     required LanguageEntity from,
     required LanguageEntity to,
-    required String tone,
+    required String? tone,
   }) async {
     final result = await _repository.translate(
       text: text,
