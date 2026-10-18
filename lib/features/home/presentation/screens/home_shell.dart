@@ -21,6 +21,7 @@ import '../cubit/home_state.dart';
 import '../widgets/input_dock.dart';
 import '../widgets/language_bar.dart';
 import '../widgets/translate_header.dart';
+import '../widgets/ui_language_listener.dart';
 
 class HomeShell extends StatelessWidget {
   const HomeShell({super.key});
@@ -44,7 +45,12 @@ class HomeShell extends StatelessWidget {
         listener: (context, state) => context
             .read<TranslateCubit>()
             .languagesChanged(from: state.from, to: state.to),
-        child: const OptionalUpdatePrompter(child: _HomeView()),
+        child: Builder(
+          builder: (context) => UiLanguageListener(
+            onChanged: context.read<TranslateCubit>().uiLanguageChanged,
+            child: const OptionalUpdatePrompter(child: _HomeView()),
+          ),
+        ),
       ),
     );
   }

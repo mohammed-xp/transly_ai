@@ -68,18 +68,6 @@
   "@translateToneCaption": {
     "description": "Caption above the tone selector chips."
   },
-  "translateToneFormal": "Formal",
-  "@translateToneFormal": {
-    "description": "Formal tone option."
-  },
-  "translateToneCasual": "Casual",
-  "@translateToneCasual": {
-    "description": "Casual tone option."
-  },
-  "translateToneConcise": "Concise",
-  "@translateToneConcise": {
-    "description": "Concise tone option."
-  },
   "translateDockKeyboard": "Keyboard",
   "@translateDockKeyboard": {
     "description": "Keyboard input mode in the bottom input dock."

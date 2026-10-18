@@ -33,6 +33,7 @@ class TranslateState {
     required this.sourceText,
     required this.from,
     required this.to,
+    required this.tones,
     required this.tone,
     required this.translatedText,
     required this.status,
@@ -40,17 +41,19 @@ class TranslateState {
     required this.lastEngineWasOnline,
   });
 
-  /// Default language pair (same as `HomeState.initial`), formal tone unless
-  /// a saved one is passed in.
+  /// Default language pair (same as `HomeState.initial`), with whatever tones
+  /// are already cached.
   /// [isOnlineAvailable] starts `false` only because it is the
   /// pre-first-emission value of the availability stream, which reports the
   /// real answer immediately.
   factory TranslateState.initial({
-    TranslationTone tone = TranslationTone.formal,
+    List<TranslationTone> tones = const [],
+    TranslationTone? tone,
   }) => TranslateState(
     sourceText: '',
     from: LanguageEntity.defaultSource,
     to: LanguageEntity.defaultTarget,
+    tones: tones,
     tone: tone,
     translatedText: '',
     status: const TranslationIdle(),
@@ -61,7 +64,12 @@ class TranslateState {
   final String sourceText;
   final LanguageEntity from;
   final LanguageEntity to;
-  final TranslationTone tone;
+
+  /// Empty until the tones have been loaded once, which hides the selector.
+  final List<TranslationTone> tones;
+
+  /// Null only while [tones] is empty; the server then applies its default.
+  final TranslationTone? tone;
   final String translatedText;
   final TranslationStatus status;
 
@@ -89,6 +97,7 @@ class TranslateState {
     String? sourceText,
     LanguageEntity? from,
     LanguageEntity? to,
+    List<TranslationTone>? tones,
     TranslationTone? tone,
     String? translatedText,
     TranslationStatus? status,
@@ -99,6 +108,7 @@ class TranslateState {
       sourceText: sourceText ?? this.sourceText,
       from: from ?? this.from,
       to: to ?? this.to,
+      tones: tones ?? this.tones,
       tone: tone ?? this.tone,
       translatedText: translatedText ?? this.translatedText,
       status: status ?? this.status,

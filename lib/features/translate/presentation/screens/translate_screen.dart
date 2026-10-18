@@ -181,7 +181,8 @@ class _BusyNoteSection extends StatelessWidget {
   }
 }
 
-/// Selects the tone + enabled flag.
+/// Selects the tones, current tone and enabled flag. Hidden until the tones
+/// have been loaded once.
 class _ToneSection extends StatelessWidget {
   const _ToneSection();
 
@@ -190,13 +191,17 @@ class _ToneSection extends StatelessWidget {
     return BlocSelector<
       TranslateCubit,
       TranslateState,
-      (TranslationTone, bool)
+      (List<TranslationTone>, TranslationTone?, bool)
     >(
-      selector: (state) => (state.tone, state.isToneEnabled && !state.isBusy),
+      selector: (state) =>
+          (state.tones, state.tone, state.isToneEnabled && !state.isBusy),
       builder: (context, data) {
+        final selected = data.$2;
+        if (data.$1.isEmpty || selected == null) return const SizedBox.shrink();
         return ToneSelector(
-          selected: data.$1,
-          enabled: data.$2,
+          tones: data.$1,
+          selected: selected,
+          enabled: data.$3,
           onSelected: context.read<TranslateCubit>().toneChanged,
         );
       },

@@ -8,7 +8,12 @@ import 'api_consumer.dart';
 import 'endpoints.dart';
 
 class DioBaseApi extends ApiConsumer {
-  DioBaseApi(this._dio, this._tokenStorage, this._sessionManager) {
+  DioBaseApi(
+    this._dio,
+    this._tokenStorage,
+    this._sessionManager, {
+    required String Function() languageCode,
+  }) : _languageCode = languageCode {
     _dio.options.headers['Accept'] = 'application/json';
     _dio.options.headers['Content-Type'] = 'application/json';
     _dio.interceptors.add(
@@ -32,6 +37,10 @@ class DioBaseApi extends ApiConsumer {
   final TokenStorage _tokenStorage;
   final SessionManager _sessionManager;
 
+  /// The app's current UI language, read per request so a language change
+  /// applies to the very next call.
+  final String Function() _languageCode;
+
   Future<bool>? _refreshInFlight;
 
   static bool _isAuthEndpoint(String path) =>
@@ -45,6 +54,7 @@ class DioBaseApi extends ApiConsumer {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    options.headers['Accept-Language'] = _languageCode();
     final accessToken = await _tokenStorage.getAccessToken();
     if (accessToken != null && accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';

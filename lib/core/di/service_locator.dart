@@ -94,15 +94,19 @@ import '../../features/profile/presentation/cubit/plan_usage_cubit.dart';
 import '../../features/profile/presentation/cubit/profile_cubit.dart';
 import '../../features/splash/presentation/cubit/splash_cubit.dart';
 import '../../features/translate/data/datasources/api_translation_remote_data_source.dart';
+import '../../features/translate/data/datasources/tones_remote_data_source.dart';
+import '../../features/translate/data/datasources/tones_remote_data_source_impl.dart';
 import '../../features/translate/data/datasources/translation_local_data_source.dart';
 import '../../features/translate/data/datasources/translation_remote_data_source.dart';
 import '../../features/translate/data/datasources/translation_settings_local_data_source.dart';
 import '../../features/translate/data/datasources/translation_settings_local_data_source_impl.dart';
 import '../../features/translate/data/repos/translation_repo_impl.dart';
 import '../../features/translate/domain/repos/translation_repo.dart';
+import '../../features/translate/domain/usecases/get_cached_tones_usecase.dart';
 import '../../features/translate/domain/usecases/get_saved_tone_usecase.dart';
 import '../../features/translate/domain/usecases/save_tone_usecase.dart';
 import '../../features/translate/domain/usecases/speak_text_usecase.dart';
+import '../../features/translate/domain/usecases/sync_tones_usecase.dart';
 import '../../features/translate/domain/usecases/translate_text_usecase.dart';
 import '../../features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import '../../features/translate/presentation/cubit/translate_cubit.dart';
@@ -122,6 +126,7 @@ import '../domain/repos/user_repo.dart';
 import '../domain/usecases/get_cached_user_use_case.dart';
 import '../domain/usecases/get_sign_in_method_use_case.dart';
 import '../init/hive_initializer.dart';
+import '../l10n/ui_language.dart';
 import '../network/api_consumer.dart';
 import '../network/dio_base_api.dart';
 import '../security/token_storage.dart';
@@ -135,6 +140,13 @@ final GetIt serviceLocator = GetIt.instance;
 /// `optional` or `required` shows the update UI with sample data in debug
 /// builds: `flutter run --dart-define=APP_UPDATE_PREVIEW=optional`.
 const String _appUpdatePreview = String.fromEnvironment('APP_UPDATE_PREVIEW');
+
+/// The UI language, read fresh on every call. Shared by the request header
+/// and the tones cache so both always agree.
+String _uiLanguageCode() => resolveUiLanguageCode(
+  serviceLocator<GetAppLanguageUseCase>()().code,
+  PlatformDispatcher.instance.locales,
+);
 
 /// Requires [HiveInitializer.initHive] to have completed.
 Future<void> configureDependencies() async {
@@ -195,7 +207,12 @@ Future<void> configureDependencies() async {
     ),
   );
   serviceLocator.registerLazySingleton<ApiConsumer>(
-    () => DioBaseApi(serviceLocator(), serviceLocator(), serviceLocator()),
+    () => DioBaseApi(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      languageCode: _uiLanguageCode,
+    ),
   );
 
   // ── Data sources ──
@@ -207,6 +224,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<TranslationRemoteDataSource>(
     () => ApiTranslationRemoteDataSource(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<TonesRemoteDataSource>(
+    () => TonesRemoteDataSourceImpl(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<TranslationSettingsLocalDataSource>(
     () => TranslationSettingsLocalDataSourceImpl(serviceLocator()),
@@ -250,6 +270,8 @@ Future<void> configureDependencies() async {
       models: serviceLocator(),
       connectivity: serviceLocator(),
       remote: serviceLocator(),
+      remoteTones: serviceLocator(),
+      uiLanguageCode: _uiLanguageCode,
       settings: serviceLocator(),
     ),
   );
@@ -310,6 +332,12 @@ Future<void> configureDependencies() async {
     () => GetSavedToneUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(() => SaveToneUseCase(serviceLocator()));
+  serviceLocator.registerLazySingleton(
+    () => GetCachedTonesUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SyncTonesUseCase(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton(
     () => SignInWithEmailUseCase(serviceLocator(), serviceLocator()),
   );
@@ -511,6 +539,8 @@ Future<void> configureDependencies() async {
       translateText: serviceLocator(),
       speakText: serviceLocator(),
       watchOnlineAvailability: serviceLocator(),
+      getCachedTones: serviceLocator(),
+      syncTones: serviceLocator(),
       getSavedTone: serviceLocator(),
       saveTone: serviceLocator(),
     ),
