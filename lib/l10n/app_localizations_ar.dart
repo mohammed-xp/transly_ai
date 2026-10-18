@@ -477,7 +477,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'لا يوجد اتصال بالإنترنت. تحقّق من الشبكة وحاول مرة أخرى.';
 
   @override
-  String get errorServer => 'حدث خطأ من جهتنا. حاول مرة أخرى لاحقًا.';
+  String get errorServer => 'حدث خطأ في الخادم. حاول مرة أخرى لاحقًا.';
 
   @override
   String get errorUnauthorized => 'انتهت صلاحية الجلسة. سجّل الدخول مرة أخرى.';

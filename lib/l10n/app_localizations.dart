@@ -941,7 +941,7 @@ abstract class AppLocalizations {
   /// The server returned a 5xx error.
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong on our side. Please try again later.'**
+  /// **'A server error occurred. Please try again later.'**
   String get errorServer;
 
   /// The server rejected the request as unauthorized (401).

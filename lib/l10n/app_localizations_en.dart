@@ -480,8 +480,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'No internet connection. Check your network and try again.';
 
   @override
-  String get errorServer =>
-      'Something went wrong on our side. Please try again later.';
+  String get errorServer => 'A server error occurred. Please try again later.';
 
   @override
   String get errorUnauthorized =>

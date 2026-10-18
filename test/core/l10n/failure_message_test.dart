@@ -84,7 +84,7 @@ void main() {
 
     expect(
       await messageIn(tester, const Locale('en'), failure),
-      'Something went wrong on our side. Please try again later.',
+      'A server error occurred. Please try again later.',
     );
   });
 

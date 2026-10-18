@@ -606,7 +606,7 @@
   "@errorNetwork": {
     "description": "A request failed because the device is offline or the server is unreachable."
   },
-  "errorServer": "Something went wrong on our side. Please try again later.",
+  "errorServer": "A server error occurred. Please try again later.",
   "@errorServer": {
     "description": "The server returned a 5xx error."
   },
