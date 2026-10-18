@@ -41,7 +41,7 @@ class TranslateCubit extends Cubit<TranslateState> {
             lastEngineWasOnline: available ? true : null,
           ),
         );
-        if (available && state.tones.isEmpty) unawaited(_loadTones());
+        if (available && _tonesStale) unawaited(_loadTones());
       },
       onError: (_) {
         if (!isClosed) emit(state.copyWith(isOnlineAvailable: false));
@@ -63,7 +63,11 @@ class TranslateCubit extends Cubit<TranslateState> {
 
   int _requestId = 0;
 
-  bool _loadingTones = false;
+  int _tonesRequestId = 0;
+
+  /// The last tones sync failed, so the shown tones may be missing or in an
+  /// older UI language. Retried once the device is back online.
+  bool _tonesStale = false;
 
   static TranslateState _initialState(ToneCatalog? cached, String? savedCode) =>
       TranslateState.initial(
@@ -71,17 +75,24 @@ class TranslateCubit extends Cubit<TranslateState> {
         tone: cached?.resolve(savedCode),
       );
 
+  /// The server names tones in the UI language, so a language change needs a
+  /// fresh list. The current one stays shown until it arrives.
+  void uiLanguageChanged() => unawaited(_loadTones());
+
   /// Refreshes the tones from the server, keeping the current pick when it is
-  /// still offered. A failure keeps whatever is already shown.
+  /// still offered. A failure keeps whatever is already shown. Only the latest
+  /// call applies, so a list fetched in the previous language can't land last.
   Future<void> _loadTones() async {
-    if (_loadingTones) return;
-    _loadingTones = true;
+    final id = ++_tonesRequestId;
     final result = await _syncTones();
-    _loadingTones = false;
-    if (isClosed) return;
-    if (result case ApiSuccess(:final data)) {
-      final tone = data.resolve(state.tone?.code ?? _getSavedTone());
-      emit(state.copyWith(tones: data.tones, tone: tone));
+    if (isClosed || id != _tonesRequestId) return;
+    switch (result) {
+      case ApiSuccess(:final data):
+        _tonesStale = false;
+        final tone = data.resolve(state.tone?.code ?? _getSavedTone());
+        emit(state.copyWith(tones: data.tones, tone: tone));
+      case ApiFailure():
+        _tonesStale = true;
     }
   }
 

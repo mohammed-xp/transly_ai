@@ -122,6 +122,7 @@ void main() {
         remote: _FakeRemote(),
         remoteTones: _UnusedRemoteTones(),
         settings: _UnusedSettings(),
+        uiLanguageCode: () => 'en',
       );
 
   Future<ApiResult<TranslationEntity>> translate(

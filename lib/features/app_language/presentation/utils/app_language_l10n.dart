@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../../core/l10n/ui_language.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/app_language.dart';
 
@@ -24,12 +25,8 @@ String appLanguageLabel(BuildContext context, AppLanguage language) {
 
 /// The language [AppLanguage.device] currently resolves to, using the same
 /// resolution `MaterialApp` applies when no locale is set.
-String deviceResolvedLanguageCode(BuildContext context) {
-  return basicLocaleListResolution(
-    View.of(context).platformDispatcher.locales,
-    AppLocalizations.supportedLocales,
-  ).languageCode;
-}
+String deviceResolvedLanguageCode(BuildContext context) =>
+    resolveUiLanguageCode(null, View.of(context).platformDispatcher.locales);
 
 /// The name of [code] in the UI language. For the UI language itself that
 /// would repeat its native name, so its English name is used instead; null

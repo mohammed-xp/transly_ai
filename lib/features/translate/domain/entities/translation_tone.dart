@@ -1,17 +1,12 @@
 import 'package:equatable/equatable.dart';
 
+/// A tone offered by the server. [name] is already in the UI language the
+/// tones were fetched in.
 class TranslationTone extends Equatable {
-  const TranslationTone({
-    required this.code,
-    required this.name,
-    required this.nameAr,
-  });
+  const TranslationTone({required this.code, required this.name});
 
   final String code;
   final String name;
-
-  /// Empty when the server has no Arabic name for this tone.
-  final String nameAr;
 
   @override
   List<Object?> get props => [code];

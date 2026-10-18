@@ -28,7 +28,6 @@ class ToneSelector extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final c = context.palette;
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return Opacity(
       opacity: enabled ? 1 : 0.55,
@@ -48,9 +47,7 @@ class ToneSelector extends StatelessWidget {
             children: [
               for (final tone in tones)
                 _ToneChip(
-                  label: isArabic && tone.nameAr.isNotEmpty
-                      ? tone.nameAr
-                      : tone.name,
+                  label: tone.name,
                   selected: tone == selected,
                   onTap: enabled ? () => onSelected(tone) : null,
                 ),

@@ -24,12 +24,14 @@ class TranslationRepoImpl implements TranslationRepo {
     required TranslationRemoteDataSource remote,
     required TonesRemoteDataSource remoteTones,
     required TranslationSettingsLocalDataSource settings,
+    required String Function() uiLanguageCode,
   }) : _local = local,
        _models = models,
        _connectivity = connectivity,
        _remote = remote,
        _remoteTones = remoteTones,
-       _settings = settings;
+       _settings = settings,
+       _uiLanguageCode = uiLanguageCode;
 
   final TranslationLocalDataSource _local;
   final OfflineModelsDataSource _models;
@@ -37,6 +39,9 @@ class TranslationRepoImpl implements TranslationRepo {
   final TranslationRemoteDataSource _remote;
   final TonesRemoteDataSource _remoteTones;
   final TranslationSettingsLocalDataSource _settings;
+
+  /// The language the server names tones in (sent as `Accept-Language`).
+  final String Function() _uiLanguageCode;
 
   @override
   Future<ApiResult<TranslationEntity>> translate({
@@ -115,11 +120,16 @@ class TranslationRepoImpl implements TranslationRepo {
   @override
   Future<ApiResult<ToneCatalog>> syncTones() async {
     try {
+      final language = _uiLanguageCode();
       final tones = await _remoteTones.getTones();
-      // A list that can't be cached is still the right answer for this call.
-      try {
-        await _settings.cacheTones(tones);
-      } catch (_) {}
+      // A reply named in a language the UI has since left must not replace
+      // the cache: the newer request's reply belongs there.
+      if (language == _uiLanguageCode()) {
+        // A list that can't be cached is still the right answer for this call.
+        try {
+          await _settings.cacheTones(tones);
+        } catch (_) {}
+      }
       return ApiResult.success(tones.toEntity());
     } catch (e) {
       return ApiResult.failure(ErrorMapper.map(e));

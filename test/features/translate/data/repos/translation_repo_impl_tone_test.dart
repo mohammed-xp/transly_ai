@@ -13,8 +13,8 @@ import 'package:transly_ai/features/translate/domain/entities/tone_catalog.dart'
 
 const _catalog = ToneCatalogModel(
   tones: [
-    ToneModel(code: 'formal', name: 'Formal', nameAr: 'رسمية'),
-    ToneModel(code: 'casual', name: 'Casual', nameAr: 'عامية'),
+    ToneModel(code: 'formal', name: 'Formal'),
+    ToneModel(code: 'casual', name: 'Casual'),
   ],
   defaultTone: 'formal',
 );
@@ -60,12 +60,16 @@ class _FakeSettings implements TranslationSettingsLocalDataSource {
 }
 
 class _FakeRemoteTones implements TonesRemoteDataSource {
-  _FakeRemoteTones({this.error});
+  _FakeRemoteTones({this.error, this.whileFetching});
 
   final Object? error;
 
+  /// Runs while the request is in flight, e.g. to switch the UI language.
+  final void Function()? whileFetching;
+
   @override
   Future<ToneCatalogModel> getTones() async {
+    whileFetching?.call();
     final error = this.error;
     if (error != null) throw error;
     return _catalog;
@@ -95,6 +99,7 @@ class _UnusedConnectivity implements ConnectivityService {
 TranslationRepoImpl _buildRepo(
   _FakeSettings settings, {
   _FakeRemoteTones? remoteTones,
+  String Function()? uiLanguageCode,
 }) => TranslationRepoImpl(
   local: _UnusedLocal(),
   models: _UnusedModels(),
@@ -102,6 +107,7 @@ TranslationRepoImpl _buildRepo(
   remote: _UnusedRemote(),
   remoteTones: remoteTones ?? _FakeRemoteTones(),
   settings: settings,
+  uiLanguageCode: uiLanguageCode ?? () => 'en',
 );
 
 void main() {
@@ -138,6 +144,24 @@ void main() {
       expect(result, isA<ApiSuccess<ToneCatalog>>());
       expect(settings.tones, same(_catalog));
     });
+
+    test(
+      'does not cache a reply when the UI language changed meanwhile',
+      () async {
+        var language = 'en';
+        final settings = _FakeSettings();
+        final repo = _buildRepo(
+          settings,
+          remoteTones: _FakeRemoteTones(whileFetching: () => language = 'ar'),
+          uiLanguageCode: () => language,
+        );
+
+        final result = await repo.syncTones();
+
+        expect(result, isA<ApiSuccess<ToneCatalog>>());
+        expect(settings.tones, isNull);
+      },
+    );
 
     test('still succeeds when caching fails', () async {
       final repo = _buildRepo(_FakeSettings(saveError: StateError('disk')));

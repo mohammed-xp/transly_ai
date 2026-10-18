@@ -9,13 +9,9 @@ import 'package:transly_ai/features/translate/domain/entities/translation_entity
 import 'package:transly_ai/features/translate/domain/entities/translation_tone.dart';
 import 'package:transly_ai/features/translate/domain/repos/translation_repo.dart';
 
-const formalTone = TranslationTone(code: 'formal', name: 'Formal', nameAr: '');
-const casualTone = TranslationTone(code: 'casual', name: 'Casual', nameAr: '');
-const conciseTone = TranslationTone(
-  code: 'concise',
-  name: 'Concise',
-  nameAr: '',
-);
+const formalTone = TranslationTone(code: 'formal', name: 'Formal');
+const casualTone = TranslationTone(code: 'casual', name: 'Casual');
+const conciseTone = TranslationTone(code: 'concise', name: 'Concise');
 
 const defaultToneCatalog = ToneCatalog(
   tones: [formalTone, casualTone, conciseTone],
@@ -50,6 +46,10 @@ class FakeTranslationRepo implements TranslationRepo {
   final List<String> savedToneCodes = [];
   final List<String?> requestedTones = [];
   int syncCalls = 0;
+
+  /// While set, each sync waits in [pendingSyncs] until the test completes it.
+  bool holdSyncs = false;
+  final List<Completer<ApiResult<ToneCatalog>>> pendingSyncs = [];
   final StreamController<bool> onlineAvailability = StreamController<bool>();
 
   @override
@@ -83,6 +83,11 @@ class FakeTranslationRepo implements TranslationRepo {
   @override
   Future<ApiResult<ToneCatalog>> syncTones() async {
     syncCalls++;
+    if (holdSyncs) {
+      final pending = Completer<ApiResult<ToneCatalog>>();
+      pendingSyncs.add(pending);
+      return pending.future;
+    }
     final failure = syncFailure;
     if (failure != null) return ApiResult.failure(failure);
     final tones = syncedTones ?? cachedTones;

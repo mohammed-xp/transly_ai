@@ -8,8 +8,7 @@ void main() {
       'tones': [
         {
           'code': 'formal',
-          'name': 'Formal',
-          'nameAr': 'رسمية',
+          'name': 'رسمية',
           'description': 'Polite and professional.',
         },
       ],
@@ -18,26 +17,25 @@ void main() {
     final entity = model.toEntity();
     expect(entity.defaultCode, 'formal');
     expect(entity.tones.single.code, 'formal');
-    expect(entity.tones.single.name, 'Formal');
-    expect(entity.tones.single.nameAr, 'رسمية');
+    expect(entity.tones.single.name, 'رسمية');
   });
 
-  test('treats a missing Arabic name as empty', () {
+  test('reads a cache written with the old nameAr field', () {
     final model = ToneCatalogModel.fromJson({
       'defaultTone': 'formal',
       'tones': [
-        {'code': 'formal', 'name': 'Formal'},
+        {'code': 'formal', 'name': 'Formal', 'nameAr': ''},
       ],
     });
 
-    expect(model.tones.single.nameAr, isEmpty);
+    expect(model.tones.single.name, 'Formal');
   });
 
   test('round-trips through its cached json', () {
     final model = ToneCatalogModel.fromJson({
       'defaultTone': 'casual',
       'tones': [
-        {'code': 'casual', 'name': 'Casual', 'nameAr': 'عامية'},
+        {'code': 'casual', 'name': 'Casual'},
       ],
     });
 

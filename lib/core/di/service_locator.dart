@@ -126,6 +126,7 @@ import '../domain/repos/user_repo.dart';
 import '../domain/usecases/get_cached_user_use_case.dart';
 import '../domain/usecases/get_sign_in_method_use_case.dart';
 import '../init/hive_initializer.dart';
+import '../l10n/ui_language.dart';
 import '../network/api_consumer.dart';
 import '../network/dio_base_api.dart';
 import '../security/token_storage.dart';
@@ -139,6 +140,13 @@ final GetIt serviceLocator = GetIt.instance;
 /// `optional` or `required` shows the update UI with sample data in debug
 /// builds: `flutter run --dart-define=APP_UPDATE_PREVIEW=optional`.
 const String _appUpdatePreview = String.fromEnvironment('APP_UPDATE_PREVIEW');
+
+/// The UI language, read fresh on every call. Shared by the request header
+/// and the tones cache so both always agree.
+String _uiLanguageCode() => resolveUiLanguageCode(
+  serviceLocator<GetAppLanguageUseCase>()().code,
+  PlatformDispatcher.instance.locales,
+);
 
 /// Requires [HiveInitializer.initHive] to have completed.
 Future<void> configureDependencies() async {
@@ -199,7 +207,12 @@ Future<void> configureDependencies() async {
     ),
   );
   serviceLocator.registerLazySingleton<ApiConsumer>(
-    () => DioBaseApi(serviceLocator(), serviceLocator(), serviceLocator()),
+    () => DioBaseApi(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      languageCode: _uiLanguageCode,
+    ),
   );
 
   // ── Data sources ──
@@ -258,6 +271,7 @@ Future<void> configureDependencies() async {
       connectivity: serviceLocator(),
       remote: serviceLocator(),
       remoteTones: serviceLocator(),
+      uiLanguageCode: _uiLanguageCode,
       settings: serviceLocator(),
     ),
   );

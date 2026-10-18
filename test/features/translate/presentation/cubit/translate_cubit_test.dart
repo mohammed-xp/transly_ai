@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/errors/failure.dart';
+import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/services/tts_service.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/auto_download_offline_models_usecase.dart';
 import 'package:transly_ai/features/translate/domain/entities/tone_catalog.dart';
@@ -25,11 +26,7 @@ class _SilentTts implements TtsService {
   Future<void> stop() => Future.value();
 }
 
-const _friendlyTone = TranslationTone(
-  code: 'friendly',
-  name: 'Friendly',
-  nameAr: '',
-);
+const _friendlyTone = TranslationTone(code: 'friendly', name: 'Friendly');
 
 void main() {
   TranslateCubit buildCubit(FakeTranslationRepo repo) {
@@ -166,6 +163,78 @@ void main() {
       await settle();
 
       expect(repo.syncCalls, 1);
+    });
+  });
+
+  group('uiLanguageChanged', () {
+    const arabicCatalog = ToneCatalog(
+      tones: [
+        TranslationTone(code: 'formal', name: 'رسمية'),
+        TranslationTone(code: 'casual', name: 'عامية'),
+      ],
+      defaultCode: 'formal',
+    );
+
+    test('reloads the tones in the new language', () async {
+      final repo = FakeTranslationRepo();
+      final cubit = buildCubit(repo);
+      addTearDown(cubit.close);
+      await settle();
+      repo.syncedTones = arabicCatalog;
+
+      cubit.uiLanguageChanged();
+      await settle();
+
+      expect(repo.syncCalls, 2);
+      expect(cubit.state.tones.map((t) => t.name), ['رسمية', 'عامية']);
+    });
+
+    test('keeps the selected tone', () async {
+      final repo = FakeTranslationRepo(savedToneCode: 'casual');
+      final cubit = buildCubit(repo);
+      addTearDown(cubit.close);
+      await settle();
+      repo.syncedTones = arabicCatalog;
+
+      cubit.uiLanguageChanged();
+      await settle();
+
+      expect(cubit.state.tone?.name, 'عامية');
+    });
+
+    test('ignores an older sync that finishes last', () async {
+      final repo = FakeTranslationRepo()..holdSyncs = true;
+      final cubit = buildCubit(repo);
+      addTearDown(cubit.close);
+
+      cubit.uiLanguageChanged();
+      repo.pendingSyncs[1].complete(const ApiResult.success(arabicCatalog));
+      await settle();
+      repo.pendingSyncs[0].complete(
+        const ApiResult.success(defaultToneCatalog),
+      );
+      await settle();
+
+      expect(cubit.state.tones.map((t) => t.name), ['رسمية', 'عامية']);
+    });
+
+    test('retries once online when the reload failed', () async {
+      final repo = FakeTranslationRepo();
+      final cubit = buildCubit(repo);
+      addTearDown(cubit.close);
+      await settle();
+      repo.syncFailure = const NetworkFailure();
+      cubit.uiLanguageChanged();
+      await settle();
+      repo
+        ..syncFailure = null
+        ..syncedTones = arabicCatalog;
+
+      repo.onlineAvailability.add(true);
+      await settle();
+
+      expect(repo.syncCalls, 3);
+      expect(cubit.state.tones.map((t) => t.name), ['رسمية', 'عامية']);
     });
   });
 
