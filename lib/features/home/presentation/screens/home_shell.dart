@@ -14,7 +14,6 @@ import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
 // import '../../../conversation/presentation/screens/conversation_screen.dart';
 import '../../../language_picker/presentation/widgets/language_picker_sheet.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
-import '../../../translate/presentation/cubit/translate_state.dart';
 import '../../../translate/presentation/screens/translate_screen.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -160,16 +159,12 @@ class _LanguageBarSection extends StatelessWidget {
       selector: (state) => (state.from, state.to),
       builder: (context, languages) {
         final (from, to) = languages;
-        return BlocSelector<TranslateCubit, TranslateState, bool>(
-          selector: (state) => state.isBusy,
-          builder: (context, isBusy) => LanguageBar(
-            fromLanguage: languageLabel(context, from),
-            toLanguage: languageLabel(context, to),
-            onSwap: context.read<HomeCubit>().swapLanguages,
-            onFromTap: () => _openPicker(context, LanguageSide.source),
-            onToTap: () => _openPicker(context, LanguageSide.target),
-            isBusy: isBusy,
-          ),
+        return LanguageBar(
+          fromLanguage: languageLabel(context, from),
+          toLanguage: languageLabel(context, to),
+          onSwap: context.read<HomeCubit>().swapLanguages,
+          onFromTap: () => _openPicker(context, LanguageSide.source),
+          onToTap: () => _openPicker(context, LanguageSide.target),
         );
       },
     );

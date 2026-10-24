@@ -25,7 +25,6 @@ void main() {
             onSwap: () => taps.add('swap'),
             onFromTap: () => taps.add('from'),
             onToTap: () => taps.add('to'),
-            isBusy: false,
           ),
         ),
       ),
