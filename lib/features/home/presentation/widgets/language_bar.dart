@@ -6,7 +6,6 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
-import 'translate_progress_bar.dart';
 
 class LanguageBar extends StatelessWidget {
   const LanguageBar({
@@ -16,7 +15,6 @@ class LanguageBar extends StatelessWidget {
     required this.onSwap,
     required this.onFromTap,
     required this.onToTap,
-    required this.isBusy,
   });
 
   final String fromLanguage;
@@ -24,7 +22,6 @@ class LanguageBar extends StatelessWidget {
   final VoidCallback onSwap;
   final VoidCallback onFromTap;
   final VoidCallback onToTap;
-  final bool isBusy;
 
   static const double _swapButtonSize = 42;
 
@@ -50,39 +47,25 @@ class LanguageBar extends StatelessWidget {
                 ),
               ],
       ),
-      child: ClipRRect(
-        borderRadius: radius,
-        child: Stack(
+      child: Padding(
+        padding: const EdgeInsets.all(6),
+        child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(6),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _LanguageColumn(
-                      label: l10n.translateFrom,
-                      language: fromLanguage,
-                      onTap: onFromTap,
-                    ),
-                  ),
-                  _SwapButton(onTap: onSwap),
-                  Expanded(
-                    child: _LanguageColumn(
-                      label: l10n.translateTo,
-                      language: toLanguage,
-                      onTap: onToTap,
-                    ),
-                  ),
-                ],
+            Expanded(
+              child: _LanguageColumn(
+                label: l10n.translateFrom,
+                language: fromLanguage,
+                onTap: onFromTap,
               ),
             ),
-            if (isBusy)
-              const Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: TranslateProgressBar(),
+            _SwapButton(onTap: onSwap),
+            Expanded(
+              child: _LanguageColumn(
+                label: l10n.translateTo,
+                language: toLanguage,
+                onTap: onToTap,
               ),
+            ),
           ],
         ),
       ),
