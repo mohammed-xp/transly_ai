@@ -1,12 +1,32 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:transly_ai/core/data/models/user_model.dart';
 import 'package:transly_ai/core/di/service_locator.dart';
+import 'package:transly_ai/core/init/hive_initializer.dart';
 import 'package:transly_ai/core/theme/app_colors.dart';
 import 'package:transly_ai/features/splash/presentation/cubit/splash_cubit.dart';
+import 'package:transly_ai/hive_registrar.g.dart';
 import 'package:transly_ai/main.dart';
 
 void main() {
-  setUpAll(configureDependencies);
+  late Directory hiveDir;
+
+  setUpAll(() async {
+    hiveDir = await Directory.systemTemp.createTemp('transly_hive_');
+    Hive.init(hiveDir.path);
+    Hive.registerAdapters();
+    await Hive.openBox<UserModel>(HiveInitializer.userBox);
+    await Hive.openBox<String>(HiveInitializer.settingsBox);
+    await configureDependencies();
+  });
+
+  tearDownAll(() async {
+    await Hive.close();
+    await hiveDir.delete(recursive: true);
+  });
 
   testWidgets('TranslyApp builds and applies the design-system theme', (
     tester,
