@@ -1,24 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:transly_ai/core/domain/repos/logout_repo.dart';
-import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/core/session/session_manager.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/session_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/session_state.dart';
 
 import '../../../../helpers/fake_logout_repo.dart';
 import '../../../../helpers/session_cubit_factory.dart';
-
-class _GatedLogoutRepo implements LogoutRepo {
-  final gate = Completer<void>();
-
-  @override
-  Future<ApiResult<void>> logout() async {
-    await gate.future;
-    return const ApiResult.success(null);
-  }
-}
 
 void main() {
   Future<List<SessionState>> statesOf(
@@ -62,14 +50,14 @@ void main() {
   });
 
   test('ends as expired when the session expires mid sign-out', () async {
-    final logoutRepo = _GatedLogoutRepo();
+    final logoutRepo = FakeLogoutRepo(gate: Completer<void>());
     final session = SessionManager(logoutRepo);
     final cubit = buildCubit(session);
 
     final states = await statesOf(cubit, () async {
       final expiring = session.expire();
       await cubit.signOut();
-      logoutRepo.gate.complete();
+      logoutRepo.gate!.complete();
       await expiring;
     });
 

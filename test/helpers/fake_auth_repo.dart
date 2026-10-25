@@ -4,11 +4,14 @@ import 'package:transly_ai/core/domain/entities/user_entity.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/auth/domain/repos/auth_repo.dart';
 
+import 'fake_user_repo.dart';
+
 class FakeAuthRepo implements AuthRepo {
   FakeAuthRepo(
     this.signUpResult, {
     this.googleResult = const ApiResult.success(null),
-  });
+    ApiResult<UserEntity>? emailResult,
+  }) : emailResult = emailResult ?? ApiResult.success(testUser);
 
   ApiResult<void> signUpResult;
   final List<({String name, String email, String password})> signUps = [];
@@ -17,8 +20,11 @@ class FakeAuthRepo implements AuthRepo {
   ApiResult<UserEntity?> googleResult;
   int googleSignIns = 0;
 
-  /// When set, [signUpWithEmail] and [signInWithGoogle] wait for it before
-  /// answering, so a test can observe the in-flight state.
+  ApiResult<UserEntity> emailResult;
+  final List<({String email, String password})> emailSignIns = [];
+
+  /// When set, every sign-in/sign-up method waits for it before answering,
+  /// so a test can observe the in-flight state.
   Completer<void>? gate;
 
   @override
@@ -43,5 +49,9 @@ class FakeAuthRepo implements AuthRepo {
   Future<ApiResult<UserEntity>> signInWithEmail({
     required String email,
     required String password,
-  }) => throw UnimplementedError();
+  }) async {
+    emailSignIns.add((email: email, password: password));
+    await gate?.future;
+    return emailResult;
+  }
 }

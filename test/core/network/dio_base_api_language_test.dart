@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/network/dio_base_api.dart';
-import 'package:transly_ai/core/security/token_storage.dart';
 import 'package:transly_ai/core/session/session_manager.dart';
+
+import '../../helpers/fake_token_storage.dart';
 
 class _RecordingAdapter implements HttpClientAdapter {
   final List<RequestOptions> requests = [];
@@ -29,14 +30,6 @@ class _RecordingAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 }
 
-class _NoTokens implements TokenStorage {
-  @override
-  Future<String?> getAccessToken() async => null;
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
-}
-
 class _UnusedSession implements SessionManager {
   @override
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
@@ -48,7 +41,7 @@ void main() {
     var language = 'ar';
     final api = DioBaseApi(
       Dio()..httpClientAdapter = adapter,
-      _NoTokens(),
+      FakeTokenStorage(),
       _UnusedSession(),
       languageCode: () => language,
     );
