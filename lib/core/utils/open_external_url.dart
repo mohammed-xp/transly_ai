@@ -5,12 +5,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../widgets/toast/app_toast.dart';
 
-/// Opens [url] in an in-app browser tab, or shows an error toast when it
-/// can't be opened.
-Future<void> openExternalUrl(BuildContext context, Uri url) async {
+/// Opens [url] — in an in-app browser tab by default — or shows an error
+/// toast when it can't be opened. Links that aren't web pages (`mailto:`)
+/// need [LaunchMode.externalApplication].
+Future<void> openExternalUrl(
+  BuildContext context,
+  Uri url, {
+  LaunchMode mode = LaunchMode.inAppBrowserView,
+}) async {
   bool opened;
   try {
-    opened = await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+    opened = await launchUrl(url, mode: mode);
   } on PlatformException catch (_) {
     opened = false;
   }

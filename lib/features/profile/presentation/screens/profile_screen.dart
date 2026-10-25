@@ -13,6 +13,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/utils/open_external_url.dart';
+import '../../../../core/widgets/profile_row.dart';
 import '../../../../core/widgets/section_card.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 // import '../../../../core/widgets/toast/coming_soon_toast.dart';
@@ -34,7 +35,6 @@ import '../widgets/delete_account_sheet.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_identity.dart';
 import '../widgets/profile_plan_usage.dart';
-import '../widgets/profile_row.dart';
 import '../widgets/profile_sign_out_button.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -173,6 +173,17 @@ class _ProfileContent extends StatelessWidget {
                 label: l10n.profileTermsOfService,
                 trailing: const ProfileRowChevron(),
                 onTap: () => openExternalUrl(context, AppLinks.termsOfService),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimens.spaceXL),
+          SectionCard(
+            title: l10n.profileAppSection,
+            rows: [
+              ProfileRow(
+                label: l10n.profileAbout,
+                trailing: const ProfileRowChevron(),
+                onTap: () => context.pushNamed(AppRoutes.aboutName),
               ),
             ],
           ),

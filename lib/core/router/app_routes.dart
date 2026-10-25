@@ -10,6 +10,7 @@ abstract final class AppRoutes {
   static const String settings = '/settings';
   static const String profile = '/profile';
   static const String offlinePacks = '/offline-packs';
+  static const String about = '/about';
 
   static const String splashName = 'splash';
   static const String onboardingName = 'onboarding';
@@ -20,4 +21,5 @@ abstract final class AppRoutes {
   static const String settingsName = 'settings';
   static const String profileName = 'profile';
   static const String offlinePacksName = 'offline_packs';
+  static const String aboutName = 'about';
 }

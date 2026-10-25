@@ -1279,6 +1279,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide'**
   String get autoDownloadNoticeHide;
+
+  /// Heading of the profile section that links to the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get profileAppSection;
+
+  /// Profile row that opens the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get profileAbout;
+
+  /// Title of the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get aboutTitle;
+
+  /// Line under the app name on the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant AI translation in 90+ languages'**
+  String get aboutTagline;
+
+  /// Installed version pill on the about screen. Kept in English in every language, as the design shows.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String aboutVersion(String version);
+
+  /// Heading of the rate/share section on the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Support us'**
+  String get aboutSupportSection;
+
+  /// About screen row on iOS that opens the store listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Traduly on the App Store'**
+  String get aboutRateOnAppStore;
+
+  /// About screen row on Android that opens the store listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Traduly on Google Play'**
+  String get aboutRateOnPlayStore;
+
+  /// About screen row that opens the share sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with friends'**
+  String get aboutShare;
+
+  /// Text shared from the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate instantly with Traduly AI: {link}'**
+  String aboutShareMessage(String link);
+
+  /// Error toast when the share sheet can't be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open sharing. Please try again.'**
+  String get aboutShareFailed;
+
+  /// About screen row that shows the release notes of the installed version.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get aboutWhatsNew;
+
+  /// Heading of the help/contact section on the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get aboutHelpSection;
+
+  /// About screen row that opens the help center.
+  ///
+  /// In en, this message translates to:
+  /// **'Help center'**
+  String get aboutHelpCenter;
+
+  /// About screen row that emails support; the address is shown next to it.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get aboutContactUs;
+
+  /// Heading of the legal section on the about screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get aboutLegalSection;
+
+  /// About screen row that opens the hosted terms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get aboutTermsOfUse;
+
+  /// About screen row that opens the hosted privacy policy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get aboutPrivacyPolicy;
+
+  /// About screen row that opens the licenses of the packages the app uses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source licenses'**
+  String get aboutOpenSourceLicenses;
+
+  /// Footer of the about screen. {year} is the current year in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'© {year} Traduly. All rights reserved.'**
+  String aboutCopyright(String year);
 }
 
 class _AppLocalizationsDelegate

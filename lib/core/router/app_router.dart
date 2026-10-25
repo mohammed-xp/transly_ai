@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/about/presentation/screens/about_screen.dart';
 import '../../features/auth/presentation/screens/sign_in_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/home/presentation/screens/home_shell.dart';
@@ -47,6 +48,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.offlinePacks,
       name: AppRoutes.offlinePacksName,
       builder: (context, state) => const OfflinePacksScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.about,
+      name: AppRoutes.aboutName,
+      builder: (context, state) => const AboutScreen(),
     ),
     GoRoute(
       path: AppRoutes.history,

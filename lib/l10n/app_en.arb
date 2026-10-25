@@ -864,5 +864,103 @@
   "autoDownloadNoticeHide": "Hide",
   "@autoDownloadNoticeHide": {
     "description": "Hides the auto-download notice; the download goes on."
+  },
+  "profileAppSection": "App",
+  "@profileAppSection": {
+    "description": "Heading of the profile section that links to the about screen."
+  },
+  "profileAbout": "About",
+  "@profileAbout": {
+    "description": "Profile row that opens the about screen."
+  },
+  "aboutTitle": "About",
+  "@aboutTitle": {
+    "description": "Title of the about screen."
+  },
+  "aboutTagline": "Instant AI translation in 90+ languages",
+  "@aboutTagline": {
+    "description": "Line under the app name on the about screen."
+  },
+  "aboutVersion": "Version {version}",
+  "@aboutVersion": {
+    "description": "Installed version pill on the about screen. Kept in English in every language, as the design shows.",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.2.2"
+      }
+    }
+  },
+  "aboutSupportSection": "Support us",
+  "@aboutSupportSection": {
+    "description": "Heading of the rate/share section on the about screen."
+  },
+  "aboutRateOnAppStore": "Rate Traduly on the App Store",
+  "@aboutRateOnAppStore": {
+    "description": "About screen row on iOS that opens the store listing."
+  },
+  "aboutRateOnPlayStore": "Rate Traduly on Google Play",
+  "@aboutRateOnPlayStore": {
+    "description": "About screen row on Android that opens the store listing."
+  },
+  "aboutShare": "Share with friends",
+  "@aboutShare": {
+    "description": "About screen row that opens the share sheet."
+  },
+  "aboutShareMessage": "Translate instantly with Traduly AI: {link}",
+  "@aboutShareMessage": {
+    "description": "Text shared from the about screen.",
+    "placeholders": {
+      "link": {
+        "type": "String",
+        "example": "https://play.google.com/store/apps/details?id=tech.mohammedadil.transly"
+      }
+    }
+  },
+  "aboutShareFailed": "Couldn't open sharing. Please try again.",
+  "@aboutShareFailed": {
+    "description": "Error toast when the share sheet can't be opened."
+  },
+  "aboutWhatsNew": "What's new",
+  "@aboutWhatsNew": {
+    "description": "About screen row that shows the release notes of the installed version."
+  },
+  "aboutHelpSection": "Help",
+  "@aboutHelpSection": {
+    "description": "Heading of the help/contact section on the about screen."
+  },
+  "aboutHelpCenter": "Help center",
+  "@aboutHelpCenter": {
+    "description": "About screen row that opens the help center."
+  },
+  "aboutContactUs": "Contact us",
+  "@aboutContactUs": {
+    "description": "About screen row that emails support; the address is shown next to it."
+  },
+  "aboutLegalSection": "Legal",
+  "@aboutLegalSection": {
+    "description": "Heading of the legal section on the about screen."
+  },
+  "aboutTermsOfUse": "Terms of use",
+  "@aboutTermsOfUse": {
+    "description": "About screen row that opens the hosted terms."
+  },
+  "aboutPrivacyPolicy": "Privacy policy",
+  "@aboutPrivacyPolicy": {
+    "description": "About screen row that opens the hosted privacy policy."
+  },
+  "aboutOpenSourceLicenses": "Open-source licenses",
+  "@aboutOpenSourceLicenses": {
+    "description": "About screen row that opens the licenses of the packages the app uses."
+  },
+  "aboutCopyright": "© {year} Traduly. All rights reserved.",
+  "@aboutCopyright": {
+    "description": "Footer of the about screen. {year} is the current year in the locale's digits.",
+    "placeholders": {
+      "year": {
+        "type": "String",
+        "example": "2026"
+      }
+    }
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_icons.dart';
-import '../../../../core/theme/app_dimens.dart';
-import '../../../../core/theme/app_palette.dart';
-import '../../../../core/widgets/app_svg_icon.dart';
+import '../constants/app_icons.dart';
+import '../theme/app_dimens.dart';
+import '../theme/app_palette.dart';
+import 'app_svg_icon.dart';
 
 class ProfileRow extends StatelessWidget {
   const ProfileRow({

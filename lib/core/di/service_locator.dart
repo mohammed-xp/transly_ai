@@ -9,6 +9,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:upgrader/upgrader.dart';
 
+import '../../features/about/data/datasources/app_info_data_source.dart';
+import '../../features/about/data/datasources/app_info_data_source_impl.dart';
+import '../../features/about/data/repos/app_info_repo_impl.dart';
+import '../../features/about/domain/repos/app_info_repo.dart';
+import '../../features/about/domain/usecases/get_app_info_usecase.dart';
+import '../../features/about/presentation/cubit/app_info_cubit.dart';
 import '../../features/app_language/data/datasources/app_language_local_data_source.dart';
 import '../../features/app_language/data/datasources/app_language_local_data_source_impl.dart';
 import '../../features/app_language/data/repos/app_language_repo_impl.dart';
@@ -262,6 +268,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<LanguagesLocalDataSource>(
     () => LanguagesLocalDataSourceImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<AppInfoDataSource>(
+    AppInfoDataSourceImpl.new,
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -308,6 +317,9 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerLazySingleton<LanguagesRepo>(
     () => LanguagesRepoImpl(remote: serviceLocator(), local: serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<AppInfoRepo>(
+    () => AppInfoRepoImpl(serviceLocator()),
   );
   // A singleton: it holds the download statuses for the whole session.
   serviceLocator.registerLazySingleton<OfflineModelsRepo>(
@@ -433,6 +445,9 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(
     () => SaveOfflinePacksSettingsUseCase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(
+    () => GetAppInfoUseCase(serviceLocator()),
+  );
 
   // ── Cubits (registerFactory — fresh instance per screen) ──
   serviceLocator.registerFactory(
@@ -544,5 +559,8 @@ Future<void> configureDependencies() async {
       getSavedTone: serviceLocator(),
       saveTone: serviceLocator(),
     ),
+  );
+  serviceLocator.registerFactory(
+    () => AppInfoCubit(getAppInfo: serviceLocator()),
   );
 }

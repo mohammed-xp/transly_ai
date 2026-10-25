@@ -57,6 +57,9 @@ abstract final class AppIcons {
   // ── Profile ──
   static const String cameraBadge = '$_dir/camera_badge.svg';
 
+  // ── About ── (not mirrored in RTL, as the design draws it)
+  static const String externalLink = '$_dir/external_link.svg';
+
   // ── Offline packs (designs `12d` and `02d`) ──
   static const String download = '$_dir/download.svg';
   static const String downloadNotice = '$_dir/download_notice.svg';
@@ -100,6 +103,7 @@ abstract final class AppIcons {
     error,
     delete,
     cameraBadge,
+    externalLink,
     download,
     downloadNotice,
     trash,

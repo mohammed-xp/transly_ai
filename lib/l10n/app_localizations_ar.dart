@@ -673,4 +673,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get autoDownloadNoticeHide => 'إخفاء';
+
+  @override
+  String get profileAppSection => 'التطبيق';
+
+  @override
+  String get profileAbout => 'عن التطبيق';
+
+  @override
+  String get aboutTitle => 'عن التطبيق';
+
+  @override
+  String get aboutTagline => 'ترجمة فورية بالذكاء الاصطناعي لأكثر من ٩٠ لغة';
+
+  @override
+  String aboutVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get aboutSupportSection => 'ادعمنا';
+
+  @override
+  String get aboutRateOnAppStore => 'قيّم Traduly على المتجر';
+
+  @override
+  String get aboutRateOnPlayStore => 'قيّم Traduly على المتجر';
+
+  @override
+  String get aboutShare => 'شارك التطبيق مع أصدقائك';
+
+  @override
+  String aboutShareMessage(String link) {
+    return 'ترجم فوراً مع Traduly AI: $link';
+  }
+
+  @override
+  String get aboutShareFailed => 'تعذّر فتح المشاركة. حاول مرة أخرى.';
+
+  @override
+  String get aboutWhatsNew => 'ما الجديد';
+
+  @override
+  String get aboutHelpSection => 'الدعم';
+
+  @override
+  String get aboutHelpCenter => 'مركز المساعدة';
+
+  @override
+  String get aboutContactUs => 'تواصل معنا';
+
+  @override
+  String get aboutLegalSection => 'قانوني';
+
+  @override
+  String get aboutTermsOfUse => 'شروط الاستخدام';
+
+  @override
+  String get aboutPrivacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get aboutOpenSourceLicenses => 'تراخيص المصادر المفتوحة';
+
+  @override
+  String aboutCopyright(String year) {
+    return '© $year Traduly. جميع الحقوق محفوظة';
+  }
 }
