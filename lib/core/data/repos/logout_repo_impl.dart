@@ -10,15 +10,25 @@ class LogoutRepoImpl implements LogoutRepo {
   final UserLocalDataSource _userLocal;
   final GoogleAuthDataSource _google;
 
+  /// Every step runs even when an earlier one fails: a leftover cached user
+  /// signs the user back in on the next launch, and a leftover refresh token
+  /// outlives the session. The first error is the one reported.
   @override
   Future<ApiResult<void>> logout() async {
-    try {
-      await _userLocal.clearCachedUserData();
-      await _userLocal.clearTokens();
-      await _google.signOut();
-      return const ApiResult.success(null);
-    } catch (e) {
-      return ApiResult.failure(ErrorMapper.map(e));
+    Object? error;
+    for (final step in [
+      _userLocal.clearTokens,
+      _userLocal.clearCachedUserData,
+      _google.signOut,
+    ]) {
+      try {
+        await step();
+      } catch (e) {
+        error ??= e;
+      }
     }
+    return error == null
+        ? const ApiResult.success(null)
+        : ApiResult.failure(ErrorMapper.map(error));
   }
 }
