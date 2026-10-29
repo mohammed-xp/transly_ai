@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,8 +12,10 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
-// import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
-// import '../../../conversation/presentation/screens/conversation_screen.dart';
+import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
+import '../../../conversation/presentation/cubit/conversation_cubit.dart';
+import '../../../conversation/presentation/screens/conversation_screen.dart';
+import '../../../conversation/presentation/widgets/voice_dock_tab.dart';
 import '../../../language_picker/presentation/widgets/language_picker_sheet.dart';
 import '../../../translate/presentation/cubit/translate_cubit.dart';
 import '../../../translate/presentation/screens/translate_screen.dart';
@@ -37,13 +41,22 @@ class HomeShell extends StatelessWidget {
               ..languagesChanged(from: home.from, to: home.to);
           },
         ),
+        BlocProvider(
+          create: (context) {
+            final home = context.read<HomeCubit>().state;
+            return serviceLocator<ConversationCubit>()
+              ..languagesChanged(from: home.from, to: home.to);
+          },
+        ),
       ],
       child: BlocListener<HomeCubit, HomeState>(
-        listenWhen: (previous, current) =>
-            previous.from != current.from || previous.to != current.to,
-        listener: (context, state) => context
-            .read<TranslateCubit>()
-            .languagesChanged(from: state.from, to: state.to),
+        listenWhen: _pairChanged,
+        listener: (context, state) {
+          context.read<ConversationCubit>().languagesChanged(
+            from: state.from,
+            to: state.to,
+          );
+        },
         child: Builder(
           builder: (context) => UiLanguageListener(
             onChanged: context.read<TranslateCubit>().uiLanguageChanged,
@@ -65,52 +78,91 @@ class _HomeView extends StatefulWidget {
 class _HomeViewState extends State<_HomeView> {
   TranslateInputMode _mode = TranslateInputMode.keyboard;
 
+  // Built once, so the keyboard's inset changing every frame of its animation
+  // doesn't rebuild them.
+  late final Widget _header = _HeaderSection(onCover: _pauseConversation);
+  late final Widget _languageBar = _LanguageBarSection(
+    onCover: _pauseConversation,
+  );
+
   void _selectMode(TranslateInputMode mode) {
     if (mode == _mode) return;
     FocusManager.instance.primaryFocus?.unfocus();
+    _pauseConversation();
+    if (mode == TranslateInputMode.voice) {
+      unawaited(context.read<ConversationCubit>().refreshQuota());
+    }
+    if (mode == TranslateInputMode.keyboard) _applyPairToTranslate();
     setState(() => _mode = mode);
+  }
+
+  /// Stops the mic and speech when the Voice tab is left or covered, so they
+  /// don't carry on out of sight.
+  void _pauseConversation() {
+    if (_mode != TranslateInputMode.voice) return;
+    unawaited(context.read<ConversationCubit>().pause());
+  }
+
+  /// The Translate tab takes a new pair only while it shows: translating out
+  /// of sight would spend quota and toast its errors over another tab.
+  void _applyPairToTranslate() {
+    final home = context.read<HomeCubit>().state;
+    context.read<TranslateCubit>().languagesChanged(
+      from: home.from,
+      to: home.to,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final isVoice = _mode == TranslateInputMode.voice;
 
-    return PopScope(
-      canPop: _mode == TranslateInputMode.keyboard,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _selectMode(TranslateInputMode.keyboard);
-      },
-      child: Scaffold(
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              const _HeaderSection(),
-              const _LanguageBarSection(),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: keyboardOpen ? AppDimens.spaceL : 0,
-                  ),
-                  child: AppToastScope(
-                    bottomSpacing: AppDimens.spaceM,
-                    avoidSystemInsets: false,
-                    child: IndexedStack(
-                      index: _mode.index,
-                      children: const [
-                        TranslateScreen(),
-                        // TODO(coming-soon): restore voice and camera tabs (and the imports above).
-                        // ConversationScreen(),
-                        // CameraScanScreen(),
-                      ],
+    return BlocListener<HomeCubit, HomeState>(
+      listenWhen: (previous, current) =>
+          _mode == TranslateInputMode.keyboard &&
+          _pairChanged(previous, current),
+      listener: (context, _) => _applyPairToTranslate(),
+      child: PopScope(
+        canPop: _mode == TranslateInputMode.keyboard,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _selectMode(TranslateInputMode.keyboard);
+        },
+        child: Scaffold(
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                _header,
+                _languageBar,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: keyboardOpen ? AppDimens.spaceL : 0,
+                    ),
+                    child: AppToastScope(
+                      bottomSpacing: AppDimens.spaceM,
+                      avoidSystemInsets: false,
+                      child: IndexedStack(
+                        index: _mode.index,
+                        children: const [
+                          TranslateScreen(),
+                          ConversationScreen(),
+                          CameraScanScreen(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // TODO(coming-soon): restore the input dock together with the tabs.
-              // if (!keyboardOpen)
-              //   InputDock(currentMode: _mode, onModeSelected: _selectMode),
-            ],
+                if (!keyboardOpen)
+                  InputDock(
+                    currentMode: _mode,
+                    onModeSelected: _selectMode,
+                    voiceTab: isVoice ? const VoiceDockTab() : null,
+                    voiceTabRaise: VoiceDockTab.raise,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -118,8 +170,14 @@ class _HomeViewState extends State<_HomeView> {
   }
 }
 
+bool _pairChanged(HomeState previous, HomeState current) =>
+    previous.from != current.from || previous.to != current.to;
+
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
+  const _HeaderSection({required this.onCover});
+
+  /// Called right before the profile covers the shell.
+  final VoidCallback onCover;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +188,10 @@ class _HeaderSection extends StatelessWidget {
         return TranslateHeader(
           userName: userName,
           isPro: isPro,
-          onProfileTap: () => context.pushNamed(AppRoutes.profileName),
+          onProfileTap: () {
+            onCover();
+            context.pushNamed(AppRoutes.profileName);
+          },
         );
       },
     );
@@ -138,12 +199,16 @@ class _HeaderSection extends StatelessWidget {
 }
 
 class _LanguageBarSection extends StatelessWidget {
-  const _LanguageBarSection();
+  const _LanguageBarSection({required this.onCover});
+
+  /// Called right before a language picker covers the shell.
+  final VoidCallback onCover;
 
   Future<void> _openPicker(BuildContext context, LanguageSide side) async {
     // A second tap that lands together with the first must not stack another
     // sheet: closing the lower one would put its stale pair back.
     if (ModalRoute.of(context)?.isCurrent == false) return;
+    onCover();
     final homeCubit = context.read<HomeCubit>();
     final pair = await showLanguagePickerSheet(
       context,

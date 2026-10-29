@@ -453,11 +453,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileUpgradeToPro => 'Upgrade to Pro';
 
   @override
-  String get conversationComingSoonTitle => 'Voice mode';
+  String get conversationEmptyTitle => 'Just speak';
 
   @override
-  String get conversationComingSoonBody =>
-      'Coming soon — speak and get an instant translation.';
+  String conversationEmptyBody(String languages) {
+    return '$languages — the language is detected automatically, so you can pass the phone back and forth.';
+  }
+
+  @override
+  String conversationLanguagesOr(String first, String second) {
+    return '$first or $second';
+  }
+
+  @override
+  String get conversationReadAloud => 'Read translations aloud';
+
+  @override
+  String get conversationReadAloudBody => 'Plays after each turn';
+
+  @override
+  String get conversationStatusIdle => 'Tap the mic and speak either language';
+
+  @override
+  String conversationStatusListening(String languages) {
+    return 'Listening · $languages';
+  }
+
+  @override
+  String get conversationStatusOffline => 'Offline · microphone paused';
+
+  @override
+  String get conversationStatusMicOff => 'Microphone is off';
+
+  @override
+  String get conversationDetecting => 'Detecting language…';
+
+  @override
+  String get conversationTranslating => 'Translating…';
+
+  @override
+  String conversationStatusOutOfTime(String time) {
+    return 'Conversation time used up · back at $time';
+  }
+
+  @override
+  String get conversationNoSpeech => 'Didn\'t catch that — try again.';
+
+  @override
+  String conversationUnsupportedLanguage(String languages) {
+    return 'That didn\'t sound like $languages. Check the languages you picked.';
+  }
+
+  @override
+  String get conversationOutOfTime =>
+      'You\'ve used today\'s conversation time.';
+
+  @override
+  String get conversationRecordingFailed => 'Couldn\'t record. Try again.';
+
+  @override
+  String conversationTurnMeta(String language, String time) {
+    return '$language · $time';
+  }
+
+  @override
+  String get conversationOfflineTitle => 'You\'re offline';
+
+  @override
+  String get conversationOfflineBody =>
+      'Translation resumes when you reconnect.';
+
+  @override
+  String get conversationMicDeniedTitle => 'Microphone access needed';
+
+  @override
+  String conversationMicDeniedBody(String languages) {
+    return 'Traduly listens to detect who\'s speaking — $languages — and translates for the other person.';
+  }
+
+  @override
+  String get conversationOpenSettings => 'Open Settings';
 
   @override
   String get cameraScanComingSoonTitle => 'Camera mode';

@@ -16,15 +16,29 @@ enum TranslateInputMode { keyboard, voice, camera }
 /// [currentMode] marks the active tab and [onModeSelected] fires when another
 /// tab is tapped; the active tab stays inert. Owned by `HomeShell`, which
 /// keeps it mounted while the content above it swaps.
+///
+/// A [voiceTab] replaces the plain Voice tab with one that rises
+/// [voiceTabRaise] above the dock (design `Conversation v2`); the dock then
+/// reserves that height so the raised part stays tappable.
 class InputDock extends StatelessWidget {
   const InputDock({
     super.key,
     required this.currentMode,
     required this.onModeSelected,
+    this.voiceTab,
+    this.voiceTabRaise = 0,
   });
 
   final TranslateInputMode currentMode;
   final ValueChanged<TranslateInputMode> onModeSelected;
+  final Widget? voiceTab;
+
+  /// How far [voiceTab] reaches above the top of the tab row.
+  final double voiceTabRaise;
+
+  static const double _padding = 6;
+  static const double _border = 1;
+  static const double _topMargin = AppDimens.spaceM - 2;
 
   /// Design bottom margin (28) — grown when the device's bottom inset
   /// (gesture bar / home indicator) would otherwise overlap the dock.
@@ -35,17 +49,60 @@ class InputDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final voiceTab = this.voiceTab;
+    if (voiceTab == null) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppDimens.spaceL,
+          _topMargin,
+          AppDimens.spaceL,
+          _bottomMargin(context),
+        ),
+        child: _dock(context),
+      );
+    }
+
+    // The dock sits [voiceTabRaise] below the content above it, and the
+    // raised tab reaches up into that gap from the top of the tab row.
+    const inset = _padding + _border;
+    final overhang = math.max(0.0, voiceTabRaise - inset);
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        AppDimens.spaceL,
+        voiceTabRaise - overhang,
+        AppDimens.spaceL,
+        _bottomMargin(context),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: overhang),
+            child: _dock(context),
+          ),
+          Positioned(
+            top: 0,
+            left: inset,
+            right: inset,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
+                Expanded(child: Center(child: voiceTab)),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dock(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.palette;
 
     return Container(
-      margin: EdgeInsets.fromLTRB(
-        AppDimens.spaceL,
-        AppDimens.spaceM - 2,
-        AppDimens.spaceL,
-        _bottomMargin(context),
-      ),
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(_padding),
       decoration: BoxDecoration(
         color: c.surface,
         borderRadius: BorderRadius.circular(AppDimens.radiusDock),
@@ -73,14 +130,16 @@ class InputDock extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _DockTab(
-              icon: AppIcons.mic,
-              label: l10n.translateDockVoice,
-              active: currentMode == TranslateInputMode.voice,
-              onTap: currentMode == TranslateInputMode.voice
-                  ? null
-                  : () => onModeSelected(TranslateInputMode.voice),
-            ),
+            child: voiceTab != null
+                ? const SizedBox.shrink()
+                : _DockTab(
+                    icon: AppIcons.mic,
+                    label: l10n.translateDockVoice,
+                    active: currentMode == TranslateInputMode.voice,
+                    onTap: currentMode == TranslateInputMode.voice
+                        ? null
+                        : () => onModeSelected(TranslateInputMode.voice),
+                  ),
           ),
           Expanded(
             child: _DockTab(

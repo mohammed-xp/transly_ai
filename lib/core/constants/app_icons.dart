@@ -66,6 +66,16 @@ abstract final class AppIcons {
   static const String trash = '$_dir/trash.svg';
   static const String close = '$_dir/close.svg';
 
+  // ── Conversation (design `Conversation v2`) ──
+  static const String globe = '$_dir/globe.svg';
+  static const String wifiOff = '$_dir/wifi_off.svg';
+  static const String micOff = '$_dir/mic_off.svg';
+
+  /// The raised mic of the voice tab, filled where [mic] is outlined.
+  static const String micFilled = '$_dir/mic_filled.svg';
+
+  static const String stop = '$_dir/stop.svg';
+
   // ── Logo mark (two rings; drawn as designed, not recoloured) ──
   static const String markWhite = '$_dir/mark_white.svg';
   static const String markCoral = '$_dir/mark_coral.svg';
@@ -108,6 +118,11 @@ abstract final class AppIcons {
     downloadNotice,
     trash,
     close,
+    globe,
+    wifiOff,
+    micOff,
+    micFilled,
+    stop,
     markWhite,
     markCoral,
   ];

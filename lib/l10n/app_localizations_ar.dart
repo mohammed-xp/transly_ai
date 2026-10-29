@@ -450,11 +450,85 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileUpgradeToPro => 'الترقية إلى Pro';
 
   @override
-  String get conversationComingSoonTitle => 'وضع الصوت';
+  String get conversationEmptyTitle => 'تحدّث فقط';
 
   @override
-  String get conversationComingSoonBody =>
-      'قريبًا — تحدّث واحصل على ترجمة فورية.';
+  String conversationEmptyBody(String languages) {
+    return '$languages — تُحدَّد اللغة تلقائيًا، فيمكنكما تبادل الهاتف بينكما.';
+  }
+
+  @override
+  String conversationLanguagesOr(String first, String second) {
+    return '$first أو $second';
+  }
+
+  @override
+  String get conversationReadAloud => 'قراءة الترجمات بصوت عالٍ';
+
+  @override
+  String get conversationReadAloudBody => 'تُشغَّل بعد كل دور';
+
+  @override
+  String get conversationStatusIdle =>
+      'اضغط على الميكروفون وتحدّث بأيٍّ من اللغتين';
+
+  @override
+  String conversationStatusListening(String languages) {
+    return 'يستمع · $languages';
+  }
+
+  @override
+  String get conversationStatusOffline => 'غير متصل · الميكروفون متوقف';
+
+  @override
+  String get conversationStatusMicOff => 'الميكروفون مغلق';
+
+  @override
+  String get conversationDetecting => 'جارٍ تحديد اللغة…';
+
+  @override
+  String get conversationTranslating => 'جارٍ الترجمة…';
+
+  @override
+  String conversationStatusOutOfTime(String time) {
+    return 'انتهى وقت المحادثة · يعود الساعة $time';
+  }
+
+  @override
+  String get conversationNoSpeech => 'لم يُسمع كلام واضح — حاول مرة أخرى.';
+
+  @override
+  String conversationUnsupportedLanguage(String languages) {
+    return 'يبدو أن الكلام ليس $languages. تحقّق من اللغتين المختارتين.';
+  }
+
+  @override
+  String get conversationOutOfTime => 'انتهى وقت المحادثة المتاح لك اليوم.';
+
+  @override
+  String get conversationRecordingFailed => 'تعذّر التسجيل. حاول مرة أخرى.';
+
+  @override
+  String conversationTurnMeta(String language, String time) {
+    return '$language · $time';
+  }
+
+  @override
+  String get conversationOfflineTitle => 'أنت غير متصل';
+
+  @override
+  String get conversationOfflineBody => 'تُستأنف الترجمة عند عودة الاتصال.';
+
+  @override
+  String get conversationMicDeniedTitle => 'يلزم الوصول إلى الميكروفون';
+
+  @override
+  String conversationMicDeniedBody(String languages) {
+    return 'يستمع Traduly ليعرف من يتحدث — $languages — ويترجم للطرف الآخر.';
+  }
+
+  @override
+  String get conversationOpenSettings => 'فتح الإعدادات';
 
   @override
   String get cameraScanComingSoonTitle => 'وضع الكاميرا';

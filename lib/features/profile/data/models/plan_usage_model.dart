@@ -6,12 +6,16 @@ class PlanUsageModel {
     required this.charactersLimit,
     required this.charactersUsed,
     required this.resetsAt,
+    this.audioSecondsLimit,
+    this.audioSecondsRemaining,
   });
 
   final String plan;
   final int charactersLimit;
   final int charactersUsed;
   final DateTime resetsAt;
+  final int? audioSecondsLimit;
+  final int? audioSecondsRemaining;
 
   factory PlanUsageModel.fromJson(Map<String, dynamic> json) {
     return PlanUsageModel(
@@ -19,6 +23,8 @@ class PlanUsageModel {
       charactersLimit: (json['charactersLimit'] as num).toInt(),
       charactersUsed: (json['charactersUsed'] as num).toInt(),
       resetsAt: DateTime.parse(json['resetsAt'] as String),
+      audioSecondsLimit: (json['audioSecondsLimit'] as num?)?.toInt(),
+      audioSecondsRemaining: (json['audioSecondsRemaining'] as num?)?.toInt(),
     );
   }
 
@@ -28,6 +34,8 @@ class PlanUsageModel {
       charactersLimit: charactersLimit,
       charactersUsed: charactersUsed,
       resetsAt: resetsAt,
+      audioSecondsLimit: audioSecondsLimit,
+      audioSecondsRemaining: audioSecondsRemaining,
     );
   }
 }

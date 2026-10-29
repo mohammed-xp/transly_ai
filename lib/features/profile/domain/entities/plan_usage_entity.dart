@@ -1,11 +1,13 @@
 /// The user's plan and how much of its character quota the current window
-/// has consumed (`GET /api/v1/usage`).
+/// has consumed (`GET /api/v1/usage`), with the conversation seconds left.
 class PlanUsageEntity {
   const PlanUsageEntity({
     required this.plan,
     required this.charactersLimit,
     required this.charactersUsed,
     required this.resetsAt,
+    this.audioSecondsLimit,
+    this.audioSecondsRemaining,
   });
 
   static const String freePlan = 'free';
@@ -14,6 +16,11 @@ class PlanUsageEntity {
   final int charactersLimit;
   final int charactersUsed;
   final DateTime resetsAt;
+
+  /// Conversation-mode seconds in the window; null when the server doesn't
+  /// report them.
+  final int? audioSecondsLimit;
+  final int? audioSecondsRemaining;
 
   /// Every plan other than the free one is a paid Pro plan. A null [plan]
   /// (none known yet) is not Pro.

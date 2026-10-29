@@ -11,6 +11,7 @@ class FlutterTtsService implements TtsService {
   static const Map<String, String> _regionTags = {'en': 'en-US', 'ar': 'ar-SA'};
 
   final Map<String, String> _resolvedTags = {};
+  bool _awaitsCompletion = false;
 
   @override
   Future<void> speak({
@@ -24,6 +25,10 @@ class FlutterTtsService implements TtsService {
     if (tag == null) return;
 
     try {
+      if (!_awaitsCompletion) {
+        await _tts.awaitSpeakCompletion(true);
+        _awaitsCompletion = true;
+      }
       await _tts.setLanguage(tag);
       await _tts.speak(trimmed);
     } on PlatformException catch (_) {

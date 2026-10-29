@@ -41,6 +41,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.toastNeutralChip,
     required this.toastNeutralIcon,
     required this.toastErrorChip,
+    required this.tintFill,
+    required this.tintBorder,
+    required this.tintGradient,
+    required this.tintDivider,
+    required this.focusRing,
   });
 
   final Color surface;
@@ -92,6 +97,19 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color toastNeutralIcon;
   final Color toastErrorChip;
 
+  /// Coral-tinted chips and selected options (conversation tab).
+  final Color tintFill;
+  final Color tintBorder;
+
+  /// The other speaker's bubble and the hero tile — flat in dark mode.
+  final Gradient tintGradient;
+
+  /// The rule between a tinted bubble's text and its translation.
+  final Color tintDivider;
+
+  /// The halo around whatever is listening right now.
+  final Color focusRing;
+
   static const light = AppPalette(
     surface: AppColors.surfaceLight,
     border: AppColors.borderLight,
@@ -128,6 +146,15 @@ class AppPalette extends ThemeExtension<AppPalette> {
     toastNeutralChip: Color(0x14FFFFFF),
     toastNeutralIcon: AppColors.captionMutedLight,
     toastErrorChip: AppColors.primary,
+    tintFill: AppColors.outputBgLight,
+    tintBorder: AppColors.tintBorderLight,
+    tintGradient: LinearGradient(
+      begin: Alignment(-0.2, -1),
+      end: Alignment(0.2, 1),
+      colors: [AppColors.outputBgLight, AppColors.outputBgLight2],
+    ),
+    tintDivider: Color(0x29C0461F),
+    focusRing: Color(0x2EFF5836),
   );
 
   static final dark = AppPalette(
@@ -169,6 +196,16 @@ class AppPalette extends ThemeExtension<AppPalette> {
     toastNeutralChip: AppColors.surfaceDark,
     toastNeutralIcon: AppColors.textSecondaryDark,
     toastErrorChip: AppColors.accentDark,
+    tintFill: AppColors.accentDark.withValues(alpha: 0.14),
+    tintBorder: AppColors.accentDark.withValues(alpha: 0.3),
+    tintGradient: LinearGradient(
+      colors: [
+        AppColors.accentDark.withValues(alpha: 0.14),
+        AppColors.accentDark.withValues(alpha: 0.14),
+      ],
+    ),
+    tintDivider: AppColors.accentDark2.withValues(alpha: 0.22),
+    focusRing: AppColors.accentDark.withValues(alpha: 0.25),
   );
 
   @override
@@ -204,6 +241,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? toastNeutralChip,
     Color? toastNeutralIcon,
     Color? toastErrorChip,
+    Color? tintFill,
+    Color? tintBorder,
+    Gradient? tintGradient,
+    Color? tintDivider,
+    Color? focusRing,
   }) {
     return AppPalette(
       surface: surface ?? this.surface,
@@ -237,6 +279,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
       toastNeutralChip: toastNeutralChip ?? this.toastNeutralChip,
       toastNeutralIcon: toastNeutralIcon ?? this.toastNeutralIcon,
       toastErrorChip: toastErrorChip ?? this.toastErrorChip,
+      tintFill: tintFill ?? this.tintFill,
+      tintBorder: tintBorder ?? this.tintBorder,
+      tintGradient: tintGradient ?? this.tintGradient,
+      tintDivider: tintDivider ?? this.tintDivider,
+      focusRing: focusRing ?? this.focusRing,
     );
   }
 
@@ -291,6 +338,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
         t,
       )!,
       toastErrorChip: Color.lerp(toastErrorChip, other.toastErrorChip, t)!,
+      tintFill: Color.lerp(tintFill, other.tintFill, t)!,
+      tintBorder: Color.lerp(tintBorder, other.tintBorder, t)!,
+      tintGradient: Gradient.lerp(tintGradient, other.tintGradient, t)!,
+      tintDivider: Color.lerp(tintDivider, other.tintDivider, t)!,
+      focusRing: Color.lerp(focusRing, other.focusRing, t)!,
     );
   }
 }

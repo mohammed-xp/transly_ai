@@ -890,17 +890,137 @@ abstract class AppLocalizations {
   /// **'Upgrade to Pro'**
   String get profileUpgradeToPro;
 
-  /// Title of the placeholder shown on the voice-input tab before it is built.
+  /// Title of the conversation tab before anything has been said.
   ///
   /// In en, this message translates to:
-  /// **'Voice mode'**
-  String get conversationComingSoonTitle;
+  /// **'Just speak'**
+  String get conversationEmptyTitle;
 
-  /// Body text of the placeholder shown on the voice-input tab before it is built.
+  /// Body of the conversation tab before anything has been said.
   ///
   /// In en, this message translates to:
-  /// **'Coming soon — speak and get an instant translation.'**
-  String get conversationComingSoonBody;
+  /// **'{languages} — the language is detected automatically, so you can pass the phone back and forth.'**
+  String conversationEmptyBody(String languages);
+
+  /// The two languages the conversation tab listens for.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} or {second}'**
+  String conversationLanguagesOr(String first, String second);
+
+  /// Switch on the empty conversation tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Read translations aloud'**
+  String get conversationReadAloud;
+
+  /// Description under the read-aloud switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Plays after each turn'**
+  String get conversationReadAloudBody;
+
+  /// Caption above the mic while it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic and speak either language'**
+  String get conversationStatusIdle;
+
+  /// Caption above the mic while it is listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening · {languages}'**
+  String conversationStatusListening(String languages);
+
+  /// Caption above the mic when there is no connection.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline · microphone paused'**
+  String get conversationStatusOffline;
+
+  /// Caption above the mic when microphone access was denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone is off'**
+  String get conversationStatusMicOff;
+
+  /// Shown while the app works out which language is being spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'Detecting language…'**
+  String get conversationDetecting;
+
+  /// Shown while a recorded turn is being translated.
+  ///
+  /// In en, this message translates to:
+  /// **'Translating…'**
+  String get conversationTranslating;
+
+  /// Caption above the mic once today's conversation seconds are spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation time used up · back at {time}'**
+  String conversationStatusOutOfTime(String time);
+
+  /// Toast when a recorded turn held no clear speech.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t catch that — try again.'**
+  String get conversationNoSpeech;
+
+  /// Toast when a turn was spoken in neither of the two languages.
+  ///
+  /// In en, this message translates to:
+  /// **'That didn\'t sound like {languages}. Check the languages you picked.'**
+  String conversationUnsupportedLanguage(String languages);
+
+  /// Toast when the daily conversation seconds ran out.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used today\'s conversation time.'**
+  String get conversationOutOfTime;
+
+  /// Toast when the microphone could not record.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t record. Try again.'**
+  String get conversationRecordingFailed;
+
+  /// Under a turn: the language it was spoken in and when.
+  ///
+  /// In en, this message translates to:
+  /// **'{language} · {time}'**
+  String conversationTurnMeta(String language, String time);
+
+  /// Title of the banner shown on the conversation tab without a connection.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline'**
+  String get conversationOfflineTitle;
+
+  /// Body of the offline banner on the conversation tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation resumes when you reconnect.'**
+  String get conversationOfflineBody;
+
+  /// Title shown when the app may not use the microphone.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access needed'**
+  String get conversationMicDeniedTitle;
+
+  /// Explains why the conversation tab needs the microphone.
+  ///
+  /// In en, this message translates to:
+  /// **'Traduly listens to detect who\'s speaking — {languages} — and translates for the other person.'**
+  String conversationMicDeniedBody(String languages);
+
+  /// Button that opens the system settings to allow the microphone.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get conversationOpenSettings;
 
   /// Title of the placeholder shown on the camera-input tab before it is built.
   ///

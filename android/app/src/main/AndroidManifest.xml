@@ -2,6 +2,8 @@
     <!-- Required for release builds too, now that translation and sign-in
          call our backend API — not just Firebase/ML Kit's own SDKs. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Conversation mode records each spoken turn. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:label="Traduly AI"
         android:name="${applicationName}"

@@ -574,13 +574,143 @@
   "@profileUpgradeToPro": {
     "description": "Button on the free-plan card that opens the Pro upgrade."
   },
-  "conversationComingSoonTitle": "Voice mode",
-  "@conversationComingSoonTitle": {
-    "description": "Title of the placeholder shown on the voice-input tab before it is built."
+  "conversationEmptyTitle": "Just speak",
+  "@conversationEmptyTitle": {
+    "description": "Title of the conversation tab before anything has been said."
   },
-  "conversationComingSoonBody": "Coming soon — speak and get an instant translation.",
-  "@conversationComingSoonBody": {
-    "description": "Body text of the placeholder shown on the voice-input tab before it is built."
+  "conversationEmptyBody": "{languages} — the language is detected automatically, so you can pass the phone back and forth.",
+  "@conversationEmptyBody": {
+    "description": "Body of the conversation tab before anything has been said.",
+    "placeholders": {
+      "languages": {
+        "type": "String",
+        "example": "English or Arabic"
+      }
+    }
+  },
+  "conversationLanguagesOr": "{first} or {second}",
+  "@conversationLanguagesOr": {
+    "description": "The two languages the conversation tab listens for.",
+    "placeholders": {
+      "first": {
+        "type": "String",
+        "example": "English"
+      },
+      "second": {
+        "type": "String",
+        "example": "Arabic"
+      }
+    }
+  },
+  "conversationReadAloud": "Read translations aloud",
+  "@conversationReadAloud": {
+    "description": "Switch on the empty conversation tab."
+  },
+  "conversationReadAloudBody": "Plays after each turn",
+  "@conversationReadAloudBody": {
+    "description": "Description under the read-aloud switch."
+  },
+  "conversationStatusIdle": "Tap the mic and speak either language",
+  "@conversationStatusIdle": {
+    "description": "Caption above the mic while it is off."
+  },
+  "conversationStatusListening": "Listening · {languages}",
+  "@conversationStatusListening": {
+    "description": "Caption above the mic while it is listening.",
+    "placeholders": {
+      "languages": {
+        "type": "String",
+        "example": "English or العربية"
+      }
+    }
+  },
+  "conversationStatusOffline": "Offline · microphone paused",
+  "@conversationStatusOffline": {
+    "description": "Caption above the mic when there is no connection."
+  },
+  "conversationStatusMicOff": "Microphone is off",
+  "@conversationStatusMicOff": {
+    "description": "Caption above the mic when microphone access was denied."
+  },
+  "conversationDetecting": "Detecting language…",
+  "@conversationDetecting": {
+    "description": "Shown while the app works out which language is being spoken."
+  },
+  "conversationTranslating": "Translating…",
+  "@conversationTranslating": {
+    "description": "Shown while a recorded turn is being translated."
+  },
+  "conversationStatusOutOfTime": "Conversation time used up · back at {time}",
+  "@conversationStatusOutOfTime": {
+    "description": "Caption above the mic once today's conversation seconds are spent.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "03:00"
+      }
+    }
+  },
+  "conversationNoSpeech": "Didn't catch that — try again.",
+  "@conversationNoSpeech": {
+    "description": "Toast when a recorded turn held no clear speech."
+  },
+  "conversationUnsupportedLanguage": "That didn't sound like {languages}. Check the languages you picked.",
+  "@conversationUnsupportedLanguage": {
+    "description": "Toast when a turn was spoken in neither of the two languages.",
+    "placeholders": {
+      "languages": {
+        "type": "String",
+        "example": "English or Arabic"
+      }
+    }
+  },
+  "conversationOutOfTime": "You've used today's conversation time.",
+  "@conversationOutOfTime": {
+    "description": "Toast when the daily conversation seconds ran out."
+  },
+  "conversationRecordingFailed": "Couldn't record. Try again.",
+  "@conversationRecordingFailed": {
+    "description": "Toast when the microphone could not record."
+  },
+  "conversationTurnMeta": "{language} · {time}",
+  "@conversationTurnMeta": {
+    "description": "Under a turn: the language it was spoken in and when.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      },
+      "time": {
+        "type": "String",
+        "example": "10:24"
+      }
+    }
+  },
+  "conversationOfflineTitle": "You're offline",
+  "@conversationOfflineTitle": {
+    "description": "Title of the banner shown on the conversation tab without a connection."
+  },
+  "conversationOfflineBody": "Translation resumes when you reconnect.",
+  "@conversationOfflineBody": {
+    "description": "Body of the offline banner on the conversation tab."
+  },
+  "conversationMicDeniedTitle": "Microphone access needed",
+  "@conversationMicDeniedTitle": {
+    "description": "Title shown when the app may not use the microphone."
+  },
+  "conversationMicDeniedBody": "Traduly listens to detect who's speaking — {languages} — and translates for the other person.",
+  "@conversationMicDeniedBody": {
+    "description": "Explains why the conversation tab needs the microphone.",
+    "placeholders": {
+      "languages": {
+        "type": "String",
+        "example": "English or Arabic"
+      }
+    }
+  },
+  "conversationOpenSettings": "Open Settings",
+  "@conversationOpenSettings": {
+    "description": "Button that opens the system settings to allow the microphone."
   },
   "cameraScanComingSoonTitle": "Camera mode",
   "@cameraScanComingSoonTitle": {

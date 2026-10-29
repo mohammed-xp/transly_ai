@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:record/record.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../features/about/data/datasources/app_info_data_source.dart';
@@ -38,6 +39,24 @@ import '../../features/app_update/domain/usecases/check_for_app_update_usecase.d
 import '../../features/app_update/domain/usecases/mark_app_update_prompted_usecase.dart';
 import '../../features/app_update/domain/usecases/open_app_store_usecase.dart';
 import '../../features/app_update/presentation/cubit/app_update_cubit.dart';
+import '../../features/conversation/data/datasources/conversation_remote_data_source.dart';
+import '../../features/conversation/data/datasources/conversation_remote_data_source_impl.dart';
+import '../../features/conversation/data/datasources/voice_recorder_data_source.dart';
+import '../../features/conversation/data/datasources/voice_recorder_data_source_impl.dart';
+import '../../features/conversation/data/repos/conversation_repo_impl.dart';
+import '../../features/conversation/data/repos/voice_recorder_repo_impl.dart';
+import '../../features/conversation/domain/repos/conversation_repo.dart';
+import '../../features/conversation/domain/repos/voice_recorder_repo.dart';
+import '../../features/conversation/domain/usecases/cancel_recording_usecase.dart';
+import '../../features/conversation/domain/usecases/check_mic_permission_usecase.dart';
+import '../../features/conversation/domain/usecases/discard_recording_usecase.dart';
+import '../../features/conversation/domain/usecases/open_mic_settings_usecase.dart';
+import '../../features/conversation/domain/usecases/request_mic_permission_usecase.dart';
+import '../../features/conversation/domain/usecases/send_conversation_turn_usecase.dart';
+import '../../features/conversation/domain/usecases/start_recording_usecase.dart';
+import '../../features/conversation/domain/usecases/stop_recording_usecase.dart';
+import '../../features/conversation/domain/usecases/watch_connection_usecase.dart';
+import '../../features/conversation/presentation/cubit/conversation_cubit.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import '../../features/auth/data/repos/auth_repo_impl.dart';
@@ -166,6 +185,7 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<TtsService>(
     () => FlutterTtsService(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton(AudioRecorder.new);
   serviceLocator.registerLazySingleton(
     () => const FlutterSecureStorage(
       iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
@@ -271,6 +291,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<AppInfoDataSource>(
     AppInfoDataSourceImpl.new,
   );
+  serviceLocator.registerLazySingleton<ConversationRemoteDataSource>(
+    () => ConversationRemoteDataSourceImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<VoiceRecorderDataSource>(
+    () => VoiceRecorderDataSourceImpl(serviceLocator()),
+  );
 
   // ── Repositories ──
   serviceLocator.registerLazySingleton<TranslationRepo>(
@@ -321,6 +347,12 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton<AppInfoRepo>(
     () => AppInfoRepoImpl(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<ConversationRepo>(
+    () => ConversationRepoImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<VoiceRecorderRepo>(
+    () => VoiceRecorderRepoImpl(serviceLocator()),
+  );
   // A singleton: it holds the download statuses for the whole session.
   serviceLocator.registerLazySingleton<OfflineModelsRepo>(
     () => OfflineModelsRepoImpl(
@@ -331,6 +363,33 @@ Future<void> configureDependencies() async {
   );
 
   // ── Use cases ──
+  serviceLocator.registerLazySingleton(
+    () => RequestMicPermissionUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => CheckMicPermissionUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => OpenMicSettingsUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => StartRecordingUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => StopRecordingUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => CancelRecordingUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => DiscardRecordingUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SendConversationTurnUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => WatchConnectionUseCase(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton(
     () => TranslateTextUseCase(serviceLocator(), serviceLocator()),
   );
@@ -562,5 +621,20 @@ Future<void> configureDependencies() async {
   );
   serviceLocator.registerFactory(
     () => AppInfoCubit(getAppInfo: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => ConversationCubit(
+      requestMicPermission: serviceLocator(),
+      checkMicPermission: serviceLocator(),
+      openMicSettings: serviceLocator(),
+      startRecording: serviceLocator(),
+      stopRecording: serviceLocator(),
+      cancelRecording: serviceLocator(),
+      discardRecording: serviceLocator(),
+      sendTurn: serviceLocator(),
+      speakText: serviceLocator(),
+      getPlanUsage: serviceLocator(),
+      watchConnection: serviceLocator(),
+    ),
   );
 }
