@@ -8,6 +8,7 @@ void main() {
   Future<void> pumpHeader(
     WidgetTester tester, {
     required bool isPro,
+    String kicker = 'Translate',
     Locale locale = const Locale('en'),
   }) {
     return tester.pumpWidget(
@@ -18,6 +19,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: TranslateHeader(
+            kicker: kicker,
             userName: 'Ahmed Hassan',
             isPro: isPro,
             onProfileTap: () {},
@@ -35,6 +37,25 @@ void main() {
           decoration.color == color;
     });
   }
+
+  testWidgets('shows the kicker in capitals above the wordmark', (
+    tester,
+  ) async {
+    await pumpHeader(tester, isPro: false, kicker: 'Conversation');
+
+    expect(find.text('CONVERSATION'), findsOneWidget);
+  });
+
+  testWidgets('shows an Arabic kicker as given', (tester) async {
+    await pumpHeader(
+      tester,
+      isPro: false,
+      kicker: 'المحادثة',
+      locale: const Locale('ar'),
+    );
+
+    expect(find.text('المحادثة'), findsOneWidget);
+  });
 
   testWidgets('a free user sees "AI Free" with a muted dot', (tester) async {
     await pumpHeader(tester, isPro: false);

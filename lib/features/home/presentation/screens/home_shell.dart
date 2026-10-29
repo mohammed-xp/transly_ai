@@ -11,6 +11,7 @@ import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
 import '../../../camera_scan/presentation/screens/camera_scan_screen.dart';
 import '../../../conversation/presentation/cubit/conversation_cubit.dart';
@@ -78,12 +79,15 @@ class _HomeView extends StatefulWidget {
 class _HomeViewState extends State<_HomeView> {
   TranslateInputMode _mode = TranslateInputMode.keyboard;
 
-  // Built once, so the keyboard's inset changing every frame of its animation
-  // doesn't rebuild them.
-  late final Widget _header = _HeaderSection(onCover: _pauseConversation);
+  // Built once (the header once per tab), so the keyboard's inset changing
+  // every frame of its animation doesn't rebuild them.
+  late Widget _header = _buildHeader();
   late final Widget _languageBar = _LanguageBarSection(
     onCover: _pauseConversation,
   );
+
+  Widget _buildHeader() =>
+      _HeaderSection(mode: _mode, onCover: _pauseConversation);
 
   void _selectMode(TranslateInputMode mode) {
     if (mode == _mode) return;
@@ -93,7 +97,10 @@ class _HomeViewState extends State<_HomeView> {
       unawaited(context.read<ConversationCubit>().refreshQuota());
     }
     if (mode == TranslateInputMode.keyboard) _applyPairToTranslate();
-    setState(() => _mode = mode);
+    setState(() {
+      _mode = mode;
+      _header = _buildHeader();
+    });
   }
 
   /// Stops the mic and speech when the Voice tab is left or covered, so they
@@ -174,18 +181,23 @@ bool _pairChanged(HomeState previous, HomeState current) =>
     previous.from != current.from || previous.to != current.to;
 
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection({required this.onCover});
+  const _HeaderSection({required this.mode, required this.onCover});
+
+  /// The open tab, named above the wordmark.
+  final TranslateInputMode mode;
 
   /// Called right before the profile covers the shell.
   final VoidCallback onCover;
 
   @override
   Widget build(BuildContext context) {
+    final kicker = mode.label(AppLocalizations.of(context)!);
     return BlocSelector<HomeCubit, HomeState, (String?, bool)>(
       selector: (state) => (state.user?.username, state.isPro),
       builder: (context, header) {
         final (userName, isPro) = header;
         return TranslateHeader(
+          kicker: kicker,
           userName: userName,
           isPro: isPro,
           onProfileTap: () {

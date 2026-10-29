@@ -32,10 +32,6 @@
   "@onboardingCreateAccount": {
     "description": "Create-account link on the onboarding welcome screen."
   },
-  "translateKicker": "TRANSLATE",
-  "@translateKicker": {
-    "description": "Uppercase kicker above the title on the translate screen."
-  },
   "translateAiPro": "AI Pro",
   "@translateAiPro": {
     "description": "Label of the plan badge in the translate screen header for users on a Pro plan."
@@ -68,13 +64,13 @@
   "@translateToneCaption": {
     "description": "Caption above the tone selector chips."
   },
-  "translateDockKeyboard": "Keyboard",
+  "translateDockKeyboard": "Translate",
   "@translateDockKeyboard": {
-    "description": "Keyboard input mode in the bottom input dock."
+    "description": "Text translation mode in the bottom input dock."
   },
-  "translateDockVoice": "Voice",
+  "translateDockVoice": "Conversation",
   "@translateDockVoice": {
-    "description": "Voice input mode in the bottom input dock."
+    "description": "Conversation (voice) mode in the bottom input dock."
   },
   "translateDockCamera": "Camera",
   "@translateDockCamera": {

@@ -34,9 +34,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingCreateAccount => 'إنشاء حساب';
 
   @override
-  String get translateKicker => 'الترجمة';
-
-  @override
   String get translateAiPro => 'AI Pro';
 
   @override
@@ -61,10 +58,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translateToneCaption => 'اقتراح الذكاء الاصطناعي · النبرة';
 
   @override
-  String get translateDockKeyboard => 'لوحة المفاتيح';
+  String get translateDockKeyboard => 'الترجمة';
 
   @override
-  String get translateDockVoice => 'الصوت';
+  String get translateDockVoice => 'المحادثة';
 
   @override
   String get translateDockCamera => 'الكاميرا';

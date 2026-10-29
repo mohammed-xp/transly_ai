@@ -12,6 +12,15 @@ import '../../../../l10n/app_localizations.dart';
 /// the `IndexedStack` child order in `HomeShell`.
 enum TranslateInputMode { keyboard, voice, camera }
 
+extension TranslateInputModeLabel on TranslateInputMode {
+  /// The mode's name, as its dock tab and the shell header show it.
+  String label(AppLocalizations l10n) => switch (this) {
+    TranslateInputMode.keyboard => l10n.translateDockKeyboard,
+    TranslateInputMode.voice => l10n.translateDockVoice,
+    TranslateInputMode.camera => l10n.translateDockCamera,
+  };
+}
+
 /// Bottom input-mode dock (design `02 · Translate`). Stateless —
 /// [currentMode] marks the active tab and [onModeSelected] fires when another
 /// tab is tapped; the active tab stays inert. Owned by `HomeShell`, which
@@ -122,7 +131,7 @@ class InputDock extends StatelessWidget {
           Expanded(
             child: _DockTab(
               icon: AppIcons.keyboard,
-              label: l10n.translateDockKeyboard,
+              label: TranslateInputMode.keyboard.label(l10n),
               active: currentMode == TranslateInputMode.keyboard,
               onTap: currentMode == TranslateInputMode.keyboard
                   ? null
@@ -134,7 +143,7 @@ class InputDock extends StatelessWidget {
                 ? const SizedBox.shrink()
                 : _DockTab(
                     icon: AppIcons.mic,
-                    label: l10n.translateDockVoice,
+                    label: TranslateInputMode.voice.label(l10n),
                     active: currentMode == TranslateInputMode.voice,
                     onTap: currentMode == TranslateInputMode.voice
                         ? null
@@ -144,7 +153,7 @@ class InputDock extends StatelessWidget {
           Expanded(
             child: _DockTab(
               icon: AppIcons.camera,
-              label: l10n.translateDockCamera,
+              label: TranslateInputMode.camera.label(l10n),
               active: currentMode == TranslateInputMode.camera,
               onTap: currentMode == TranslateInputMode.camera
                   ? null

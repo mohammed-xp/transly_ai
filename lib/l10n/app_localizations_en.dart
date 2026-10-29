@@ -34,9 +34,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingCreateAccount => 'Create account';
 
   @override
-  String get translateKicker => 'TRANSLATE';
-
-  @override
   String get translateAiPro => 'AI Pro';
 
   @override
@@ -61,10 +58,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translateToneCaption => 'AI suggested · Tone';
 
   @override
-  String get translateDockKeyboard => 'Keyboard';
+  String get translateDockKeyboard => 'Translate';
 
   @override
-  String get translateDockVoice => 'Voice';
+  String get translateDockVoice => 'Conversation';
 
   @override
   String get translateDockCamera => 'Camera';

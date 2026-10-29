@@ -8,11 +8,14 @@ import '../../../../l10n/app_localizations.dart';
 class TranslateHeader extends StatelessWidget {
   const TranslateHeader({
     super.key,
+    required this.kicker,
     required this.userName,
     required this.isPro,
     required this.onProfileTap,
   });
 
+  /// Shown above the wordmark — the name of the open tab.
+  final String kicker;
   final String? userName;
   final bool isPro;
   final VoidCallback onProfileTap;
@@ -38,7 +41,7 @@ class TranslateHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.translateKicker,
+                  kicker.toUpperCase(),
                   style: textTheme.labelMedium?.copyWith(color: c.textMuted),
                 ),
                 Text(

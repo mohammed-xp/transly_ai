@@ -18,7 +18,7 @@ void main() {
     );
   }
 
-  testWidgets('tapping Voice selects the voice mode', (tester) async {
+  testWidgets('tapping Conversation selects the voice mode', (tester) async {
     TranslateInputMode? selected;
     await pumpDock(
       tester,
@@ -28,7 +28,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Voice'));
+    await tester.tap(find.text('Conversation'));
 
     expect(selected, TranslateInputMode.voice);
   });
@@ -45,8 +45,8 @@ void main() {
     );
 
     expect(find.byKey(const Key('raised')), findsOneWidget);
-    expect(find.text('Voice'), findsNothing);
-    expect(find.text('Keyboard'), findsOneWidget);
+    expect(find.text('Conversation'), findsNothing);
+    expect(find.text('Translate'), findsOneWidget);
     expect(find.text('Camera'), findsOneWidget);
   });
 

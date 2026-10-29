@@ -169,12 +169,12 @@ void main() {
       tester.element(find.byType(InputDock)).read<T>();
 
   Future<void> openVoice(WidgetTester tester) async {
-    await tester.tap(find.text('Voice'));
+    await tester.tap(find.text('Conversation'));
     await tester.pump();
   }
 
   Future<void> openKeyboard(WidgetTester tester) async {
-    await tester.tap(find.text('Keyboard'));
+    await tester.tap(find.text('Translate'));
     await tester.pump();
   }
 
@@ -202,6 +202,33 @@ void main() {
       ..translateNow();
     await tester.pump();
   }
+
+  group('Header', () {
+    testWidgets('names the Translate tab on start', (tester) async {
+      await pumpShell(tester);
+
+      expect(find.text('TRANSLATE'), findsOneWidget);
+    });
+
+    testWidgets('names the Conversation tab once it opens', (tester) async {
+      await pumpShell(tester);
+
+      await openVoice(tester);
+
+      expect(find.text('CONVERSATION'), findsOneWidget);
+      expect(find.text('TRANSLATE'), findsNothing);
+    });
+
+    testWidgets('names the Camera tab once it opens', (tester) async {
+      await pumpShell(tester);
+
+      await tester.tap(find.text('Camera'));
+      await tester.pump();
+
+      expect(find.text('CAMERA'), findsOneWidget);
+      expect(find.text('TRANSLATE'), findsNothing);
+    });
+  });
 
   group('Voice tab', () {
     testWidgets('keeps the shared header and language bar', (tester) async {

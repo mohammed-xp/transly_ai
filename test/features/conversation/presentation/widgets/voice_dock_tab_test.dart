@@ -126,9 +126,9 @@ void main() {
     expect(recorder.permissionRequests, 0);
   });
 
-  testWidgets('labels the tab Voice', (tester) async {
+  testWidgets('labels the tab Conversation', (tester) async {
     await pumpTab(tester, ConversationState.initial());
 
-    expect(find.text('Voice'), findsOneWidget);
+    expect(find.text('Conversation'), findsOneWidget);
   });
 }

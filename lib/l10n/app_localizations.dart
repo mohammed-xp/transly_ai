@@ -146,12 +146,6 @@ abstract class AppLocalizations {
   /// **'Create account'**
   String get onboardingCreateAccount;
 
-  /// Uppercase kicker above the title on the translate screen.
-  ///
-  /// In en, this message translates to:
-  /// **'TRANSLATE'**
-  String get translateKicker;
-
   /// Label of the plan badge in the translate screen header for users on a Pro plan.
   ///
   /// In en, this message translates to:
@@ -200,16 +194,16 @@ abstract class AppLocalizations {
   /// **'AI suggested · Tone'**
   String get translateToneCaption;
 
-  /// Keyboard input mode in the bottom input dock.
+  /// Text translation mode in the bottom input dock.
   ///
   /// In en, this message translates to:
-  /// **'Keyboard'**
+  /// **'Translate'**
   String get translateDockKeyboard;
 
-  /// Voice input mode in the bottom input dock.
+  /// Conversation (voice) mode in the bottom input dock.
   ///
   /// In en, this message translates to:
-  /// **'Voice'**
+  /// **'Conversation'**
   String get translateDockVoice;
 
   /// Camera input mode in the bottom input dock.
