@@ -756,6 +756,10 @@
   "@errorOfflineModelMissing": {
     "description": "Offline translation was attempted while the on-device model of one of the languages isn't downloaded."
   },
+  "errorVoiceUnavailable": "This language can't be read aloud on your device.",
+  "@errorVoiceUnavailable": {
+    "description": "Toast when the device has no text-to-speech voice for the language being read aloud."
+  },
   "errorUnknown": "Something went wrong. Please try again.",
   "@errorUnknown": {
     "description": "Fallback for any unexpected error."

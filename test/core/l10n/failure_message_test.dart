@@ -74,6 +74,19 @@ void main() {
     );
   });
 
+  testWidgets('says the language cannot be read aloud when it has no voice', (
+    tester,
+  ) async {
+    expect(
+      await messageIn(
+        tester,
+        const Locale('en'),
+        const VoiceUnavailableFailure(),
+      ),
+      "This language can't be read aloud on your device.",
+    );
+  });
+
   testWidgets('falls back to the failure type when there is no key', (
     tester,
   ) async {

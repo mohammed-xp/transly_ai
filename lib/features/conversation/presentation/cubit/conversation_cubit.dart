@@ -75,6 +75,10 @@ class ConversationCubit extends Cubit<ConversationState> {
   Timer? _maxDuration;
   bool _starting = false;
 
+  /// Languages this conversation already said can't be read aloud, so
+  /// read-aloud doesn't repeat it on every turn.
+  final Set<String> _unspokenLanguages = {};
+
   /// A new pair of languages starts a new conversation.
   void languagesChanged({
     required LanguageEntity from,
@@ -82,6 +86,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   }) {
     if (from == state.from && to == state.to) return;
     _session++;
+    _unspokenLanguages.clear();
     _dropPending();
     if (state.status is ConversationRecording) unawaited(_abandonRecording());
     emit(
@@ -142,7 +147,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   /// hear itself.
   Future<void> speakTurn(ConversationTurn turn) async {
     if (state.status is ConversationRecording) return;
-    await _speak(turn);
+    await _speak(turn, tapped: true);
   }
 
   void setReadAloud(bool value) {
@@ -298,8 +303,26 @@ class ConversationCubit extends Cubit<ConversationState> {
       (failure is ServerFailure &&
           const {502, 503, 504}.contains(failure.statusCode));
 
-  Future<void> _speak(ConversationTurn turn) =>
-      _speakText(text: turn.translation, language: turn.translationLanguage);
+  /// A failure is told every time the user [tapped], but only once per
+  /// language when read aloud on its own.
+  Future<void> _speak(ConversationTurn turn, {bool tapped = false}) async {
+    final session = _session;
+    final code = turn.translationLanguage.code;
+    final result = await _speakText(
+      text: turn.translation,
+      language: turn.translationLanguage,
+    );
+    if (isClosed || session != _session) return;
+    switch (result) {
+      case ApiSuccess():
+        _unspokenLanguages.remove(code);
+      case ApiFailure(:final failure):
+        final firstTime = _unspokenLanguages.add(code);
+        if (firstTime || tapped) {
+          emit(state.copyWith(notice: ReadAloudFailedNotice(failure)));
+        }
+    }
+  }
 
   Future<void> _abandonRecording() async {
     if (isClosed || state.status is! ConversationRecording) return;

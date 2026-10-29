@@ -55,6 +55,11 @@ class OfflineModelMissingFailure extends Failure {
   const OfflineModelMissingFailure();
 }
 
+/// The device has no text-to-speech voice for the language.
+class VoiceUnavailableFailure extends Failure {
+  const VoiceUnavailableFailure();
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure();
 }

@@ -183,7 +183,10 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(OnDeviceTranslatorModelManager.new);
   serviceLocator.registerLazySingleton(FlutterTts.new);
   serviceLocator.registerLazySingleton<TtsService>(
-    () => FlutterTtsService(serviceLocator()),
+    () => FlutterTtsService(
+      serviceLocator(),
+      deviceCountry: () => PlatformDispatcher.instance.locale.countryCode,
+    ),
   );
   serviceLocator.registerLazySingleton(AudioRecorder.new);
   serviceLocator.registerLazySingleton(

@@ -148,12 +148,20 @@ class TranslateCubit extends Cubit<TranslateState> {
 
   void speakSource() {
     if (state.sourceText.trim().isEmpty) return;
-    unawaited(_speakText(text: state.sourceText, language: state.from));
+    unawaited(_speak(state.sourceText, state.from));
   }
 
   void speakOutput() {
     if (state.translatedText.trim().isEmpty) return;
-    unawaited(_speakText(text: state.translatedText, language: state.to));
+    unawaited(_speak(state.translatedText, state.to));
+  }
+
+  Future<void> _speak(String text, LanguageEntity language) async {
+    final result = await _speakText(text: text, language: language);
+    if (isClosed) return;
+    if (result case ApiFailure(:final failure)) {
+      emit(state.copyWith(speakNotice: SpeakFailedNotice(failure)));
+    }
   }
 
   Future<void> _translate() async {

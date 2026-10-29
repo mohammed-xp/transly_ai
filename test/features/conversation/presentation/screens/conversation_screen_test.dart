@@ -34,6 +34,7 @@ void main() {
     ConversationState? state,
     FakeVoiceRecorderRepo? recorder,
     FakeConversationRepo? conversation,
+    FakeTts? tts,
     bool connected = true,
     Locale locale = const Locale('en'),
     Size size = const Size(402, 874),
@@ -46,6 +47,7 @@ void main() {
       initialState: state,
       recorder: recorder,
       conversation: conversation,
+      tts: tts,
       connectivity: FakeConnectivity(connected: connected),
     );
 
@@ -268,6 +270,22 @@ void main() {
       await sendTurn(tester, cubit);
 
       expect(find.text('Retry'), findsOneWidget);
+    });
+
+    testWidgets('a language without a voice says it cannot be read aloud', (
+      tester,
+    ) async {
+      final tts = FakeTts()
+        ..result = const ApiResult.failure(VoiceUnavailableFailure());
+      final cubit = await pumpScreen(tester, tts: tts);
+
+      await sendTurn(tester, cubit);
+      await tester.pump();
+
+      expect(
+        find.text("This language can't be read aloud on your device."),
+        findsOneWidget,
+      );
     });
   });
 

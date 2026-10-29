@@ -165,6 +165,7 @@
   "errorFormat": "وصلنا رد غير متوقع. حاول مرة أخرى.",
   "errorUnsupportedLanguage": "هذه اللغة غير متاحة بدون إنترنت حاليًا.",
   "errorOfflineModelMissing": "للترجمة بدون إنترنت، نزّل أولًا اللغات التي تستخدمها من قائمة اللغات.",
+  "errorVoiceUnavailable": "لا يمكن نطق هذه اللغة على جهازك.",
   "errorUnknown": "حدث خطأ ما. حاول مرة أخرى.",
   "errorEmailAlreadyRegistered": "يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.",
   "errorQuotaExceeded": "وصلت إلى الحد المسموح به للترجمة في خطتك.",

@@ -569,6 +569,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'للترجمة بدون إنترنت، نزّل أولًا اللغات التي تستخدمها من قائمة اللغات.';
 
   @override
+  String get errorVoiceUnavailable => 'لا يمكن نطق هذه اللغة على جهازك.';
+
+  @override
   String get errorUnknown => 'حدث خطأ ما. حاول مرة أخرى.';
 
   @override

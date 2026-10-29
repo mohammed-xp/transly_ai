@@ -576,6 +576,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'To translate offline, first download the languages you\'re using from the language list.';
 
   @override
+  String get errorVoiceUnavailable =>
+      'This language can\'t be read aloud on your device.';
+
+  @override
   String get errorUnknown => 'Something went wrong. Please try again.';
 
   @override

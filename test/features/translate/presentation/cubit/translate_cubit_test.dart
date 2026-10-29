@@ -17,10 +17,14 @@ import 'package:transly_ai/features/translate/presentation/cubit/translate_cubit
 import '../../../../helpers/fake_offline_models_repo.dart';
 import '../../../../helpers/fake_translation_repo.dart';
 
-class _SilentTts implements TtsService {
+class _FakeTts implements TtsService {
+  ApiResult<void> result = const ApiResult.success(null);
+
   @override
-  Future<void> speak({required String text, required String languageCode}) =>
-      Future.value();
+  Future<ApiResult<void>> speak({
+    required String text,
+    required String languageCode,
+  }) => Future.value(result);
 
   @override
   Future<void> stop() => Future.value();
@@ -29,13 +33,13 @@ class _SilentTts implements TtsService {
 const _friendlyTone = TranslationTone(code: 'friendly', name: 'Friendly');
 
 void main() {
-  TranslateCubit buildCubit(FakeTranslationRepo repo) {
+  TranslateCubit buildCubit(FakeTranslationRepo repo, {_FakeTts? tts}) {
     return TranslateCubit(
       translateText: TranslateTextUseCase(
         repo,
         AutoDownloadOfflineModelsUseCase(FakeOfflineModelsRepo()),
       ),
-      speakText: SpeakTextUseCase(_SilentTts()),
+      speakText: SpeakTextUseCase(tts ?? _FakeTts()),
       watchOnlineAvailability: WatchOnlineAvailabilityUseCase(repo),
       getCachedTones: GetCachedTonesUseCase(repo),
       syncTones: SyncTonesUseCase(repo),
@@ -303,6 +307,48 @@ void main() {
       await settle();
 
       expect(repo.requestedTones, [null]);
+    });
+  });
+
+  group('speak', () {
+    test('tells the user when the text cannot be read aloud', () async {
+      final tts = _FakeTts()
+        ..result = const ApiResult.failure(VoiceUnavailableFailure());
+      final cubit = buildCubit(FakeTranslationRepo(), tts: tts);
+      addTearDown(cubit.close);
+      cubit.sourceTextChanged('hello');
+
+      cubit.speakSource();
+      await settle();
+
+      expect(cubit.state.speakNotice?.failure, isA<VoiceUnavailableFailure>());
+    });
+
+    test('tells the user again when the same failure repeats', () async {
+      final tts = _FakeTts()
+        ..result = const ApiResult.failure(VoiceUnavailableFailure());
+      final cubit = buildCubit(FakeTranslationRepo(), tts: tts);
+      addTearDown(cubit.close);
+      cubit.sourceTextChanged('hello');
+      cubit.speakSource();
+      await settle();
+      final first = cubit.state.speakNotice;
+
+      cubit.speakSource();
+      await settle();
+
+      expect(cubit.state.speakNotice, isNot(same(first)));
+    });
+
+    test('tells the user nothing when the text is read aloud', () async {
+      final cubit = buildCubit(FakeTranslationRepo());
+      addTearDown(cubit.close);
+      cubit.sourceTextChanged('hello');
+
+      cubit.speakSource();
+      await settle();
+
+      expect(cubit.state.speakNotice, isNull);
     });
   });
 }

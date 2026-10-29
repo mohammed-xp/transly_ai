@@ -209,6 +209,46 @@ void main() {
       expect(tts.spoken.single, (testTurn().translation, 'ar'));
     });
 
+    test('tells the user when the translation cannot be read aloud', () async {
+      tts.result = const ApiResult.failure(VoiceUnavailableFailure());
+
+      await speakOneTurn();
+      await settle();
+
+      final notice = cubit.state.notice;
+      expect(notice, isA<ReadAloudFailedNotice>());
+      expect(
+        (notice! as ReadAloudFailedNotice).failure,
+        isA<VoiceUnavailableFailure>(),
+      );
+    });
+
+    test('says only once that a language cannot be read aloud', () async {
+      tts.result = const ApiResult.failure(VoiceUnavailableFailure());
+      await speakOneTurn();
+      await settle();
+      final first = cubit.state.notice;
+
+      await speakOneTurn();
+      await settle();
+
+      expect(cubit.state.notice, same(first));
+    });
+
+    test('says it again once the languages change', () async {
+      tts.result = const ApiResult.failure(VoiceUnavailableFailure());
+      await speakOneTurn();
+      await settle();
+      final first = cubit.state.notice;
+      cubit.languagesChanged(from: french, to: LanguageEntity.english);
+
+      await speakOneTurn();
+      await settle();
+
+      expect(cubit.state.notice, isA<ReadAloudFailedNotice>());
+      expect(cubit.state.notice, isNot(same(first)));
+    });
+
     test('is not read aloud when read-aloud is off', () async {
       cubit.setReadAloud(false);
 
@@ -414,6 +454,25 @@ void main() {
     await cubit.speakTurn(testTurn());
 
     expect(tts.spoken.single, (testTurn().translation, 'ar'));
+  });
+
+  test('speakTurn tells the user when the turn cannot be read aloud', () async {
+    tts.result = const ApiResult.failure(VoiceUnavailableFailure());
+
+    await cubit.speakTurn(testTurn());
+
+    expect(cubit.state.notice, isA<ReadAloudFailedNotice>());
+  });
+
+  test('speakTurn tells the user on every tap', () async {
+    tts.result = const ApiResult.failure(VoiceUnavailableFailure());
+    await cubit.speakTurn(testTurn());
+    final first = cubit.state.notice;
+
+    await cubit.speakTurn(testTurn());
+
+    expect(cubit.state.notice, isA<ReadAloudFailedNotice>());
+    expect(cubit.state.notice, isNot(same(first)));
   });
 
   test('speakTurn is ignored while recording', () async {

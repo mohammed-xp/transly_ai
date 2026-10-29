@@ -51,6 +51,13 @@ class RecordingFailedNotice extends ConversationNotice {
   final Failure failure;
 }
 
+/// A translation couldn't be read aloud, e.g. no voice for its language.
+class ReadAloudFailedNotice extends ConversationNotice {
+  ReadAloudFailedNotice(this.failure);
+
+  final Failure failure;
+}
+
 /// Single immutable state of the voice tab (design `Conversation v2`).
 class ConversationState {
   const ConversationState({

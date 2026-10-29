@@ -28,12 +28,22 @@ class TranslateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => serviceLocator<AutoDownloadNoticeCubit>(),
-      child: BlocListener<TranslateCubit, TranslateState>(
-        listenWhen: (previous, current) =>
-            previous.status != current.status &&
-            (previous.status is TranslationError ||
-                current.status is TranslationError),
-        listener: _onErrorChanged,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<TranslateCubit, TranslateState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status &&
+                (previous.status is TranslationError ||
+                    current.status is TranslationError),
+            listener: _onErrorChanged,
+          ),
+          BlocListener<TranslateCubit, TranslateState>(
+            listenWhen: (previous, current) =>
+                current.speakNotice != null &&
+                previous.speakNotice != current.speakNotice,
+            listener: _onSpeakFailed,
+          ),
+        ],
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
             AppDimens.spaceL,
@@ -71,6 +81,16 @@ class TranslateScreen extends StatelessWidget {
       type: AppToastType.error,
       actionLabel: l10n.translateRetry,
       onAction: context.read<TranslateCubit>().translateNow,
+    );
+  }
+
+  void _onSpeakFailed(BuildContext context, TranslateState state) {
+    final notice = state.speakNotice;
+    if (notice == null) return;
+    AppToast.show(
+      context,
+      message: failureMessage(context, notice.failure),
+      type: AppToastType.neutral,
     );
   }
 }

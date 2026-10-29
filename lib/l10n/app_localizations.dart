@@ -1088,6 +1088,12 @@ abstract class AppLocalizations {
   /// **'To translate offline, first download the languages you\'re using from the language list.'**
   String get errorOfflineModelMissing;
 
+  /// Toast when the device has no text-to-speech voice for the language being read aloud.
+  ///
+  /// In en, this message translates to:
+  /// **'This language can\'t be read aloud on your device.'**
+  String get errorVoiceUnavailable;
+
   /// Fallback for any unexpected error.
   ///
   /// In en, this message translates to:

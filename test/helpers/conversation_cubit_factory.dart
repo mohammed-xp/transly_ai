@@ -124,12 +124,16 @@ class FakeConversationRepo implements ConversationRepo {
 class FakeTts implements TtsService {
   final List<(String, String)> spoken = [];
   int stops = 0;
+  ApiResult<void> result = const ApiResult.success(null);
 
   @override
-  Future<void> speak({
+  Future<ApiResult<void>> speak({
     required String text,
     required String languageCode,
-  }) async => spoken.add((text, languageCode));
+  }) async {
+    spoken.add((text, languageCode));
+    return result;
+  }
 
   @override
   Future<void> stop() async => stops++;

@@ -98,6 +98,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
           message: l10n.conversationRecordingFailed,
           type: AppToastType.error,
         );
+      case ReadAloudFailedNotice(:final failure):
+        AppToast.show(
+          context,
+          message: failureMessage(context, failure),
+          type: AppToastType.neutral,
+        );
     }
   }
 

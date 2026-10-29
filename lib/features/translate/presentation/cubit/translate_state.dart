@@ -24,6 +24,14 @@ class TranslationError extends TranslationStatus {
   final Failure failure;
 }
 
+/// Speech couldn't start. Deliberately not `const`: each notice is a new
+/// object, so the same failure twice in a row is still told twice.
+class SpeakFailedNotice {
+  SpeakFailedNotice(this.failure);
+
+  final Failure failure;
+}
+
 /// Single immutable screen state. Persistent fields (source text, languages,
 /// tone, last result) survive across [status] transitions so the output card
 /// never flashes empty mid-translate — the varying async phase lives in the
@@ -39,6 +47,7 @@ class TranslateState {
     required this.status,
     required this.isOnlineAvailable,
     required this.lastEngineWasOnline,
+    this.speakNotice,
   });
 
   /// Default language pair (same as `HomeState.initial`), with whatever tones
@@ -83,6 +92,9 @@ class TranslateState {
   /// [isOnlineAvailable] rather than overwriting it.
   final bool lastEngineWasOnline;
 
+  /// The latest speech failure to tell the user about.
+  final SpeakFailedNotice? speakNotice;
+
   /// Tone is offered only when online translation is available *and* the last
   /// result actually honoured it. Derived rather than stored so the two
   /// independent signals can arrive in any order without one clobbering the
@@ -103,6 +115,7 @@ class TranslateState {
     TranslationStatus? status,
     bool? isOnlineAvailable,
     bool? lastEngineWasOnline,
+    SpeakFailedNotice? speakNotice,
   }) {
     return TranslateState(
       sourceText: sourceText ?? this.sourceText,
@@ -114,6 +127,7 @@ class TranslateState {
       status: status ?? this.status,
       isOnlineAvailable: isOnlineAvailable ?? this.isOnlineAvailable,
       lastEngineWasOnline: lastEngineWasOnline ?? this.lastEngineWasOnline,
+      speakNotice: speakNotice ?? this.speakNotice,
     );
   }
 }
