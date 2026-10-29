@@ -5,6 +5,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../security/token_storage.dart';
 import '../session/session_manager.dart';
 import 'api_consumer.dart';
+import 'api_response.dart';
 import 'endpoints.dart';
 
 class DioBaseApi extends ApiConsumer {
@@ -25,6 +26,9 @@ class DioBaseApi extends ApiConsumer {
         PrettyDioLogger(
           requestBody: true,
           responseBody: true,
+          // Conversation turns carry what people said; keep them out of logs.
+          filter: (options, _) =>
+              !options.path.contains(Endpoints.conversationTurns),
           // filter: (options, _) => !_isAuthEndpoint(options.path),
         ),
       );
@@ -86,6 +90,9 @@ class DioBaseApi extends ApiConsumer {
     try {
       options.extra[_retriedKey] = true;
       options.headers.remove('Authorization');
+      // A form is finalized once sent; the replay needs a fresh copy.
+      final data = options.data;
+      if (data is FormData) options.data = data.clone();
       handler.resolve(await _dio.fetch(options));
     } on DioException catch (retryError) {
       handler.next(retryError);
@@ -148,6 +155,23 @@ class DioBaseApi extends ApiConsumer {
       queryParameters: queryParameters,
     );
     return result.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<ApiResponse> postMultipart(
+    String url, {
+    required FormData formData,
+    Duration? receiveTimeout,
+  }) async {
+    final result = await _dio.post(
+      url,
+      data: formData,
+      options: Options(receiveTimeout: receiveTimeout),
+    );
+    return ApiResponse(
+      data: result.data as Map<String, dynamic>,
+      headers: result.headers.map,
+    );
   }
 
   @override

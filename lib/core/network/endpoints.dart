@@ -4,7 +4,7 @@ abstract final class Endpoints {
   static const String baseUrlTest = 'http://192.168.1.147:5260';
   static const String baseUrlProduction = 'https://translyai-api.jollypond-1171c5b6.uaenorth.azurecontainerapps.io';
 
-  static const String baseUrl = baseUrlProduction; // kReleaseMode? baseUrlProduction : baseUrlTest;
+  static const String baseUrl = kReleaseMode ? baseUrlProduction : baseUrlTest;
 
 
   static const String translations = '$baseUrl/api/v1/translations';
@@ -16,4 +16,5 @@ abstract final class Endpoints {
   static const String deleteAccount = '$baseUrl/api/v1/auth/delete-account';
   static const String refreshToken = '$baseUrl/api/v1/auth/refresh';
   static const String usage = '$baseUrl/api/v1/usage';
+  static const String conversationTurns = '$baseUrl/api/v1/conversations/turns';
 }

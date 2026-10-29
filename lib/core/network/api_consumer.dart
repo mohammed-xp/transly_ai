@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
+import 'api_response.dart';
+
 abstract class ApiConsumer {
   const ApiConsumer();
 
@@ -15,6 +17,14 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     FormData? formData,
     Map<String, dynamic>? queryParameters,
+  });
+
+  /// Sends [formData] as `multipart/form-data` and returns the body with its
+  /// headers. [receiveTimeout] overrides the client's for slow endpoints.
+  Future<ApiResponse> postMultipart(
+    String url, {
+    required FormData formData,
+    Duration? receiveTimeout,
   });
 
   Future<Uint8List> getBytes(

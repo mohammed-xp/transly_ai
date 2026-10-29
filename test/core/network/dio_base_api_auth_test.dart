@@ -289,4 +289,25 @@ void main() {
     expect(adapter.refreshCalls, hasLength(1));
     expect(tokens.saves, hasLength(1));
   });
+
+  test('replays a multipart request with a fresh copy of its form', () async {
+    final form = FormData()..fields.add(const MapEntry('languageA', 'ar'));
+
+    final result = await api.postMultipart(_protectedUrl, formData: form);
+
+    expect(result.data, {'data': 'ok'});
+    final sent = adapter.protectedCalls.map((c) => c.data).toList();
+    expect(sent, hasLength(2));
+    expect(sent.last, isA<FormData>());
+    expect(identical(sent.first, sent.last), isFalse);
+    expect((sent.last! as FormData).fields, form.fields);
+  });
+
+  test('a multipart response carries its headers', () async {
+    tokens.accessToken = 'new-access';
+
+    final result = await api.postMultipart(_protectedUrl, formData: FormData());
+
+    expect(result.header('content-type'), Headers.jsonContentType);
+  });
 }
