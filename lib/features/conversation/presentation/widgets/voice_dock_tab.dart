@@ -5,18 +5,18 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
-import '../../../../core/widgets/spinning_ring.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/conversation_cubit.dart';
 import '../cubit/conversation_state.dart';
 import 'pulse_ring.dart';
 
-enum _MicLook { idle, recording, translating, unavailable, denied }
+enum _MicLook { idle, recording, unavailable, denied }
 
 /// The Voice tab of the input dock while it is the open tab: a mic raised
 /// above the dock (design `Conversation v2`). Tap to record a turn, tap again
 /// to send it. Grey and inert while a turn is translating, offline, out of
-/// time, or without microphone access.
+/// time, or without microphone access. A translating turn shows its progress
+/// in the conversation, not here.
 class VoiceDockTab extends StatelessWidget {
   const VoiceDockTab({super.key});
 
@@ -27,7 +27,7 @@ class VoiceDockTab extends StatelessWidget {
 
   static _MicLook _lookOf(ConversationState state) => switch (state.status) {
     ConversationMicDenied() => _MicLook.denied,
-    ConversationTranslating() => _MicLook.translating,
+    ConversationTranslating() => _MicLook.unavailable,
     _ when !state.canUseMic => _MicLook.unavailable,
     ConversationRecording() => _MicLook.recording,
     ConversationIdle() => _MicLook.idle,
@@ -94,13 +94,6 @@ class _Mic extends StatelessWidget {
         AppIcons.stop,
         size: 24,
         color: Colors.white,
-      ),
-      _MicLook.translating => SpinningRing(
-        size: 26,
-        stroke: 3,
-        trackColor: c.surface,
-        activeColor: c.coral,
-        duration: const Duration(milliseconds: 900),
       ),
       _MicLook.unavailable => AppSvgIcon(
         AppIcons.micFilled,
