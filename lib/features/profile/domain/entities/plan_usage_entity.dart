@@ -39,7 +39,48 @@ class PlanUsageEntity {
   /// characters are still left.
   int get usedPercent => (usedFraction * 100).floor();
 
-  int get remainingPercent => 100 - usedPercent;
+  bool get charactersExhausted => usedFraction >= 1;
+
+  /// Null when the server sends no conversation seconds, or a zero limit:
+  /// a plan without conversation time, not one that has spent it.
+  int? get audioSecondsUsed {
+    final limit = audioSecondsLimit;
+    final remaining = audioSecondsRemaining;
+    if (limit == null || limit <= 0 || remaining == null) return null;
+    return (limit - remaining).clamp(0, limit);
+  }
+
+  bool get hasAudioQuota => audioSecondsUsed != null;
+
+  double? get audioUsedFraction {
+    final limit = audioSecondsLimit;
+    final used = audioSecondsUsed;
+    if (limit == null || used == null) return null;
+    return used / limit;
+  }
+
+  bool get audioExhausted {
+    final remaining = audioSecondsRemaining;
+    return hasAudioQuota && remaining != null && remaining <= 0;
+  }
+
+  bool get conversationAvailable => hasAudioQuota && !audioExhausted;
+
+  /// Rounded down, like [usedPercent], so the conversation never reads as
+  /// fully used while seconds are still left; the whole limit once they are
+  /// not.
+  int? get audioMinutesUsed {
+    final used = audioSecondsUsed;
+    if (used == null) return null;
+    return audioExhausted ? audioMinutesLimit : used ~/ 60;
+  }
+
+  /// Rounded up, so the used minutes stay below it while seconds are left.
+  int? get audioMinutesLimit {
+    final limit = audioSecondsLimit;
+    if (limit == null || !hasAudioQuota) return null;
+    return (limit / 60).ceil();
+  }
 
   Duration timeUntilReset(DateTime now) {
     final remaining = resetsAt.difference(now);

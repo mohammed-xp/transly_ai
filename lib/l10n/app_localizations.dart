@@ -860,23 +860,59 @@ abstract class AppLocalizations {
   /// **'{minutes, plural, =1{Usage resets in 1 minute} other{Usage resets in {count} minutes}}'**
   String profileUsageResetsInMinutes(int minutes, String count);
 
-  /// Share of today's quota already used, shown large on the free-plan card.
+  /// A percentage of the translation quota, the {amount} of profileUsageUsed. {percent} is written in the locale's digits.
   ///
   /// In en, this message translates to:
   /// **'{percent}%'**
   String profileUsagePercent(String percent);
 
-  /// Caption under the usage bar on the free-plan card.
+  /// Label of the translation quota row on the free-plan card.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s usage'**
-  String get profileUsageToday;
+  /// **'Translation'**
+  String get profileUsageTranslation;
 
-  /// Share of today's quota still available, under the usage bar on the free-plan card.
+  /// Label of the conversation-time quota row on the free-plan card.
   ///
   /// In en, this message translates to:
-  /// **'{percent}% left'**
-  String profileUsageRemaining(String percent);
+  /// **'Conversation'**
+  String get profileUsageConversation;
+
+  /// How much of the translation quota is used, beside its row on the free-plan card. {amount} is a profileUsagePercent and is shown bold.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} used'**
+  String profileUsageUsed(String amount);
+
+  /// Conversation minutes used out of the quota, beside its row on the free-plan card. {used} (shown bold) and {limitCount} are written in the locale's digits; {limit} picks the plural.
+  ///
+  /// In en, this message translates to:
+  /// **'{limit, plural, =1{{used} of 1 minute} other{{used} of {limitCount} minutes}}'**
+  String profileUsageMinutes(int limit, String used, String limitCount);
+
+  /// Badge on a quota row of the free-plan card once that quota is spent.
+  ///
+  /// In en, this message translates to:
+  /// **'Used up'**
+  String get profileUsageUsedUp;
+
+  /// Note under a spent quota row of the free-plan card when no other quota is left.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until it renews'**
+  String get profileUsagePaused;
+
+  /// Note under the spent conversation row of the free-plan card while translations are still left.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until it renews · translation is still available'**
+  String get profileUsagePausedTranslationLeft;
+
+  /// Note under the spent translation row of the free-plan card while conversation time is still left.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until it renews · conversation is still available'**
+  String get profileUsagePausedConversationLeft;
 
   /// Button on the free-plan card that opens the Pro upgrade.
   ///

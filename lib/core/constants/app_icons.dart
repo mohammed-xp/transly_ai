@@ -57,6 +57,10 @@ abstract final class AppIcons {
   // ── Profile ──
   static const String cameraBadge = '$_dir/camera_badge.svg';
 
+  /// The two quota rows of the plan card (design `Profile Usage` · 1a).
+  static const String translate = '$_dir/translate.svg';
+  static const String conversation = '$_dir/conversation.svg';
+
   // ── About ── (not mirrored in RTL, as the design draws it)
   static const String externalLink = '$_dir/external_link.svg';
 
@@ -113,6 +117,8 @@ abstract final class AppIcons {
     error,
     delete,
     cameraBadge,
+    translate,
+    conversation,
     externalLink,
     download,
     downloadNotice,

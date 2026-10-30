@@ -436,12 +436,42 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get profileUsageToday => 'استهلاك اليوم';
+  String get profileUsageTranslation => 'الترجمة';
 
   @override
-  String profileUsageRemaining(String percent) {
-    return 'متبقٍ $percent٪';
+  String get profileUsageConversation => 'المحادثة';
+
+  @override
+  String profileUsageUsed(String amount) {
+    return '$amount مستخدم';
   }
+
+  @override
+  String profileUsageMinutes(int limit, String used, String limitCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      limit,
+      locale: localeName,
+      other: '$used من $limitCount دقيقة',
+      few: '$used من $limitCount دقائق',
+      two: '$used من دقيقتين',
+      one: '$used من دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileUsageUsedUp => 'نفدت';
+
+  @override
+  String get profileUsagePaused => 'متوقفة حتى التجديد';
+
+  @override
+  String get profileUsagePausedTranslationLeft =>
+      'متوقفة حتى التجديد · الترجمة ما زالت متاحة';
+
+  @override
+  String get profileUsagePausedConversationLeft =>
+      'متوقفة حتى التجديد · المحادثة ما زالت متاحة';
 
   @override
   String get profileUpgradeToPro => 'الترقية إلى Pro';

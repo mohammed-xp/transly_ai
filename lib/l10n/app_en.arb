@@ -544,7 +544,7 @@
   },
   "profileUsagePercent": "{percent}%",
   "@profileUsagePercent": {
-    "description": "Share of today's quota already used, shown large on the free-plan card.",
+    "description": "A percentage of the translation quota, the {amount} of profileUsageUsed. {percent} is written in the locale's digits.",
     "placeholders": {
       "percent": {
         "type": "String",
@@ -552,19 +552,56 @@
       }
     }
   },
-  "profileUsageToday": "Today's usage",
-  "@profileUsageToday": {
-    "description": "Caption under the usage bar on the free-plan card."
+  "profileUsageTranslation": "Translation",
+  "@profileUsageTranslation": {
+    "description": "Label of the translation quota row on the free-plan card."
   },
-  "profileUsageRemaining": "{percent}% left",
-  "@profileUsageRemaining": {
-    "description": "Share of today's quota still available, under the usage bar on the free-plan card.",
+  "profileUsageConversation": "Conversation",
+  "@profileUsageConversation": {
+    "description": "Label of the conversation-time quota row on the free-plan card."
+  },
+  "profileUsageUsed": "{amount} used",
+  "@profileUsageUsed": {
+    "description": "How much of the translation quota is used, beside its row on the free-plan card. {amount} is a profileUsagePercent and is shown bold.",
     "placeholders": {
-      "percent": {
+      "amount": {
         "type": "String",
-        "example": "30"
+        "example": "70%"
       }
     }
+  },
+  "profileUsageMinutes": "{limit, plural, =1{{used} of 1 minute} other{{used} of {limitCount} minutes}}",
+  "@profileUsageMinutes": {
+    "description": "Conversation minutes used out of the quota, beside its row on the free-plan card. {used} (shown bold) and {limitCount} are written in the locale's digits; {limit} picks the plural.",
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      },
+      "used": {
+        "type": "String",
+        "example": "8"
+      },
+      "limitCount": {
+        "type": "String",
+        "example": "15"
+      }
+    }
+  },
+  "profileUsageUsedUp": "Used up",
+  "@profileUsageUsedUp": {
+    "description": "Badge on a quota row of the free-plan card once that quota is spent."
+  },
+  "profileUsagePaused": "Paused until it renews",
+  "@profileUsagePaused": {
+    "description": "Note under a spent quota row of the free-plan card when no other quota is left."
+  },
+  "profileUsagePausedTranslationLeft": "Paused until it renews · translation is still available",
+  "@profileUsagePausedTranslationLeft": {
+    "description": "Note under the spent conversation row of the free-plan card while translations are still left."
+  },
+  "profileUsagePausedConversationLeft": "Paused until it renews · conversation is still available",
+  "@profileUsagePausedConversationLeft": {
+    "description": "Note under the spent translation row of the free-plan card while conversation time is still left."
   },
   "profileUpgradeToPro": "Upgrade to Pro",
   "@profileUpgradeToPro": {

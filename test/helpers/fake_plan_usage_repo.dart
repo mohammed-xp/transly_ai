@@ -29,6 +29,16 @@ final testFreeUsage = PlanUsageEntity(
   resetsAt: DateTime.utc(2026, 9, 29),
 );
 
+/// [testFreeUsage] with 8 of the 15 conversation minutes used: design 1a.
+final testFreeUsageWithConversation = PlanUsageEntity(
+  plan: PlanUsageEntity.freePlan,
+  charactersLimit: 5000,
+  charactersUsed: 3500,
+  resetsAt: DateTime.utc(2026, 9, 29),
+  audioSecondsLimit: 900,
+  audioSecondsRemaining: 420,
+);
+
 final testProUsage = PlanUsageEntity(
   plan: testProPlan,
   charactersLimit: 500000,

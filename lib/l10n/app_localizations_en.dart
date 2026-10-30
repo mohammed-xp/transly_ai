@@ -439,12 +439,40 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get profileUsageToday => 'Today\'s usage';
+  String get profileUsageTranslation => 'Translation';
 
   @override
-  String profileUsageRemaining(String percent) {
-    return '$percent% left';
+  String get profileUsageConversation => 'Conversation';
+
+  @override
+  String profileUsageUsed(String amount) {
+    return '$amount used';
   }
+
+  @override
+  String profileUsageMinutes(int limit, String used, String limitCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      limit,
+      locale: localeName,
+      other: '$used of $limitCount minutes',
+      one: '$used of 1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileUsageUsedUp => 'Used up';
+
+  @override
+  String get profileUsagePaused => 'Paused until it renews';
+
+  @override
+  String get profileUsagePausedTranslationLeft =>
+      'Paused until it renews · translation is still available';
+
+  @override
+  String get profileUsagePausedConversationLeft =>
+      'Paused until it renews · conversation is still available';
 
   @override
   String get profileUpgradeToPro => 'Upgrade to Pro';

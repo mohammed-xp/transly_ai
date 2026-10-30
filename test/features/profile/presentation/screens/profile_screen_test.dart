@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/di/service_locator.dart';
@@ -43,7 +44,9 @@ void main() {
   late FakeOfflineModelsRepo modelsRepo;
 
   setUp(() {
-    usageRepo = FakePlanUsageRepo(ApiResult.success(testFreeUsage));
+    usageRepo = FakePlanUsageRepo(
+      ApiResult.success(testFreeUsageWithConversation),
+    );
     languageRepo = FakeAppLanguageRepo();
     themeRepo = FakeAppThemeRepo();
     signInMethod = SignInMethod.email;
@@ -75,8 +78,12 @@ void main() {
 
   tearDown(serviceLocator.reset);
 
-  Future<void> pumpScreen(WidgetTester tester, Locale locale) async {
-    tester.view.physicalSize = const Size(402, 874) * 3;
+  Future<void> pumpScreen(
+    WidgetTester tester,
+    Locale locale, {
+    double width = 402,
+  }) async {
+    tester.view.physicalSize = Size(width, 874) * 3;
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
 
@@ -162,23 +169,157 @@ void main() {
     expect(find.text('Upgrade to Pro'), findsNothing);
   });
 
-  testWidgets('shows today\'s usage on the free-plan card', (tester) async {
+  PlanUsageEntity freeUsage({
+    int charactersUsed = 3500,
+    int? audioSecondsRemaining = 420,
+  }) => PlanUsageEntity(
+    plan: PlanUsageEntity.freePlan,
+    charactersLimit: 5000,
+    charactersUsed: charactersUsed,
+    resetsAt: DateTime.utc(2026, 9, 29),
+    audioSecondsLimit: audioSecondsRemaining == null ? null : 900,
+    audioSecondsRemaining: audioSecondsRemaining,
+  );
+
+  Finder richText(String text) => find.text(text, findRichText: true);
+
+  testWidgets('shows the translation and conversation quotas', (tester) async {
     await pumpScreen(tester, const Locale('en'));
 
     expect(find.text('Free plan'), findsOneWidget);
-    expect(find.text('70%'), findsOneWidget);
-    expect(find.text("Today's usage"), findsOneWidget);
-    expect(find.text('30% left'), findsOneWidget);
+    expect(find.text('Conversation'), findsOneWidget);
+    expect(richText('70% used'), findsOneWidget);
+    expect(richText('8 of 15 minutes'), findsOneWidget);
+    expect(find.text('Used up'), findsNothing);
   });
 
-  testWidgets('writes the usage in Arabic-Indic digits in Arabic', (
+  testWidgets('writes the quotas in Arabic-Indic digits in Arabic', (
     tester,
   ) async {
     await pumpScreen(tester, const Locale('ar'));
 
     expect(find.text('الخطة المجانية'), findsOneWidget);
-    expect(find.text('٧٠٪'), findsOneWidget);
-    expect(find.text('متبقٍ ٣٠٪'), findsOneWidget);
+    expect(find.text('المحادثة'), findsOneWidget);
+    expect(richText('٧٠٪ مستخدم'), findsOneWidget);
+    expect(richText('٨ من ١٥ دقيقة'), findsOneWidget);
+  });
+
+  testWidgets('hides the conversation quota when the server omits it', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(audioSecondsRemaining: null),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(richText('70% used'), findsOneWidget);
+    expect(find.text('Conversation'), findsNothing);
+  });
+
+  testWidgets('marks spent conversation time while translation is left', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(freeUsage(audioSecondsRemaining: 0));
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Used up'), findsOneWidget);
+    expect(richText('15 of 15 minutes'), findsOneWidget);
+    expect(
+      find.text('Paused until it renews · translation is still available'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('marks spent translation while conversation time is left', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(freeUsage(charactersUsed: 5000));
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Used up'), findsOneWidget);
+    expect(richText('100% used'), findsOneWidget);
+    expect(
+      find.text('Paused until it renews · conversation is still available'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('pauses spent translation alone when conversation is unknown', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(charactersUsed: 5000, audioSecondsRemaining: null),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Used up'), findsOneWidget);
+    expect(find.text('Paused until it renews'), findsOneWidget);
+  });
+
+  testWidgets('bolds only the used amount of each quota', (tester) async {
+    await pumpScreen(tester, const Locale('en'));
+
+    List<String> boldIn(String text) {
+      final bold = <String>[];
+      tester.widget<RichText>(richText(text)).text.visitChildren((span) {
+        if (span is TextSpan &&
+            span.text != null &&
+            span.style?.fontWeight == FontWeight.w700) {
+          bold.add(span.text!);
+        }
+        return true;
+      });
+      return bold;
+    }
+
+    expect(boldIn('70% used'), ['70%']);
+    expect(boldIn('8 of 15 minutes'), ['8']);
+  });
+
+  testWidgets('keeps a spent label whole beside its badge when there is room', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(freeUsage(audioSecondsRemaining: 0));
+
+    await pumpScreen(tester, const Locale('en'), width: 700);
+
+    final label = tester.renderObject<RenderParagraph>(
+      find.textContaining('Conversation', findRichText: true),
+    );
+    expect(label.didExceedMaxLines, isFalse);
+    expect(find.text('Used up'), findsOneWidget);
+  });
+
+  testWidgets('pauses both quotas without pointing to the other', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(charactersUsed: 5000, audioSecondsRemaining: 0),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Used up'), findsNWidgets(2));
+    expect(find.text('Paused until it renews'), findsNWidgets(2));
+  });
+
+  testWidgets('lays out a spent quota in Arabic without overflowing', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(freeUsage(audioSecondsRemaining: 0));
+
+    await pumpScreen(tester, const Locale('ar'));
+
+    expect(find.text('نفدت'), findsOneWidget);
+    expect(
+      find.text('متوقفة حتى التجديد · الترجمة ما زالت متاحة'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('hides the plan card for a paid plan', (tester) async {
@@ -371,7 +512,8 @@ void main() {
   ) async {
     await pumpScreen(tester, const Locale('en'));
 
-    expect(find.text('Translation'), findsOneWidget);
+    // The section title and the plan card's quota row.
+    expect(find.text('Translation'), findsNWidgets(2));
     expect(find.text('Offline packs'), findsOneWidget);
     expect(find.text('1 installed'), findsOneWidget);
   });

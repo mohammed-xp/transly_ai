@@ -1,7 +1,33 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/features/profile/presentation/utils/plan_usage_l10n.dart';
+import 'package:transly_ai/l10n/app_localizations.dart';
 
 void main() {
+  group('Arabic conversation minutes', () {
+    final ar = lookupAppLocalizations(const Locale('ar'));
+    String minutes(int limit) =>
+        ar.profileUsageMinutes(limit, 'X', limit.toString());
+
+    test('a one-minute limit takes the singular', () {
+      expect(minutes(1), 'X من دقيقة');
+    });
+
+    test('a two-minute limit takes the dual', () {
+      expect(minutes(2), 'X من دقيقتين');
+    });
+
+    test('three to ten minutes take the plural', () {
+      expect(minutes(3), 'X من 3 دقائق');
+      expect(minutes(10), 'X من 10 دقائق');
+    });
+
+    test('eleven minutes and more take the singular noun', () {
+      expect(minutes(11), 'X من 11 دقيقة');
+      expect(minutes(100), 'X من 100 دقيقة');
+    });
+  });
+
   test('counts in hours once an hour or more is left, rounding up', () {
     expect(resetCountdown(const Duration(hours: 5, minutes: 10)), (
       unit: ResetUnit.hours,
