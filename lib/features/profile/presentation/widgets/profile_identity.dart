@@ -5,16 +5,13 @@ import '../../../../core/domain/entities/user_entity.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../core/widgets/user_avatar.dart';
+import '../../../../core/widgets/user_avatar_hero.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Avatar with the change-photo badge, then name and email (design
 /// `12 · Profile`).
 class ProfileIdentity extends StatelessWidget {
-  const ProfileIdentity({
-    super.key,
-    required this.user,
-    this.onChangePhoto,
-  });
+  const ProfileIdentity({super.key, required this.user, this.onChangePhoto});
 
   final UserEntity user;
   final VoidCallback? onChangePhoto;
@@ -33,7 +30,13 @@ class ProfileIdentity extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              UserAvatar(name: user.username, size: _avatarSize, ringWidth: 4),
+              UserAvatarHero(
+                child: UserAvatar(
+                  name: user.username,
+                  size: _avatarSize,
+                  ringWidth: 4,
+                ),
+              ),
               if (onChangePhoto != null)
                 PositionedDirectional(
                   end: 0,

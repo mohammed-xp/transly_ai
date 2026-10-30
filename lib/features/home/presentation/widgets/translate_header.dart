@@ -4,6 +4,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/user_avatar.dart';
+import '../../../../core/widgets/user_avatar_hero.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class TranslateHeader extends StatelessWidget {
@@ -143,11 +144,13 @@ class _ProfileAvatarButton extends StatelessWidget {
       label: label,
       child: GestureDetector(
         onTap: onTap,
-        child: UserAvatar(
-          name: userName,
-          size: _size,
-          ringWidth: 2,
-          glow: !isDark,
+        child: UserAvatarHero(
+          child: UserAvatar(
+            name: userName,
+            size: _size,
+            ringWidth: 2,
+            glow: !isDark,
+          ),
         ),
       ),
     );
