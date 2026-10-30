@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/user_avatar.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -40,10 +41,7 @@ class TranslateHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  kicker.toUpperCase(),
-                  style: textTheme.labelMedium?.copyWith(color: c.textMuted),
-                ),
+                _Kicker(text: kicker),
                 Text(
                   'Traduly', // brand name — not localized
                   style: textTheme.headlineLarge?.copyWith(color: c.ink),
@@ -62,6 +60,63 @@ class TranslateHeader extends StatelessWidget {
             onTap: onProfileTap,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Rolls upward when [text] changes: the new word rises in as the old one
+/// leaves through the top.
+class _Kicker extends StatelessWidget {
+  const _Kicker({required this.text});
+
+  final String text;
+
+  /// Told apart by the animation's direction, not by the word: a word that
+  /// comes back while it is still leaving must keep leaving.
+  static Widget _transition(Widget child, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      child: child,
+      builder: (context, child) {
+        final leaving = animation.status == AnimationStatus.reverse;
+        final t = animation.value;
+        final (opacity, dy) = leaving
+            ? (
+                AppMotion.kickerFadeOut.transform(t),
+                -AppMotion.kickerShift *
+                    (1 - const FlippedCurve(AppMotion.modeCurve).transform(t)),
+              )
+            : (
+                AppMotion.kickerFadeIn.transform(t),
+                AppMotion.kickerShift * (1 - AppMotion.modeCurve.transform(t)),
+              );
+        return ExcludeSemantics(
+          excluding: leaving,
+          child: Opacity(
+            opacity: opacity,
+            child: Transform.translate(offset: Offset(0, dy), child: child),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: AppMotion.modeSwitch,
+      transitionBuilder: _transition,
+      layoutBuilder: (current, previous) => Stack(
+        alignment: AlignmentDirectional.centerStart,
+        children: [...previous, ?current],
+      ),
+      child: Text(
+        text.toUpperCase(),
+        key: ValueKey(text),
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(color: context.palette.textMuted),
       ),
     );
   }

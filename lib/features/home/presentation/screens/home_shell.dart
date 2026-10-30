@@ -10,6 +10,7 @@ import '../../../../core/domain/entities/language_side.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
+import '../../../../core/widgets/mode_transition.dart';
 import '../../../../core/widgets/toast/app_toast_scope.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../app_update/presentation/widgets/optional_update_prompter.dart';
@@ -150,7 +151,7 @@ class _HomeViewState extends State<_HomeView> {
                     child: AppToastScope(
                       bottomSpacing: AppDimens.spaceM,
                       avoidSystemInsets: false,
-                      child: IndexedStack(
+                      child: ModeTransitionStack(
                         index: _mode.index,
                         children: const [
                           TranslateScreen(),
@@ -165,7 +166,7 @@ class _HomeViewState extends State<_HomeView> {
                   InputDock(
                     currentMode: _mode,
                     onModeSelected: _selectMode,
-                    voiceTab: isVoice ? const VoiceDockTab() : null,
+                    voiceTab: VoiceDockTab(open: isVoice),
                     voiceTabRaise: VoiceDockTab.raise,
                   ),
               ],

@@ -46,6 +46,44 @@ void main() {
     expect(find.text('CONVERSATION'), findsOneWidget);
   });
 
+  List<double> opacitiesOf(WidgetTester tester, String text) {
+    return find.text(text).evaluate().map((element) {
+      final opacity = find.ancestor(
+        of: find.byElementPredicate((candidate) => candidate == element),
+        matching: find.byType(Opacity),
+      );
+      return tester.widget<Opacity>(opacity.first).opacity;
+    }).toList();
+  }
+
+  testWidgets('a kicker that comes back keeps the old word leaving', (
+    tester,
+  ) async {
+    await pumpHeader(tester, isPro: false, kicker: 'Translate');
+    await pumpHeader(tester, isPro: false, kicker: 'Conversation');
+    await tester.pump(const Duration(milliseconds: 150));
+    final leaving = opacitiesOf(tester, 'TRANSLATE').single;
+
+    await pumpHeader(tester, isPro: false, kicker: 'Translate');
+
+    final after = opacitiesOf(tester, 'TRANSLATE');
+    expect(after, hasLength(2));
+    expect(after.reduce((a, b) => a > b ? a : b), lessThanOrEqualTo(leaving));
+  });
+
+  testWidgets('the word that left is hidden from screen readers', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await pumpHeader(tester, isPro: false, kicker: 'Translate');
+    await pumpHeader(tester, isPro: false, kicker: 'Conversation');
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.semantics.byLabel('TRANSLATE'), findsNothing);
+    expect(find.semantics.byLabel('CONVERSATION'), findsOneWidget);
+    handle.dispose();
+  });
+
   testWidgets('shows an Arabic kicker as given', (tester) async {
     await pumpHeader(
       tester,

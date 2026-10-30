@@ -9,6 +9,7 @@ import '../../../../core/l10n/failure_message.dart';
 import '../../../../core/l10n/language_label.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/app_icon_source.dart';
+import '../../../../core/widgets/mode_transition.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../language_picker/presentation/cubit/auto_download_notice_cubit.dart';
@@ -53,12 +54,12 @@ class TranslateScreen extends StatelessWidget {
           ),
           children: const [
             AutoDownloadNotice(),
-            _SourceSection(),
+            ModeEntrance(index: 1, child: _SourceSection()),
             SizedBox(height: AppDimens.spaceM),
-            _OutputSection(),
+            ModeEntrance(index: 2, child: _OutputSection()),
             _BusyNoteSection(),
             SizedBox(height: AppDimens.spaceM),
-            _ToneSection(),
+            ModeEntrance(index: 3, child: _ToneSection()),
           ],
         ),
       ),

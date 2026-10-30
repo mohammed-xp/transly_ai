@@ -17,6 +17,7 @@ import 'package:transly_ai/features/app_update/domain/usecases/open_app_store_us
 import 'package:transly_ai/features/app_update/presentation/cubit/app_update_cubit.dart';
 import 'package:transly_ai/features/conversation/presentation/cubit/conversation_cubit.dart';
 import 'package:transly_ai/features/conversation/presentation/cubit/conversation_state.dart';
+import 'package:transly_ai/features/conversation/presentation/widgets/voice_dock_tab.dart';
 import 'package:transly_ai/features/home/presentation/cubit/home_cubit.dart';
 import 'package:transly_ai/features/home/presentation/screens/home_shell.dart';
 import 'package:transly_ai/features/home/presentation/widgets/input_dock.dart';
@@ -170,12 +171,12 @@ void main() {
 
   Future<void> openVoice(WidgetTester tester) async {
     await tester.tap(find.text('Conversation'));
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> openKeyboard(WidgetTester tester) async {
     await tester.tap(find.text('Translate'));
-    await tester.pump();
+    await tester.pumpAndSettle();
   }
 
   Future<void> swap(WidgetTester tester) async {
@@ -223,10 +224,61 @@ void main() {
       await pumpShell(tester);
 
       await tester.tap(find.text('Camera'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('CAMERA'), findsOneWidget);
       expect(find.text('TRANSLATE'), findsNothing);
+    });
+
+    testWidgets('rolls the old tab name out during the switch', (tester) async {
+      await pumpShell(tester);
+
+      await tester.tap(find.text('Conversation'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('CONVERSATION'), findsOneWidget);
+      expect(find.text('TRANSLATE'), findsOneWidget);
+    });
+  });
+
+  group('Switching tabs', () {
+    testWidgets('keeps what was typed on the Translate tab', (tester) async {
+      await pumpShell(tester);
+      await tester.enterText(find.byType(TextField), 'hello');
+      await tester.pump();
+
+      await openVoice(tester);
+      await openKeyboard(tester);
+
+      expect(find.widgetWithText(TextField, 'hello'), findsOneWidget);
+    });
+
+    testWidgets('the back gesture returns to Translate with the motion', (
+      tester,
+    ) async {
+      await pumpShell(tester);
+      await openVoice(tester);
+
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('TRANSLATE'), findsOneWidget);
+      expect(find.text('CONVERSATION'), findsOneWidget);
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('CONVERSATION'), findsNothing);
+    });
+
+    testWidgets('the mic is only live on the Voice tab', (tester) async {
+      await pumpShell(tester);
+
+      await tester.tapAt(tester.getCenter(find.byType(VoiceDockTab)));
+      await tester.pump();
+
+      expect(recorder.starts, 0);
     });
   });
 

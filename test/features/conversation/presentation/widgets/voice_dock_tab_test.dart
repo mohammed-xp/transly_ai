@@ -19,6 +19,7 @@ void main() {
     WidgetTester tester,
     ConversationState state, {
     bool connected = true,
+    bool open = true,
   }) async {
     final recorder = FakeVoiceRecorderRepo();
     cubit = buildConversationCubit(
@@ -37,7 +38,7 @@ void main() {
             child: BlocProvider(
               // Owned by the provider, which closes it when the tree goes.
               create: (_) => cubit,
-              child: const VoiceDockTab(),
+              child: VoiceDockTab(open: open),
             ),
           ),
         ),
@@ -130,5 +131,32 @@ void main() {
     await pumpTab(tester, ConversationState.initial());
 
     expect(find.text('Conversation'), findsOneWidget);
+  });
+
+  testWidgets('closed, it ignores taps', (tester) async {
+    final recorder = await pumpTab(
+      tester,
+      ConversationState.initial(),
+      open: false,
+    );
+
+    await tester.tap(find.byType(VoiceDockTab), warnIfMissed: false);
+    await tester.pump();
+
+    expect(recorder.starts, 0);
+  });
+
+  testWidgets('closed, it leaves the label to the plain tab', (tester) async {
+    await pumpTab(tester, ConversationState.initial(), open: false);
+
+    expect(find.text('Conversation'), findsNothing);
+  });
+
+  testWidgets('closed, it hides from screen readers', (tester) async {
+    final handle = tester.ensureSemantics();
+    await pumpTab(tester, ConversationState.initial(), open: false);
+
+    expect(find.bySemanticsLabel('Conversation'), findsNothing);
+    handle.dispose();
   });
 }

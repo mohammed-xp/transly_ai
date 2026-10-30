@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_svg_icon.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -17,8 +18,15 @@ enum _MicLook { idle, recording, unavailable, denied }
 /// to send it. Grey and inert while a turn is translating, offline, out of
 /// time, or without microphone access. A translating turn shows its progress
 /// in the conversation, not here.
+///
+/// Stays mounted while another tab is open, so the mic can pop in and sink
+/// back out (design `Mode Transition`).
 class VoiceDockTab extends StatelessWidget {
-  const VoiceDockTab({super.key});
+  const VoiceDockTab({super.key, required this.open});
+
+  /// Whether the Voice tab is the open tab. Closed, the mic is hidden and
+  /// taps pass through to the dock's plain tab.
+  final bool open;
 
   static const double micSize = 76;
 
@@ -43,32 +51,87 @@ class VoiceDockTab extends StatelessWidget {
       selector: _lookOf,
       builder: (context, look) {
         final enabled = look == _MicLook.idle || look == _MicLook.recording;
-        return Semantics(
-          button: true,
-          selected: true,
-          enabled: enabled,
-          label: label,
-          excludeSemantics: true,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: enabled ? context.read<ConversationCubit>().micTapped : null,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _Mic(look: look),
-                const SizedBox(height: 3),
-                Text(
-                  label,
-                  style: textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: enabled ? c.coral : c.textMuted,
-                  ),
+        return IgnorePointer(
+          ignoring: !open,
+          child: ExcludeSemantics(
+            excluding: !open,
+            child: Semantics(
+              button: true,
+              selected: true,
+              enabled: enabled,
+              label: label,
+              excludeSemantics: true,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: enabled
+                    ? context.read<ConversationCubit>().micTapped
+                    : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _MicMotion(
+                      open: open,
+                      child: _Mic(look: look),
+                    ),
+                    const SizedBox(height: 1),
+                    if (open)
+                      TweenAnimationBuilder<Color?>(
+                        tween: ColorTween(
+                          begin: c.textMuted,
+                          end: enabled ? c.coral : c.textMuted,
+                        ),
+                        duration: AppMotion.dockColor,
+                        curve: Curves.ease,
+                        builder: (context, color, _) => Text(
+                          label,
+                          style: textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: color,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// Pops [child] in when the tab [open]s and sinks it out when it closes.
+class _MicMotion extends StatelessWidget {
+  const _MicMotion({required this.open, required this.child});
+
+  final bool open;
+  final Widget child;
+
+  static const double _sink = 30;
+
+  @override
+  Widget build(BuildContext context) {
+    final duration = open ? AppMotion.micIn : AppMotion.micOut;
+    final curve = open ? AppMotion.popCurve : AppMotion.modeCurve;
+
+    return AnimatedSlide(
+      offset: open
+          ? Offset.zero
+          : const Offset(0, _sink / VoiceDockTab.micSize),
+      duration: duration,
+      curve: curve,
+      child: AnimatedScale(
+        scale: open ? 1 : AppMotion.shrunkScale,
+        duration: duration,
+        curve: curve,
+        child: AnimatedOpacity(
+          opacity: open ? 1 : 0,
+          duration: open ? AppMotion.micFadeIn : AppMotion.micFadeOut,
+          curve: Curves.ease,
+          child: child,
+        ),
+      ),
     );
   }
 }

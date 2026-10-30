@@ -11,6 +11,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_icon_source.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/mode_transition.dart';
 import '../../../../core/widgets/spinning_ring.dart';
 import '../../../../core/widgets/toast/app_toast.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -116,7 +117,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
       child: const Column(
         children: [
           Expanded(child: _BodySection()),
-          _StatusCaption(),
+          ModeEntrance(
+            index: 4,
+            offset: Offset(0, 10),
+            child: _StatusCaption(),
+          ),
         ],
       ),
     );
@@ -138,6 +143,10 @@ String _localizedLanguages(BuildContext context, ConversationState state) =>
 
 /// The same gap under the language bar as on the Translate tab.
 const double _topInset = AppDimens.spaceL - 2;
+
+/// How the conversation rises in when the tab opens.
+const Offset _entranceOffset = Offset(0, 18);
+const double _entranceScale = .94;
 
 class _BodySection extends StatelessWidget {
   const _BodySection();
@@ -205,7 +214,12 @@ class _HeroBody extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: hero,
+              child: ModeEntrance(
+                index: 1,
+                offset: _entranceOffset,
+                scale: _entranceScale,
+                child: hero,
+              ),
             ),
           ),
         ),
@@ -298,6 +312,13 @@ class _TurnListState extends State<_TurnList> {
     super.dispose();
   }
 
+  /// The turns the tab opens on are the last three: they enter one after
+  /// another, and any older ones with the first of them.
+  static int _entranceIndex(int index, int count) {
+    final first = count > 3 ? count - 3 : 0;
+    return index <= first ? 1 : index - first + 1;
+  }
+
   Future<void> _copy(BuildContext context, ConversationTurn turn) async {
     await Clipboard.setData(ClipboardData(text: turn.translation));
     if (!context.mounted) return;
@@ -350,11 +371,19 @@ class _TurnListState extends State<_TurnList> {
         ],
         for (final (index, turn) in state.turns.indexed) ...[
           if (index > 0) const SizedBox(height: 6),
-          TurnBubble(
-            turn: turn,
-            isEndSide: turn.language == state.to,
-            onSpeak: recording ? null : () => cubit.speakTurn(turn),
-            onCopy: () => _copy(context, turn),
+          ModeEntrance(
+            index: _entranceIndex(index, state.turns.length),
+            offset: _entranceOffset,
+            scale: _entranceScale,
+            alignment: turn.language == state.to
+                ? AlignmentDirectional.bottomEnd
+                : AlignmentDirectional.bottomStart,
+            child: TurnBubble(
+              turn: turn,
+              isEndSide: turn.language == state.to,
+              onSpeak: recording ? null : () => cubit.speakTurn(turn),
+              onCopy: () => _copy(context, turn),
+            ),
           ),
         ],
         if (trailing != null) ...[
