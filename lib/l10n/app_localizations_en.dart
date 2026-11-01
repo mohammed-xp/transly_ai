@@ -412,12 +412,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileFreePlanTitle => 'Free plan';
 
   @override
+  String get profileFreePlanRenewals =>
+      'Daily translation · monthly conversation';
+
+  @override
+  String get profileFreePlanTranslationRenewal => 'Daily translation';
+
+  @override
   String profileUsageResetsInHours(int hours, String count) {
     String _temp0 = intl.Intl.pluralLogic(
       hours,
       locale: localeName,
-      other: 'Usage resets in $count hours',
-      one: 'Usage resets in 1 hour',
+      other: 'Renews daily · in $count hours',
+      one: 'Renews daily · in 1 hour',
     );
     return '$_temp0';
   }
@@ -427,10 +434,15 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       minutes,
       locale: localeName,
-      other: 'Usage resets in $count minutes',
-      one: 'Usage resets in 1 minute',
+      other: 'Renews daily · in $count minutes',
+      one: 'Renews daily · in 1 minute',
     );
     return '$_temp0';
+  }
+
+  @override
+  String profileUsageResetsMonthly(String date) {
+    return 'Renews monthly · $date';
   }
 
   @override

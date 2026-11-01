@@ -516,9 +516,17 @@
   "@profileFreePlanTitle": {
     "description": "Title of the plan card on the profile screen for users on the free plan."
   },
-  "profileUsageResetsInHours": "{hours, plural, =1{Usage resets in 1 hour} other{Usage resets in {count} hours}}",
+  "profileFreePlanRenewals": "Daily translation · monthly conversation",
+  "@profileFreePlanRenewals": {
+    "description": "Line under the free-plan title saying how often each quota renews."
+  },
+  "profileFreePlanTranslationRenewal": "Daily translation",
+  "@profileFreePlanTranslationRenewal": {
+    "description": "Line under the free-plan title when only the translation quota has a known renewal."
+  },
+  "profileUsageResetsInHours": "{hours, plural, =1{Renews daily · in 1 hour} other{Renews daily · in {count} hours}}",
   "@profileUsageResetsInHours": {
-    "description": "Countdown under the free-plan title until the usage quota resets, when an hour or more is left. {count} is {hours} written in the locale's digits.",
+    "description": "Countdown under the translation quota row until it renews, when an hour or more is left. {count} is {hours} written in the locale's digits.",
     "placeholders": {
       "hours": {
         "type": "int"
@@ -529,9 +537,9 @@
       }
     }
   },
-  "profileUsageResetsInMinutes": "{minutes, plural, =1{Usage resets in 1 minute} other{Usage resets in {count} minutes}}",
+  "profileUsageResetsInMinutes": "{minutes, plural, =1{Renews daily · in 1 minute} other{Renews daily · in {count} minutes}}",
   "@profileUsageResetsInMinutes": {
-    "description": "Countdown under the free-plan title until the usage quota resets, when less than an hour is left. {count} is {minutes} written in the locale's digits.",
+    "description": "Countdown under the translation quota row until it renews, when less than an hour is left. {count} is {minutes} written in the locale's digits.",
     "placeholders": {
       "minutes": {
         "type": "int"
@@ -539,6 +547,16 @@
       "count": {
         "type": "String",
         "example": "45"
+      }
+    }
+  },
+  "profileUsageResetsMonthly": "Renews monthly · {date}",
+  "@profileUsageResetsMonthly": {
+    "description": "Date the conversation quota renews, under its row on the free-plan card. {date} is a short month and day in the locale's digits.",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Dec 10"
       }
     }
   },

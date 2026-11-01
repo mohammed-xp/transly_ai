@@ -34,6 +34,19 @@ void main() {
     expect(entity.audioSecondsRemaining, 258);
   });
 
+  test('reads the conversation renewal apart from the translation one', () {
+    final entity = PlanUsageModel.fromJson({
+      'plan': 'free',
+      'charactersLimit': 1500,
+      'charactersUsed': 120,
+      'resetsAt': '2026-10-29T00:00:00+00:00',
+      'audioResetsAt': '2026-11-01T00:00:00+00:00',
+    }).toEntity();
+
+    expect(entity.resetsAt, DateTime.utc(2026, 10, 29));
+    expect(entity.audioResetsAt, DateTime.utc(2026, 11));
+  });
+
   test('leaves the conversation seconds unknown when they are missing', () {
     final entity = PlanUsageModel.fromJson({
       'plan': 'free',
@@ -43,6 +56,7 @@ void main() {
     }).toEntity();
 
     expect(entity.audioSecondsRemaining, isNull);
+    expect(entity.audioResetsAt, isNull);
   });
 
   test('throws when a required field is missing', () {

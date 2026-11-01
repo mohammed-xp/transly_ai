@@ -848,17 +848,35 @@ abstract class AppLocalizations {
   /// **'Free plan'**
   String get profileFreePlanTitle;
 
-  /// Countdown under the free-plan title until the usage quota resets, when an hour or more is left. {count} is {hours} written in the locale's digits.
+  /// Line under the free-plan title saying how often each quota renews.
   ///
   /// In en, this message translates to:
-  /// **'{hours, plural, =1{Usage resets in 1 hour} other{Usage resets in {count} hours}}'**
+  /// **'Daily translation · monthly conversation'**
+  String get profileFreePlanRenewals;
+
+  /// Line under the free-plan title when only the translation quota has a known renewal.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily translation'**
+  String get profileFreePlanTranslationRenewal;
+
+  /// Countdown under the translation quota row until it renews, when an hour or more is left. {count} is {hours} written in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, =1{Renews daily · in 1 hour} other{Renews daily · in {count} hours}}'**
   String profileUsageResetsInHours(int hours, String count);
 
-  /// Countdown under the free-plan title until the usage quota resets, when less than an hour is left. {count} is {minutes} written in the locale's digits.
+  /// Countdown under the translation quota row until it renews, when less than an hour is left. {count} is {minutes} written in the locale's digits.
   ///
   /// In en, this message translates to:
-  /// **'{minutes, plural, =1{Usage resets in 1 minute} other{Usage resets in {count} minutes}}'**
+  /// **'{minutes, plural, =1{Renews daily · in 1 minute} other{Renews daily · in {count} minutes}}'**
   String profileUsageResetsInMinutes(int minutes, String count);
+
+  /// Date the conversation quota renews, under its row on the free-plan card. {date} is a short month and day in the locale's digits.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews monthly · {date}'**
+  String profileUsageResetsMonthly(String date);
 
   /// A percentage of the translation quota, the {amount} of profileUsageUsed. {percent} is written in the locale's digits.
   ///

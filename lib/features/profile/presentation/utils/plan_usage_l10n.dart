@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../../core/l10n/localized_digits.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -27,4 +28,21 @@ String resetCountdownLabel(BuildContext context, PlanUsageEntity usage) {
     ResetUnit.minutes => l10n.profileUsageResetsInMinutes(value, count),
     ResetUnit.hours => l10n.profileUsageResetsInHours(value, count),
   };
+}
+
+/// Null when the server doesn't say when the conversation time renews.
+String? conversationRenewalLabel(BuildContext context, PlanUsageEntity usage) {
+  final resetsAt = usage.audioResetsAt;
+  if (resetsAt == null) return null;
+
+  final l10n = AppLocalizations.of(context)!;
+  final date = DateFormat.MMMd(l10n.localeName).format(resetsAt.toLocal());
+  return l10n.profileUsageResetsMonthly(localizedDigitsIn(context, date));
+}
+
+String planRenewalsLabel(BuildContext context, PlanUsageEntity usage) {
+  final l10n = AppLocalizations.of(context)!;
+  return usage.hasAudioQuota && usage.audioResetsAt != null
+      ? l10n.profileFreePlanRenewals
+      : l10n.profileFreePlanTranslationRenewal;
 }

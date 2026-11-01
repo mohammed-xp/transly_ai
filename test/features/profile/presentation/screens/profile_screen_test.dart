@@ -172,14 +172,20 @@ void main() {
   PlanUsageEntity freeUsage({
     int charactersUsed = 3500,
     int? audioSecondsRemaining = 420,
+    DateTime? resetsAt,
+    DateTime? audioResetsAt,
   }) => PlanUsageEntity(
     plan: PlanUsageEntity.freePlan,
     charactersLimit: 5000,
     charactersUsed: charactersUsed,
-    resetsAt: DateTime.utc(2026, 9, 29),
+    resetsAt: resetsAt ?? DateTime.utc(2026, 9, 29),
     audioSecondsLimit: audioSecondsRemaining == null ? null : 900,
     audioSecondsRemaining: audioSecondsRemaining,
+    audioResetsAt: audioResetsAt,
   );
+
+  DateTime inSixHours() =>
+      DateTime.now().add(const Duration(hours: 5, minutes: 30));
 
   Finder richText(String text) => find.text(text, findRichText: true);
 
@@ -202,6 +208,89 @@ void main() {
     expect(find.text('المحادثة'), findsOneWidget);
     expect(richText('٧٠٪ مستخدم'), findsOneWidget);
     expect(richText('٨ من ١٥ دقيقة'), findsOneWidget);
+  });
+
+  testWidgets('shows when each quota renews', (tester) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(resetsAt: inSixHours(), audioResetsAt: DateTime(2026, 12, 10)),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(
+      find.text('Daily translation · monthly conversation'),
+      findsOneWidget,
+    );
+    expect(find.text('Renews daily · in 6 hours'), findsOneWidget);
+    expect(find.text('Renews monthly · Dec 10'), findsOneWidget);
+  });
+
+  testWidgets('shows when each quota renews in Arabic', (tester) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(resetsAt: inSixHours(), audioResetsAt: DateTime(2026, 12, 10)),
+    );
+
+    await pumpScreen(tester, const Locale('ar'));
+
+    expect(find.text('ترجمة يومية · محادثة شهرية'), findsOneWidget);
+    expect(find.text('يتجدد يوميًا · خلال ٦ ساعات'), findsOneWidget);
+    expect(find.text('يتجدد شهريًا · ١٠ ديسمبر'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('hides the conversation renewal when the server omits it', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(freeUsage(resetsAt: inSixHours()));
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(richText('8 of 15 minutes'), findsOneWidget);
+    expect(find.text('Daily translation'), findsOneWidget);
+    expect(find.text('Renews daily · in 6 hours'), findsOneWidget);
+    expect(find.textContaining('Renews monthly'), findsNothing);
+  });
+
+  testWidgets('names only translation when conversation time is unknown', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(
+        audioSecondsRemaining: null,
+        audioResetsAt: DateTime(2026, 12, 10),
+      ),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(find.text('Daily translation'), findsOneWidget);
+    expect(find.textContaining('Renews monthly'), findsNothing);
+  });
+
+  testWidgets('keeps the renewal under the pause note of a spent quota', (
+    tester,
+  ) async {
+    usageRepo.result = ApiResult.success(
+      freeUsage(
+        audioSecondsRemaining: 0,
+        audioResetsAt: DateTime(2026, 12, 10),
+      ),
+    );
+
+    await pumpScreen(tester, const Locale('en'));
+
+    expect(
+      tester.getTopLeft(find.text('Renews monthly · Dec 10')).dy,
+      greaterThan(
+        tester
+            .getTopLeft(
+              find.text(
+                'Paused until it renews · translation is still available',
+              ),
+            )
+            .dy,
+      ),
+    );
   });
 
   testWidgets('hides the conversation quota when the server omits it', (

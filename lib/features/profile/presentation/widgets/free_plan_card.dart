@@ -52,7 +52,7 @@ class FreePlanCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      resetCountdownLabel(context, usage),
+                      planRenewalsLabel(context, usage),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: textTheme.bodySmall?.copyWith(
@@ -78,6 +78,7 @@ class FreePlanCard extends StatelessWidget {
             pausedNote: usage.conversationAvailable
                 ? l10n.profileUsagePausedConversationLeft
                 : l10n.profileUsagePaused,
+            renewal: resetCountdownLabel(context, usage),
           ),
           if (usage case PlanUsageEntity(
             audioMinutesUsed: final int minutesUsed,
@@ -98,6 +99,7 @@ class FreePlanCard extends StatelessWidget {
               pausedNote: usage.charactersExhausted
                   ? l10n.profileUsagePaused
                   : l10n.profileUsagePausedTranslationLeft,
+              renewal: conversationRenewalLabel(context, usage),
             ),
           if (onUpgrade != null) _UpgradeButton(onTap: onUpgrade!),
         ],
@@ -242,9 +244,9 @@ class _PlanIconChip extends StatelessWidget {
   }
 }
 
-/// One quota: its label, how much is used and a bar. Once [exhausted], the
-/// row turns tinted, gains the used-up badge and shows [pausedNote] under the
-/// bar.
+/// One quota: its label, how much is used, a bar and when it renews. Once
+/// [exhausted], the row turns tinted, gains the used-up badge and shows
+/// [pausedNote] under the bar.
 class _UsageRow extends StatelessWidget {
   const _UsageRow({
     required this.icon,
@@ -254,6 +256,7 @@ class _UsageRow extends StatelessWidget {
     required this.fraction,
     required this.exhausted,
     required this.pausedNote,
+    required this.renewal,
   });
 
   /// Stands in [value] for the bold [highlight], so the right number is
@@ -267,6 +270,7 @@ class _UsageRow extends StatelessWidget {
   final double fraction;
   final bool exhausted;
   final String pausedNote;
+  final String? renewal;
 
   static const double _gap = 10;
 
@@ -332,6 +336,16 @@ class _UsageRow extends StatelessWidget {
               color: c.coralLabel,
             ),
           ),
+        if (renewal case final String text)
+          Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.bodySmall?.copyWith(
+              fontSize: 12,
+              color: c.textMuted,
+            ),
+          ),
       ],
     );
     if (!exhausted) return content;
@@ -391,6 +405,7 @@ class _UsageRowSkeleton extends StatelessWidget {
           ],
         ),
         _UsageMeter(fraction: 0),
+        _SkeletonBar(width: 130, height: 10),
       ],
     );
   }

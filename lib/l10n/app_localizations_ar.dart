@@ -405,14 +405,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileFreePlanTitle => 'الخطة المجانية';
 
   @override
+  String get profileFreePlanRenewals => 'ترجمة يومية · محادثة شهرية';
+
+  @override
+  String get profileFreePlanTranslationRenewal => 'ترجمة يومية';
+
+  @override
   String profileUsageResetsInHours(int hours, String count) {
     String _temp0 = intl.Intl.pluralLogic(
       hours,
       locale: localeName,
-      other: 'يتجدد الاستهلاك خلال $count ساعة',
-      few: 'يتجدد الاستهلاك خلال $count ساعات',
-      two: 'يتجدد الاستهلاك خلال ساعتين',
-      one: 'يتجدد الاستهلاك خلال ساعة',
+      other: 'يتجدد يوميًا · خلال $count ساعة',
+      few: 'يتجدد يوميًا · خلال $count ساعات',
+      two: 'يتجدد يوميًا · خلال ساعتين',
+      one: 'يتجدد يوميًا · خلال ساعة',
     );
     return '$_temp0';
   }
@@ -422,12 +428,17 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       minutes,
       locale: localeName,
-      other: 'يتجدد الاستهلاك خلال $count دقيقة',
-      few: 'يتجدد الاستهلاك خلال $count دقائق',
-      two: 'يتجدد الاستهلاك خلال دقيقتين',
-      one: 'يتجدد الاستهلاك خلال دقيقة',
+      other: 'يتجدد يوميًا · خلال $count دقيقة',
+      few: 'يتجدد يوميًا · خلال $count دقائق',
+      two: 'يتجدد يوميًا · خلال دقيقتين',
+      one: 'يتجدد يوميًا · خلال دقيقة',
     );
     return '$_temp0';
+  }
+
+  @override
+  String profileUsageResetsMonthly(String date) {
+    return 'يتجدد شهريًا · $date';
   }
 
   @override

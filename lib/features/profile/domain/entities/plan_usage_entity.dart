@@ -8,6 +8,7 @@ class PlanUsageEntity {
     required this.resetsAt,
     this.audioSecondsLimit,
     this.audioSecondsRemaining,
+    this.audioResetsAt,
   });
 
   static const String freePlan = 'free';
@@ -21,6 +22,10 @@ class PlanUsageEntity {
   /// report them.
   final int? audioSecondsLimit;
   final int? audioSecondsRemaining;
+
+  /// Conversation time renews on its own window, not [resetsAt]; null when
+  /// the server doesn't report it.
+  final DateTime? audioResetsAt;
 
   /// Every plan other than the free one is a paid Pro plan. A null [plan]
   /// (none known yet) is not Pro.
