@@ -1,7 +1,7 @@
 name: transly_ai
 description: "Traduly AI — bilingual AI-powered translation app (Arabic / English)."
 publish_to: 'none'
-version: 1.2.3+7
+version: 2.0.1+8
 
 environment:
   sdk: ^3.11.5
@@ -61,6 +61,9 @@ dependencies:
   record: ^6.2.1
   permission_handler: ^13.0.2
   path_provider: ^2.1.6
+
+  # Analytics
+  firebase_analytics: ^12.6.0
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ import 'package:transly_ai/core/errors/app_exceptions.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 
+import '../../../helpers/fake_analytics_service.dart';
 import '../../../helpers/fake_google_auth_data_source.dart';
 
 class _FakeUserLocal implements UserLocalDataSource {
@@ -37,9 +38,27 @@ class _FakeUserLocal implements UserLocalDataSource {
 
 void main() {
   late FakeGoogleAuthDataSource google;
+  late FakeAnalyticsService analytics;
 
   setUp(() {
     google = FakeGoogleAuthDataSource();
+    analytics = FakeAnalyticsService();
+  });
+
+  test('unlinks analytics from the account', () async {
+    await LogoutRepoImpl(_FakeUserLocal(), google, analytics).logout();
+
+    expect(analytics.userIds, [null]);
+  });
+
+  test('unlinks analytics even when clearing the tokens fails', () async {
+    final userLocal = _FakeUserLocal(
+      clearTokensError: const UnknownException(),
+    );
+
+    await LogoutRepoImpl(userLocal, google, analytics).logout();
+
+    expect(analytics.userIds, [null]);
   });
 
   test(
@@ -47,7 +66,11 @@ void main() {
     () async {
       final userLocal = _FakeUserLocal();
 
-      final result = await LogoutRepoImpl(userLocal, google).logout();
+      final result = await LogoutRepoImpl(
+        userLocal,
+        google,
+        analytics,
+      ).logout();
 
       expect(result, isA<ApiSuccess<void>>());
       expect(userLocal.cachedUserCleared, isTrue);
@@ -61,7 +84,7 @@ void main() {
       clearCachedUserDataError: const UnknownException(),
     );
 
-    await LogoutRepoImpl(userLocal, google).logout();
+    await LogoutRepoImpl(userLocal, google, analytics).logout();
 
     expect(userLocal.tokensCleared, isTrue);
   });
@@ -71,7 +94,7 @@ void main() {
       clearTokensError: const UnknownException(),
     );
 
-    await LogoutRepoImpl(userLocal, google).logout();
+    await LogoutRepoImpl(userLocal, google, analytics).logout();
 
     expect(userLocal.cachedUserCleared, isTrue);
   });
@@ -81,7 +104,7 @@ void main() {
       clearTokensError: const UnknownException(),
     );
 
-    await LogoutRepoImpl(userLocal, google).logout();
+    await LogoutRepoImpl(userLocal, google, analytics).logout();
 
     expect(google.signOuts, 1);
   });
@@ -91,7 +114,7 @@ void main() {
       clearTokensError: const UnknownException(),
     );
 
-    final result = await LogoutRepoImpl(userLocal, google).logout();
+    final result = await LogoutRepoImpl(userLocal, google, analytics).logout();
 
     expect((result as ApiFailure<void>).failure, isA<UnknownFailure>());
   });
@@ -102,7 +125,7 @@ void main() {
       clearCachedUserDataError: const UnknownException(),
     );
 
-    final result = await LogoutRepoImpl(userLocal, google).logout();
+    final result = await LogoutRepoImpl(userLocal, google, analytics).logout();
 
     expect((result as ApiFailure<void>).failure, isA<NetworkFailure>());
   });

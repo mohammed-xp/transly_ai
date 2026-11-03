@@ -8,6 +8,7 @@ import 'package:transly_ai/features/language_picker/domain/usecases/sync_languag
 import 'package:transly_ai/features/language_picker/domain/usecases/watch_offline_model_updates_usecase.dart';
 import 'package:transly_ai/features/language_picker/presentation/cubit/offline_packs_cubit.dart';
 
+import 'fake_analytics_service.dart';
 import 'fake_languages_repo.dart';
 import 'fake_offline_models_repo.dart';
 
@@ -22,7 +23,10 @@ OfflinePacksCubit buildOfflinePacksCubit({
     syncLanguages: SyncLanguagesUseCase(languagesRepo),
     getOfflineModelStatuses: GetOfflineModelStatusesUseCase(modelsRepo),
     watchOfflineModelUpdates: WatchOfflineModelUpdatesUseCase(modelsRepo),
-    downloadOfflineModel: DownloadOfflineModelUseCase(modelsRepo),
+    downloadOfflineModel: DownloadOfflineModelUseCase(
+      modelsRepo,
+      FakeAnalyticsService(),
+    ),
     deleteOfflineModel: DeleteOfflineModelUseCase(modelsRepo),
     getSettings: GetOfflinePacksSettingsUseCase(modelsRepo),
     saveSettings: SaveOfflinePacksSettingsUseCase(modelsRepo),

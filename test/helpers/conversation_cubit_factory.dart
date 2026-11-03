@@ -23,6 +23,7 @@ import 'package:transly_ai/features/conversation/presentation/cubit/conversation
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
 import 'package:transly_ai/features/translate/domain/usecases/speak_text_usecase.dart';
 
+import 'fake_analytics_service.dart';
 import 'fake_plan_usage_repo.dart';
 
 const testRecording = RecordedAudio(
@@ -179,6 +180,7 @@ ConversationCubit buildConversationCubit({
     discardRecording: DiscardRecordingUseCase(recorderRepo),
     sendTurn: SendConversationTurnUseCase(
       conversation ?? FakeConversationRepo(),
+      FakeAnalyticsService(),
     ),
     speakText: SpeakTextUseCase(tts ?? FakeTts()),
     getPlanUsage: GetPlanUsageUseCase(

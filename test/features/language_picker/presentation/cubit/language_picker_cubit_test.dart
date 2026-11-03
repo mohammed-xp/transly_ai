@@ -19,6 +19,7 @@ import 'package:transly_ai/features/language_picker/presentation/cubit/language_
 import 'package:transly_ai/features/language_picker/presentation/cubit/language_picker_state.dart';
 import 'package:transly_ai/features/language_picker/presentation/cubit/offline_model_error.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_offline_models_repo.dart';
 
@@ -39,7 +40,10 @@ void main() {
       selectLanguage: const SelectLanguageUseCase(),
       getOfflineModelStatuses: GetOfflineModelStatusesUseCase(modelsRepo),
       watchOfflineModelUpdates: WatchOfflineModelUpdatesUseCase(modelsRepo),
-      downloadOfflineModel: DownloadOfflineModelUseCase(modelsRepo),
+      downloadOfflineModel: DownloadOfflineModelUseCase(
+        modelsRepo,
+        FakeAnalyticsService(),
+      ),
       deleteOfflineModel: DeleteOfflineModelUseCase(modelsRepo),
     );
     addTearDown(cubit.close);

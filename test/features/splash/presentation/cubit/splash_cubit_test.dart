@@ -4,11 +4,13 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/domain/entities/language_entity.dart';
 import 'package:transly_ai/core/domain/usecases/get_cached_user_use_case.dart';
+import 'package:transly_ai/core/domain/usecases/sync_analytics_user_usecase.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/language_picker/domain/usecases/sync_languages_usecase.dart';
 import 'package:transly_ai/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:transly_ai/features/splash/presentation/cubit/splash_state.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
 
@@ -24,12 +26,18 @@ void main() {
   SplashCubit buildCubit(
     FakeLanguagesRepo languagesRepo, {
     FakeUserRepo? userRepo,
-  }) => SplashCubit(
-    getCachedUserUseCase: GetCachedUserUseCase(
-      userRepo ?? FakeUserRepo(testUser),
-    ),
-    syncLanguages: SyncLanguagesUseCase(languagesRepo),
-  );
+    FakeAnalyticsService? analytics,
+  }) {
+    final users = userRepo ?? FakeUserRepo(testUser);
+    return SplashCubit(
+      getCachedUserUseCase: GetCachedUserUseCase(users),
+      syncLanguages: SyncLanguagesUseCase(languagesRepo),
+      syncAnalyticsUser: SyncAnalyticsUserUseCase(
+        users,
+        analytics ?? FakeAnalyticsService(),
+      ),
+    );
+  }
 
   test('refreshes the languages once when a user is signed in', () {
     fakeAsync((async) {
@@ -65,6 +73,19 @@ void main() {
       async.elapse(SplashCubit.minSplashDuration);
 
       expect(cubit.state, isA<SplashReady>());
+      cubit.close();
+    });
+  });
+
+  test('links analytics to the signed-in account at startup', () {
+    fakeAsync((async) {
+      final analytics = FakeAnalyticsService();
+      final cubit = buildCubit(FakeLanguagesRepo(), analytics: analytics);
+
+      cubit.checkAuthStatus();
+      async.flushMicrotasks();
+
+      expect(analytics.userIds, [testUser.id]);
       cubit.close();
     });
   });

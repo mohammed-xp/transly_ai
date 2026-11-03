@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transly_ai/core/domain/entities/language_entity.dart';
 import 'package:transly_ai/core/domain/usecases/get_cached_user_use_case.dart';
+import 'package:transly_ai/core/domain/usecases/log_screen_view_usecase.dart';
 import 'package:transly_ai/core/errors/failure.dart';
 import 'package:transly_ai/core/result/api_result.dart';
 import 'package:transly_ai/features/home/presentation/cubit/home_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:transly_ai/features/profile/domain/entities/plan_usage_entity.da
 import 'package:transly_ai/features/profile/domain/usecases/get_cached_plan_usecase.dart';
 import 'package:transly_ai/features/profile/domain/usecases/get_plan_usage_usecase.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_plan_usage_repo.dart';
 import '../../../../helpers/fake_user_repo.dart';
@@ -20,6 +22,7 @@ void main() {
     FakeUserRepo repo, {
     FakePlanUsageRepo? planRepo,
     FakeLanguagesRepo? languagesRepo,
+    FakeAnalyticsService? analytics,
   }) {
     final plans =
         planRepo ?? FakePlanUsageRepo(ApiResult.success(testFreeUsage));
@@ -30,6 +33,7 @@ void main() {
       getPlanUsage: GetPlanUsageUseCase(plans),
       getSavedLanguagePair: GetSavedLanguagePairUseCase(languages),
       saveLanguagePair: SaveLanguagePairUseCase(languages),
+      logScreenView: LogScreenViewUseCase(analytics ?? FakeAnalyticsService()),
     );
   }
 
@@ -252,5 +256,16 @@ void main() {
     await closing;
     await subscription.cancel();
     expect(states, isEmpty);
+  });
+
+  test('tabShown reports the tab as a screen view', () async {
+    final analytics = FakeAnalyticsService();
+    final cubit = buildCubit(FakeUserRepo(testUser), analytics: analytics);
+    addTearDown(cubit.close);
+
+    cubit.tabShown('voice');
+    await pumpEventQueue();
+
+    expect(analytics.screens, ['voice']);
   });
 }

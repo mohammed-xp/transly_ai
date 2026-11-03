@@ -24,6 +24,7 @@ import 'package:transly_ai/features/language_picker/presentation/cubit/language_
 import 'package:transly_ai/features/language_picker/presentation/widgets/language_picker_sheet.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_offline_models_repo.dart';
 
@@ -56,7 +57,10 @@ void main() {
             watchOfflineModelUpdates: WatchOfflineModelUpdatesUseCase(
               modelsRepo,
             ),
-            downloadOfflineModel: DownloadOfflineModelUseCase(modelsRepo),
+            downloadOfflineModel: DownloadOfflineModelUseCase(
+              modelsRepo,
+              FakeAnalyticsService(),
+            ),
             deleteOfflineModel: DeleteOfflineModelUseCase(modelsRepo),
           ),
         );

@@ -9,6 +9,7 @@ import 'package:transly_ai/features/auth/domain/usecases/sign_in_with_google_use
 import 'package:transly_ai/features/auth/presentation/cubit/google_sign_in_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/google_sign_in_state.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_auth_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 
@@ -27,7 +28,9 @@ void main() {
       FakeAuthRepo(const ApiResult.success(null), googleResult: googleResult);
 
   GoogleSignInCubit buildCubit(FakeAuthRepo repo) {
-    final cubit = GoogleSignInCubit(SignInWithGoogleUseCase(repo, session));
+    final cubit = GoogleSignInCubit(
+      SignInWithGoogleUseCase(repo, session, FakeAnalyticsService()),
+    );
     addTearDown(cubit.close);
     return cubit;
   }

@@ -8,6 +8,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/entities/language_side.dart';
 import '../../../../core/l10n/language_label.dart';
+import '../../../../core/router/analytics_route_observer.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/widgets/mode_transition.dart';
@@ -77,8 +78,41 @@ class _HomeView extends StatefulWidget {
   State<_HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<_HomeView> {
+class _HomeViewState extends State<_HomeView> with RouteAware {
   TranslateInputMode _mode = TranslateInputMode.keyboard;
+  final AnalyticsRouteObserver _routeObserver =
+      serviceLocator<AnalyticsRouteObserver>();
+  bool _subscribed = false;
+
+  /// The router leaves this page to report its tabs: the one showing when
+  /// the page first appears and whenever it's uncovered again.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_subscribed) return;
+    final route = ModalRoute.of(context);
+    if (route is! PageRoute) return;
+    _routeObserver.subscribe(this, route);
+    _subscribed = true;
+  }
+
+  @override
+  void dispose() {
+    _routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush() => _reportTab();
+
+  @override
+  void didPopNext() => _reportTab();
+
+  void _reportTab() => context.read<HomeCubit>().tabShown(switch (_mode) {
+    TranslateInputMode.keyboard => 'translate',
+    TranslateInputMode.voice => 'voice',
+    TranslateInputMode.camera => 'camera',
+  });
 
   // Built once (the header once per tab), so the keyboard's inset changing
   // every frame of its animation doesn't rebuild them.
@@ -102,6 +136,7 @@ class _HomeViewState extends State<_HomeView> {
       _mode = mode;
       _header = _buildHeader();
     });
+    _reportTab();
   }
 
   /// Stops the mic and speech when the Voice tab is left or covered, so they

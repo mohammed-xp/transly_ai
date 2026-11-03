@@ -15,6 +15,7 @@ import 'package:transly_ai/features/auth/presentation/cubit/sign_in_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_auth_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 
@@ -24,13 +25,15 @@ void main() {
     final session = SessionManager(FakeLogoutRepo());
     serviceLocator.registerFactory(
       () => SignInCubit(
-        signIn: SignInWithEmailUseCase(repo, session),
+        signIn: SignInWithEmailUseCase(repo, session, FakeAnalyticsService()),
         validate: const ValidateSignInFormUseCase(),
       ),
     );
     // The social row on this screen owns a Google sign-in cubit.
     serviceLocator.registerFactory(
-      () => GoogleSignInCubit(SignInWithGoogleUseCase(repo, session)),
+      () => GoogleSignInCubit(
+        SignInWithGoogleUseCase(repo, session, FakeAnalyticsService()),
+      ),
     );
   });
 

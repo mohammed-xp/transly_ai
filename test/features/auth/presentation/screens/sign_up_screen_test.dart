@@ -19,6 +19,7 @@ import 'package:transly_ai/features/auth/presentation/screens/sign_up_screen.dar
 import 'package:transly_ai/features/auth/presentation/widgets/terms_agreement.dart';
 import 'package:transly_ai/l10n/app_localizations.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_auth_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 
@@ -29,7 +30,7 @@ void main() {
     repo = FakeAuthRepo(const ApiResult.success(null));
     serviceLocator.registerFactory(
       () => SignUpCubit(
-        signUp: SignUpWithEmailUseCase(repo),
+        signUp: SignUpWithEmailUseCase(repo, FakeAnalyticsService()),
         validate: const ValidateSignUpFormUseCase(),
         evaluatePasswordStrength: const EvaluatePasswordStrengthUseCase(),
       ),
@@ -37,7 +38,11 @@ void main() {
     // The social row on this screen owns a Google sign-in cubit.
     serviceLocator.registerFactory(
       () => GoogleSignInCubit(
-        SignInWithGoogleUseCase(repo, SessionManager(FakeLogoutRepo())),
+        SignInWithGoogleUseCase(
+          repo,
+          SessionManager(FakeLogoutRepo()),
+          FakeAnalyticsService(),
+        ),
       ),
     );
   });

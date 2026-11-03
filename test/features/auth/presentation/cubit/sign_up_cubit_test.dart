@@ -11,11 +11,12 @@ import 'package:transly_ai/features/auth/domain/usecases/validate_sign_up_form_u
 import 'package:transly_ai/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/sign_up_state.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_auth_repo.dart';
 
 void main() {
   SignUpCubit buildCubit(FakeAuthRepo repo) => SignUpCubit(
-    signUp: SignUpWithEmailUseCase(repo),
+    signUp: SignUpWithEmailUseCase(repo, FakeAnalyticsService()),
     validate: const ValidateSignUpFormUseCase(),
     evaluatePasswordStrength: const EvaluatePasswordStrengthUseCase(),
   );

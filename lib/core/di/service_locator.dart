@@ -150,12 +150,18 @@ import '../domain/repos/logout_repo.dart';
 import '../domain/repos/user_repo.dart';
 import '../domain/usecases/get_cached_user_use_case.dart';
 import '../domain/usecases/get_sign_in_method_use_case.dart';
+import '../domain/usecases/log_screen_view_usecase.dart';
+import '../domain/usecases/sync_analytics_user_usecase.dart';
 import '../init/hive_initializer.dart';
 import '../l10n/ui_language.dart';
 import '../network/api_consumer.dart';
 import '../network/dio_base_api.dart';
+import '../router/analytics_route_observer.dart';
+import '../router/app_routes.dart';
 import '../security/token_storage.dart';
+import '../services/analytics_service.dart';
 import '../services/connectivity_service.dart';
+import '../services/firebase_analytics_service.dart';
 import '../services/flutter_tts_service.dart';
 import '../services/tts_service.dart';
 import '../session/session_manager.dart';
@@ -187,6 +193,9 @@ Future<void> configureDependencies() async {
       serviceLocator(),
       deviceCountry: () => PlatformDispatcher.instance.locale.countryCode,
     ),
+  );
+  serviceLocator.registerLazySingleton<AnalyticsService>(
+    FirebaseAnalyticsService.new,
   );
   serviceLocator.registerLazySingleton(AudioRecorder.new);
   serviceLocator.registerLazySingleton(
@@ -221,7 +230,7 @@ Future<void> configureDependencies() async {
     ),
   );
   serviceLocator.registerLazySingleton<LogoutRepo>(
-    () => LogoutRepoImpl(serviceLocator(), serviceLocator()),
+    () => LogoutRepoImpl(serviceLocator(), serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(() => SessionManager(serviceLocator()));
 
@@ -388,13 +397,17 @@ Future<void> configureDependencies() async {
     () => DiscardRecordingUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
-    () => SendConversationTurnUseCase(serviceLocator()),
+    () => SendConversationTurnUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
     () => WatchConnectionUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
-    () => TranslateTextUseCase(serviceLocator(), serviceLocator()),
+    () => TranslateTextUseCase(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
   serviceLocator.registerLazySingleton(
     () => SpeakTextUseCase(serviceLocator()),
@@ -413,14 +426,22 @@ Future<void> configureDependencies() async {
     () => SyncTonesUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
-    () => SignInWithEmailUseCase(serviceLocator(), serviceLocator()),
+    () => SignInWithEmailUseCase(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
   serviceLocator.registerLazySingleton(
-    () => SignInWithGoogleUseCase(serviceLocator(), serviceLocator()),
+    () => SignInWithGoogleUseCase(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
   serviceLocator.registerLazySingleton(ValidateSignInFormUseCase.new);
   serviceLocator.registerLazySingleton(
-    () => SignUpWithEmailUseCase(serviceLocator()),
+    () => SignUpWithEmailUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(ValidateSignUpFormUseCase.new);
   serviceLocator.registerLazySingleton(EvaluatePasswordStrengthUseCase.new);
@@ -430,6 +451,18 @@ Future<void> configureDependencies() async {
   serviceLocator.registerLazySingleton(() => SignOutUseCase(serviceLocator()));
   serviceLocator.registerLazySingleton(
     () => GetCachedUserUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => SyncAnalyticsUserUseCase(serviceLocator(), serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => LogScreenViewUseCase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton(
+    () => AnalyticsRouteObserver(
+      serviceLocator(),
+      selfReportingRoutes: const {AppRoutes.homeName},
+    ),
   );
   serviceLocator.registerLazySingleton(
     () => GetSignInMethodUseCase(serviceLocator()),
@@ -493,7 +526,7 @@ Future<void> configureDependencies() async {
     () => WatchOfflineModelUpdatesUseCase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
-    () => DownloadOfflineModelUseCase(serviceLocator()),
+    () => DownloadOfflineModelUseCase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton(
     () => DeleteOfflineModelUseCase(serviceLocator()),
@@ -516,6 +549,7 @@ Future<void> configureDependencies() async {
     () => SplashCubit(
       getCachedUserUseCase: serviceLocator(),
       syncLanguages: serviceLocator(),
+      syncAnalyticsUser: serviceLocator(),
     ),
   );
   serviceLocator.registerFactory(
@@ -542,6 +576,7 @@ Future<void> configureDependencies() async {
       getPlanUsage: serviceLocator(),
       getSavedLanguagePair: serviceLocator(),
       saveLanguagePair: serviceLocator(),
+      logScreenView: serviceLocator(),
     ),
   );
   serviceLocator.registerFactoryParam<LanguagePickerCubit, LanguagePair, void>(

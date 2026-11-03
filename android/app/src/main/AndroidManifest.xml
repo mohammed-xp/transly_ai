@@ -1,9 +1,18 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Required for release builds too, now that translation and sign-in
          call our backend API — not just Firebase/ML Kit's own SDKs. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Conversation mode records each spoken turn. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Firebase Analytics merges these in; the app shows no ads, so they're
+         removed and the Play Console declares no advertising ID. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID"
+        tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION"
+        tools:node="remove"/>
     <application
         android:label="Traduly AI"
         android:name="${applicationName}"
@@ -36,6 +45,18 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Off in debug and profile builds (see build.gradle.kts), so
+             development runs don't count as users, first_open included. -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="${analyticsCollectionEnabled}" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <!-- The whole app is one activity; screens are reported from Dart. -->
+        <meta-data
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

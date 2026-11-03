@@ -1,3 +1,4 @@
+import '../domain/entities/backend_error_code.dart';
 import '../domain/entities/error_entity.dart';
 
 sealed class Failure {
@@ -6,6 +7,8 @@ sealed class Failure {
   final int? statusCode;
 
   final ErrorEntity? error;
+
+  bool get isQuotaExceeded => error?.code == BackendErrorCode.quotaExceeded;
 }
 
 class NetworkFailure extends Failure {

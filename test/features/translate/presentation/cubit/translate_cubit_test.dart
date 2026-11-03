@@ -14,6 +14,7 @@ import 'package:transly_ai/features/translate/domain/usecases/translate_text_use
 import 'package:transly_ai/features/translate/domain/usecases/watch_online_availability_usecase.dart';
 import 'package:transly_ai/features/translate/presentation/cubit/translate_cubit.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_offline_models_repo.dart';
 import '../../../../helpers/fake_translation_repo.dart';
 
@@ -38,6 +39,7 @@ void main() {
       translateText: TranslateTextUseCase(
         repo,
         AutoDownloadOfflineModelsUseCase(FakeOfflineModelsRepo()),
+        FakeAnalyticsService(),
       ),
       speakText: SpeakTextUseCase(tts ?? _FakeTts()),
       watchOnlineAvailability: WatchOnlineAvailabilityUseCase(repo),

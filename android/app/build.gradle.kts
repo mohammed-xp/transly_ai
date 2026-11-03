@@ -45,6 +45,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["analyticsCollectionEnabled"] = "false"
     }
 
     signingConfigs {
@@ -62,6 +63,7 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("release")
             // signingConfig = signingConfigs.getByName("debug")
+            manifestPlaceholders["analyticsCollectionEnabled"] = "true"
         }
     }
 }

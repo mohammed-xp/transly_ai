@@ -7,6 +7,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/result/api_result.dart';
 import '../../../profile/domain/usecases/get_plan_usage_usecase.dart';
 import '../../../translate/domain/usecases/speak_text_usecase.dart';
+import '../../domain/entities/conversation_failure.dart';
 import '../../domain/entities/conversation_turn.dart';
 import '../../domain/entities/recorded_audio.dart';
 import '../../domain/entities/turn_result.dart';
@@ -273,7 +274,7 @@ class ConversationCubit extends Cubit<ConversationState> {
   }
 
   void _showFailure(Failure failure) {
-    if (failure is TooManyRequestsFailure && failure.statusCode == 429) {
+    if (failure.isOutOfConversationTime) {
       _dropPending();
       emit(
         state.copyWith(

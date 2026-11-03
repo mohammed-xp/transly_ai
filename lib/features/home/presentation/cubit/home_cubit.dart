@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/domain/entities/language_entity.dart';
 import '../../../../core/domain/usecases/get_cached_user_use_case.dart';
+import '../../../../core/domain/usecases/log_screen_view_usecase.dart';
 import '../../../language_picker/domain/entities/language_pair.dart';
 import '../../../language_picker/domain/usecases/get_saved_language_pair_usecase.dart';
 import '../../../language_picker/domain/usecases/save_language_pair_usecase.dart';
@@ -19,8 +20,10 @@ class HomeCubit extends Cubit<HomeState> {
     required GetPlanUsageUseCase getPlanUsage,
     required GetSavedLanguagePairUseCase getSavedLanguagePair,
     required SaveLanguagePairUseCase saveLanguagePair,
+    required LogScreenViewUseCase logScreenView,
   }) : _getPlanUsage = getPlanUsage,
        _saveLanguagePair = saveLanguagePair,
+       _logScreenView = logScreenView,
        super(
          HomeState.initial(
            user: getCachedUser().when(
@@ -34,6 +37,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   final GetPlanUsageUseCase _getPlanUsage;
   final SaveLanguagePairUseCase _saveLanguagePair;
+  final LogScreenViewUseCase _logScreenView;
+
+  /// Tabs switch without a route change, so the router never reports them.
+  void tabShown(String screenName) => unawaited(_logScreenView(screenName));
 
   void swapLanguages() => _setPair(from: state.to, to: state.from);
 

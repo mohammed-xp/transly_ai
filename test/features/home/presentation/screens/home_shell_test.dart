@@ -6,7 +6,9 @@ import 'package:transly_ai/core/constants/app_icons.dart';
 import 'package:transly_ai/core/di/service_locator.dart';
 import 'package:transly_ai/core/domain/entities/language_entity.dart';
 import 'package:transly_ai/core/domain/usecases/get_cached_user_use_case.dart';
+import 'package:transly_ai/core/domain/usecases/log_screen_view_usecase.dart';
 import 'package:transly_ai/core/result/api_result.dart';
+import 'package:transly_ai/core/router/analytics_route_observer.dart';
 import 'package:transly_ai/core/router/app_routes.dart';
 import 'package:transly_ai/core/theme/app_palette.dart';
 import 'package:transly_ai/core/widgets/toast/app_toast_scope.dart';
@@ -52,6 +54,7 @@ import 'package:transly_ai/features/translate/presentation/cubit/translate_cubit
 import 'package:transly_ai/l10n/app_localizations.dart';
 
 import '../../../../helpers/conversation_cubit_factory.dart';
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_app_update_repo.dart';
 import '../../../../helpers/fake_languages_repo.dart';
 import '../../../../helpers/fake_offline_models_repo.dart';
@@ -64,15 +67,23 @@ void main() {
   late FakeTranslationRepo translationRepo;
   late FakeVoiceRecorderRepo recorder;
   late FakeTts tts;
+  late FakeAnalyticsService analytics;
 
   setUp(() {
     translationRepo = FakeTranslationRepo();
     recorder = FakeVoiceRecorderRepo();
     tts = FakeTts();
+    analytics = FakeAnalyticsService();
     final languagesRepo = FakeLanguagesRepo(cached: testLanguages);
     final modelsRepo = FakeOfflineModelsRepo();
     final plans = FakePlanUsageRepo(ApiResult.success(testFreeUsage));
     serviceLocator
+      ..registerSingleton(
+        AnalyticsRouteObserver(
+          LogScreenViewUseCase(analytics),
+          selfReportingRoutes: const {AppRoutes.homeName},
+        ),
+      )
       ..registerFactory(
         () => HomeCubit(
           getCachedUser: GetCachedUserUseCase(FakeUserRepo(testUser)),
@@ -80,6 +91,7 @@ void main() {
           getPlanUsage: GetPlanUsageUseCase(plans),
           getSavedLanguagePair: GetSavedLanguagePairUseCase(languagesRepo),
           saveLanguagePair: SaveLanguagePairUseCase(languagesRepo),
+          logScreenView: LogScreenViewUseCase(analytics),
         ),
       )
       ..registerFactory(
@@ -87,6 +99,7 @@ void main() {
           translateText: TranslateTextUseCase(
             translationRepo,
             AutoDownloadOfflineModelsUseCase(modelsRepo),
+            FakeAnalyticsService(),
           ),
           speakText: SpeakTextUseCase(tts),
           watchOnlineAvailability: WatchOnlineAvailabilityUseCase(
@@ -118,7 +131,10 @@ void main() {
           selectLanguage: const SelectLanguageUseCase(),
           getOfflineModelStatuses: GetOfflineModelStatusesUseCase(modelsRepo),
           watchOfflineModelUpdates: WatchOfflineModelUpdatesUseCase(modelsRepo),
-          downloadOfflineModel: DownloadOfflineModelUseCase(modelsRepo),
+          downloadOfflineModel: DownloadOfflineModelUseCase(
+            modelsRepo,
+            FakeAnalyticsService(),
+          ),
           deleteOfflineModel: DeleteOfflineModelUseCase(modelsRepo),
         ),
       );
@@ -139,8 +155,13 @@ void main() {
     );
     addTearDown(updateCubit.close);
     final router = GoRouter(
+      observers: [serviceLocator<AnalyticsRouteObserver>()],
       routes: [
-        GoRoute(path: '/', builder: (_, _) => const HomeShell()),
+        GoRoute(
+          path: '/',
+          name: AppRoutes.homeName,
+          builder: (_, _) => const HomeShell(),
+        ),
         GoRoute(
           path: AppRoutes.profile,
           name: AppRoutes.profileName,
@@ -387,6 +408,39 @@ void main() {
       expect(translate.state.from, LanguageEntity.defaultTarget);
       expect(translate.state.to, LanguageEntity.defaultSource);
       expect(translationRepo.requestedTones, hasLength(2));
+    });
+  });
+
+  group('Screen views', () {
+    testWidgets('reports the Translate tab, not the home route, on start', (
+      tester,
+    ) async {
+      await pumpShell(tester);
+
+      expect(analytics.screens, ['translate']);
+    });
+
+    testWidgets('reports each tab it switches to', (tester) async {
+      await pumpShell(tester);
+      await openVoice(tester);
+      await tester.tap(find.text('Camera'));
+      await tester.pumpAndSettle();
+
+      expect(analytics.screens, ['translate', 'voice', 'camera']);
+    });
+
+    testWidgets('coming back from the profile reports the open tab', (
+      tester,
+    ) async {
+      await pumpShell(tester);
+      await openVoice(tester);
+      await tester.tap(find.byType(UserAvatar));
+      await tester.pumpAndSettle();
+
+      GoRouter.of(tester.element(find.text('Profile'))).pop();
+      await tester.pumpAndSettle();
+
+      expect(analytics.screens, ['translate', 'voice', 'profile', 'voice']);
     });
   });
 }

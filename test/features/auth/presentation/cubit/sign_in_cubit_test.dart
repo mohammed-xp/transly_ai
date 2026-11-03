@@ -10,12 +10,17 @@ import 'package:transly_ai/features/auth/domain/usecases/validate_sign_in_form_u
 import 'package:transly_ai/features/auth/presentation/cubit/sign_in_cubit.dart';
 import 'package:transly_ai/features/auth/presentation/cubit/sign_in_state.dart';
 
+import '../../../../helpers/fake_analytics_service.dart';
 import '../../../../helpers/fake_auth_repo.dart';
 import '../../../../helpers/fake_logout_repo.dart';
 
 void main() {
   SignInCubit buildCubit(FakeAuthRepo repo) => SignInCubit(
-    signIn: SignInWithEmailUseCase(repo, SessionManager(FakeLogoutRepo())),
+    signIn: SignInWithEmailUseCase(
+      repo,
+      SessionManager(FakeLogoutRepo()),
+      FakeAnalyticsService(),
+    ),
     validate: const ValidateSignInFormUseCase(),
   );
 
